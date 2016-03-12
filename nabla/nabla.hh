@@ -1,5 +1,6 @@
 #include "fwd.hh"
 
+#include "division.hh"
 #include "nabla_tag.hh"
 #include "negation.hh"
 #include "product.hh"

@@ -9,6 +9,7 @@ namespace nabla {
     template<typename Expr> class negation;
     template<typename LHS, typename RHS> class sum;
     template<typename LHS, typename RHS> class product;
+    template<typename LHS, typename RHS> class division;
   }
 }
 
