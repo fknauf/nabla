@@ -2,7 +2,7 @@
 #define INCLUDED_NABLA2_DIVISION_HH
 
 #include "fwd.hh"
-#include "nabla_tag.hh"
+#include "nabla_base.hh"
 #include "product.hh"
 #include "sum.hh"
 #include "variable.hh"
@@ -19,8 +19,9 @@ namespace nabla {
       return { std::forward<LHS>(lhs), std::forward<RHS>(rhs) };
     }
 
-    template<typename LHS, typename RHS> class division : public nabla_tag {
+    template<typename LHS, typename RHS> class division : public nabla_base<division<LHS, RHS>> {
     public:
+      using nabla_base<division>::diff;
       static int constexpr dimension = std::max(LHS::dimension, RHS::dimension);
 
       template<typename L, typename R>

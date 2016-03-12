@@ -2,7 +2,7 @@
 #define INCLUDED_NABLA2_NEGATION_HH
 
 #include "fwd.hh"
-#include "nabla_tag.hh"
+#include "nabla_base.hh"
 #include "variable.hh"
 #include "vector.hh"
 
@@ -15,8 +15,9 @@ namespace nabla {
     }
     
     template<typename Expr>
-    class negation : public nabla_tag {
+    class negation : public nabla_base<negation<Expr>> {
     public:
+      using nabla_base<negation>::diff;
       static int constexpr dimension = Expr::dimension;
 
       template<typename E>

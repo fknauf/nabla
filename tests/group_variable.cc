@@ -21,15 +21,15 @@ BOOST_AUTO_TEST_CASE( diff_by_var )  {
   BOOST_CHECK_EQUAL(1, z.diff(z)(vars));
   BOOST_CHECK_EQUAL(0, x.diff(y)(vars));
   BOOST_CHECK_EQUAL(0, x.diff(z)(vars));
-  BOOST_CHECK_EQUAL(0, x.diff(x).diff(x)(vars));
-  BOOST_CHECK_EQUAL(0, x.diff(x).diff(y)(vars));
-  BOOST_CHECK_EQUAL(0, x.diff(x).diff(z)(vars));
-  BOOST_CHECK_EQUAL(0, x.diff(y).diff(x)(vars));
-  BOOST_CHECK_EQUAL(0, x.diff(y).diff(y)(vars));
-  BOOST_CHECK_EQUAL(0, x.diff(y).diff(z)(vars));
-  BOOST_CHECK_EQUAL(0, x.diff(z).diff(x)(vars));
-  BOOST_CHECK_EQUAL(0, x.diff(z).diff(y)(vars));
-  BOOST_CHECK_EQUAL(0, x.diff(z).diff(z)(vars));
+  BOOST_CHECK_EQUAL(0, x.diff(x, x)(vars));
+  BOOST_CHECK_EQUAL(0, x.diff(x, y)(vars));
+  BOOST_CHECK_EQUAL(0, x.diff(x, z)(vars));
+  BOOST_CHECK_EQUAL(0, x.diff(y, x)(vars));
+  BOOST_CHECK_EQUAL(0, x.diff(y, y)(vars));
+  BOOST_CHECK_EQUAL(0, x.diff(y, z)(vars));
+  BOOST_CHECK_EQUAL(0, x.diff(z, x)(vars));
+  BOOST_CHECK_EQUAL(0, x.diff(z, y)(vars));
+  BOOST_CHECK_EQUAL(0, x.diff(z, z)(vars));
 }
 
 BOOST_AUTO_TEST_CASE( diff_by_num )  {

@@ -2,7 +2,7 @@
 #define INCLUDED_NABLA2_SUM_HH
 
 #include "fwd.hh"
-#include "nabla_tag.hh"
+#include "nabla_base.hh"
 #include "negation.hh"
 #include "vector.hh"
 
@@ -24,8 +24,9 @@ namespace nabla {
       return std::forward<LHS>(lhs) + -std::forward<RHS>(rhs);
     }
     
-    template<typename LHS, typename RHS> class sum : public nabla_tag {
+    template<typename LHS, typename RHS> class sum : public nabla_base<sum<LHS, RHS>> {
     public:
+      using nabla_base<sum>::diff;
       static int constexpr dimension = std::max(LHS::dimension, RHS::dimension);
 
       template<typename L, typename R>

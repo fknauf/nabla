@@ -2,6 +2,7 @@ nobase_include_HEADERS = \
   nabla/constant.hh \
   nabla/fwd.hh \
   nabla/nabla.hh \
+  nabla/nabla_base.hh \
   nabla/nabla_tag.hh \
   nabla/negation.hh \
   nabla/product.hh \

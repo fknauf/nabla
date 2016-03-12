@@ -2,15 +2,16 @@
 #define INCLUDED_NABLA2_VARIABLE_HH
 
 #include "constant.hh"
-#include "nabla_tag.hh"
+#include "nabla_base.hh"
 
 namespace nabla {
   namespace expr {
     template<int N>
-    class variable : public nabla_tag {
+    class variable : public nabla_base<variable<N>> {
     public:
       static_assert(N >= 0, "Variables are numbered starting from 0");
       
+      using nabla_base<variable>::diff;
       static int constexpr dimension = N + 1;
 
       template<int O>
