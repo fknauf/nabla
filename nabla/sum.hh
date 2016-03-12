@@ -2,8 +2,9 @@
 #define INCLUDED_NABLA2_SUM_HH
 
 #include "fwd.hh"
+#include "nabla_tag.hh"
 #include "negation.hh"
-#include "tag.hh"
+#include "vector.hh"
 
 #include <algorithm>
 

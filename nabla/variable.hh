@@ -2,7 +2,7 @@
 #define INCLUDED_NABLA2_VARIABLE_HH
 
 #include "constant.hh"
-#include "tag.hh"
+#include "nabla_tag.hh"
 
 namespace nabla {
   namespace expr {

@@ -1,7 +1,7 @@
 #ifndef INCLUDED_NABLA2_CONSTANT_HH
 #define INCLUDED_NABLA2_CONSTANT_HH
 
-#include "tag.hh"
+#include "nabla_tag.hh"
 #include "vector.hh"
 
 namespace nabla {

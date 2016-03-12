@@ -2,7 +2,7 @@
 #define INCLUDED_NABLA2_NEGATION_HH
 
 #include "fwd.hh"
-#include "tag.hh"
+#include "nabla_tag.hh"
 #include "variable.hh"
 #include "vector.hh"
 
