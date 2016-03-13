@@ -10,6 +10,8 @@ namespace nabla {
     template<typename LHS, typename RHS> class sum;
     template<typename LHS, typename RHS> class product;
     template<typename LHS, typename RHS> class division;
+
+    template<typename Outer, typename... Inner> class chain;
   }
 }
 

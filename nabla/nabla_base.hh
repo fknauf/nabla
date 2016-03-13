@@ -12,8 +12,20 @@ namespace nabla {
       template<int N, int... O>
       auto diff(variable<N> const &head,
 		variable<O> const &... tail) const {
-	return static_cast<Derived const &>(*this).diff(head).diff(tail...);
+	return self().diff(head).diff(tail...);
       }
+
+      /*     
+      template<typename... Inner>
+      std::enable_if_t<traits::is_nabla_tuple<Inner...>::value,
+		       chain<Derived, traits::nabla_equivalent<Inner>...>>
+	operator()(Inner&&... inner) const {
+	return { self(), std::forward<Inner>(inner)... };
+      }
+      */
+      
+    private:
+      Derived const &self() const noexcept { return static_cast<Derived const &>(*this);  }
     };
   }
 }

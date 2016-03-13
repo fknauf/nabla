@@ -20,7 +20,8 @@ tests_test_SOURCES = \
   tests/group_negation.cc \
   tests/group_sum.cc \
   tests/group_product.cc \
-  tests/group_division.cc
+  tests/group_division.cc \
+  tests/group_chain.cc
 
 # gcc 5 with -std=c++11 complains about Eigen's use of std::bind1st, std::bind2nd,
 # -Wno-deprecated-declarations makes it shut up
