@@ -10,8 +10,10 @@ namespace nabla {
     template<typename LHS, typename RHS> class sum;
     template<typename LHS, typename RHS> class product;
     template<typename LHS, typename RHS> class division;
+    template<typename Base> class polynomial;
 
     template<typename Outer, typename... Inner> class chain;
+    template<typename Condition, typename ExprTrue, typename ExprFalse> class conditional;
   }
 }
 

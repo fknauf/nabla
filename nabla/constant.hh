@@ -25,7 +25,10 @@ namespace nabla {
       double operator()(vector<N> const &) const {
 	return value_;
       }		    
-      
+
+      // Benutzt in polynomial
+      double value() const noexcept { return value_; }
+
     private:
       double value_;
     };
