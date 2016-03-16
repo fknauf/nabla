@@ -1,10 +1,12 @@
 nobase_include_HEADERS = \
   nabla/constant.hh \
+  nabla/exponential.hh \
   nabla/fwd.hh \
   nabla/nabla.hh \
   nabla/nabla_base.hh \
   nabla/nabla_tag.hh \
   nabla/negation.hh \
+  nabla/polynomial.hh \
   nabla/product.hh \
   nabla/sum.hh \
   nabla/variable.hh \
@@ -23,7 +25,8 @@ tests_test_SOURCES = \
   tests/group_division.cc \
   tests/group_chain.cc \
   tests/group_conditional.cc \
-  tests/group_polynomial.cc
+  tests/group_polynomial.cc \
+  tests/group_exponential.cc
 
 # gcc 5 with -std=c++11 complains about Eigen's use of std::bind1st, std::bind2nd,
 # -Wno-deprecated-declarations makes it shut up

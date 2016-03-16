@@ -3,6 +3,7 @@
 #include "chain.hh"
 #include "conditional.hh"
 #include "division.hh"
+#include "exponential.hh"
 #include "nabla_tag.hh"
 #include "negation.hh"
 #include "polynomial.hh"
