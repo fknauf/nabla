@@ -1,5 +1,6 @@
 #include <nabla/polynomial.hh>
 #include <nabla/product.hh>
+#include <nabla/sum.hh>
 
 #include <boost/test/unit_test.hpp>
 
@@ -80,6 +81,25 @@ BOOST_AUTO_TEST_CASE( simple_break )  {
   BOOST_CHECK_SMALL(   f           (vars), epsilon);
   BOOST_CHECK_CLOSE(1, f.diff(x   )(vars), epsilon);
   BOOST_CHECK_CLOSE(0, f.diff(x, x)(vars), epsilon);
+}
+
+BOOST_AUTO_TEST_CASE( chain )  {
+  nabla::expr::variable<0> x;
+  nabla::expr::variable<1> y;
+
+  auto f = pow(y - x, 3);
+  
+  nabla::vector<2> vars;
+  vars << 1, 3;
+
+  BOOST_CHECK_CLOSE(8, f(vars), epsilon);
+
+  BOOST_CHECK_CLOSE(-12, f.diff(x      )(vars), epsilon);
+  BOOST_CHECK_EQUAL( 12, f.diff(y      )(vars));
+  BOOST_CHECK_CLOSE( 12, f.diff(x, x   )(vars), epsilon);
+  BOOST_CHECK_EQUAL(-12, f.diff(x, y   )(vars));
+  BOOST_CHECK_CLOSE( -6, f.diff(x, x, x)(vars), epsilon);
+  BOOST_CHECK_EQUAL(  6, f.diff(x, x, y)(vars));
 }
 
 BOOST_AUTO_TEST_SUITE_END()

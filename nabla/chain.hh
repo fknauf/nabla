@@ -26,28 +26,28 @@ namespace nabla {
       }
 
       // TODO: Mit C++17-Fold-Expressions ersetzen, wenn gcc 6 rauskommt.
-      template<int Direction, int Dimension, int N>
+      template<int Direction, int N>
       struct chain_diff_accumulator {
 	template<typename O, typename T>
 	static auto accumulate(O &&outer, T &&inners) {
 	  return
-	    chain_diff_accumulator<Direction, Dimension, N - 1>::accumulate(std::forward<O>(outer), std::forward<T>(inners))
-	    + make_chain_diff_term<Direction, N>(std::forward<O>(outer), std::forward<T>(inners), std::make_integer_sequence<int, Dimension>());
+	    chain_diff_accumulator<Direction, N - 1>::accumulate(std::forward<O>(outer), std::forward<T>(inners))
+	    + make_chain_diff_term<Direction, N>(std::forward<O>(outer), std::forward<T>(inners), std::make_integer_sequence<int, traits::plain_type<O>::dimension>());
 	}
       };
 
       // Stopper
-      template<int Direction, int Dimension>
-      struct chain_diff_accumulator<Direction, Dimension, 0> {
+      template<int Direction>
+      struct chain_diff_accumulator<Direction, 0> {
 	template<typename O, typename T>
 	  static auto accumulate(O &&outer, T &&inners) {
-	  return make_chain_diff_term<Direction, 0>(std::forward<O>(outer), std::forward<T>(inners), std::make_integer_sequence<int, Dimension>());
+	  return make_chain_diff_term<Direction, 0>(std::forward<O>(outer), std::forward<T>(inners), std::make_integer_sequence<int, traits::plain_type<O>::dimension>());
 	}
       };
       
       // Kann bei dimension = 0 passieren
-      template<int Direction, int Dimension>
-      struct chain_diff_accumulator<Direction, Dimension, -1> {
+      template<int Direction>
+      struct chain_diff_accumulator<Direction, -1> {
 	template<typename O, typename T>
 	  static constant accumulate(O &&outer, T &&inners) {
 	  return { 0.0 };
@@ -58,8 +58,8 @@ namespace nabla {
     template<typename Outer, typename... Inner>
     class chain : public nabla_base<chain<Outer, Inner...> > {
     public:
-      static_assert(Outer::dimension == sizeof...(Inner),
-		    "Chain rule: Outer function does not expect the number of arguments given");
+      static_assert(Outer::dimension <= sizeof...(Inner),
+		    "Chain rule: Outer function expects more arguments than are given");
       
       using nabla_base<chain>::diff;
       static int constexpr dimension = std::max({ Inner::dimension... });
@@ -72,12 +72,12 @@ namespace nabla {
 
       template<int N>
       auto operator()(vector<N> const &vars) const {
-	return eval(vars, std::make_integer_sequence<int, dimension>());
+	return eval(vars, std::make_integer_sequence<int, Outer::dimension>());
       }
 
       template<int N>
       auto diff(variable<N> const & = {}) const {
-	return impl::chain_diff_accumulator<N, dimension, dimension - 1>::accumulate(outer_, inners_);
+	return impl::chain_diff_accumulator<N, Outer::dimension - 1>::accumulate(outer_, inners_);
       }
       
     private:
