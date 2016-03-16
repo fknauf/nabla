@@ -41,10 +41,23 @@ namespace nabla {
 
       template<int N>
       auto diff(variable<N> const &var = {}) const {
-	return impl::make_conditional(condition_, expr_true_.diff(var), expr_false_.diff(var));
+	return diff_dispatch(var, std::integral_constant<bool,
+			     N < dimension &&
+			     (!std::is_same<constant, ExprTrue >::value ||
+			      !std::is_same<constant, ExprFalse>::value)>());
       }
       
     private:
+      template<int N>
+      auto diff_dispatch(variable<N> const &var, std::true_type) const {
+	return impl::make_conditional(condition_, expr_true_.diff(var), expr_false_.diff(var));
+      }
+
+      template<int N>
+      constant diff_dispatch(variable<N> const &, std::false_type) const {
+	return 0;
+      }
+      
       Condition condition_;
       ExprTrue  expr_true_;
       ExprFalse expr_false_;

@@ -16,7 +16,7 @@ namespace nabla {
     operator+(LHS &&lhs, RHS &&rhs) {
       return { std::forward<LHS>(lhs), std::forward<RHS>(rhs) };
     }
-    
+
     template<typename LHS, typename RHS>
     std::enable_if_t<traits::is_nabla_pair<LHS, RHS>::value, sum<traits::nabla_equivalent<LHS>,
 								 traits::negated_nabla_equivalent<RHS>>>

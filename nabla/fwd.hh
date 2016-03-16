@@ -13,6 +13,8 @@ namespace nabla {
 
     class polynomial;
     class exponential;
+    class logarithm;
+    template<typename Base, typename Exponent> class power;
     
     template<typename Outer, typename... Inner> class chain;
     template<typename Condition, typename ExprTrue, typename ExprFalse> class conditional;
