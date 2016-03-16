@@ -3,44 +3,51 @@
 
 #include "fwd.hh"
 
+#include "chain.hh"
 #include "conditional.hh"
 #include "product.hh"
+
 #include <cmath>
+#include <type_traits>
 
 namespace nabla {
   namespace expr {
     template<typename Base>
-    std::enable_if_t<traits::is_nabla_expression<Base>::value, polynomial<traits::plain_type<Base> > >
-    pow(Base &&base, double exponent) {
-      return { std::forward<Base>(base), exponent };
+    std::enable_if_t<traits::is_nabla_expression<Base>::value, chain<polynomial, traits::plain_type<Base> > >
+    pow(Base &&base, constant exponent) {
+      return { polynomial(exponent), std::forward<Base>(base) };
     }
 
-    template<typename Base>
-    class polynomial : public nabla_base<polynomial<Base> > {
+    class polynomial : public nabla_base<polynomial> {
     public:
       using nabla_base<polynomial>::diff;
-      static int constexpr dimension = Base::dimension;
+      static int constexpr dimension = 1;
 
-      template<typename B>
-      polynomial(B &&base, constant exponent)
-	: base_(std::forward<B>(base)),
-	  exponent_(exponent)
+      polynomial(constant exponent)
+	: exponent_(exponent)
       { }
 
       template<int N>
       auto operator()(vector<N> const &vars) const {
-	return std::pow(base_(vars), exponent_(vars));
+	return std::pow(vars(0), exponent_(vars));
       }
 
       template<int N>
-      auto diff(variable<N> const &var = {}) const {
-	return impl::make_conditional([=](auto &&) { return exponent_.value() != 0.0; },
-				      exponent_ * base_.diff(var) * pow(base_, exponent_.value() - 1.0),
-				      0);
+      auto diff(variable<N> const & = {}) const {
+	return diff_dispatch(std::integral_constant<bool, N == 0>());
       }
 
     private:
-      Base     base_;
+      constant diff_dispatch(std::false_type) const {
+	return 0;
+      }
+      
+      auto diff_dispatch(std::true_type) const {
+	return impl::make_conditional([=](auto &&) { return exponent_.value() != 0.0; },
+				      exponent_ * polynomial(exponent_.value() - 1.0),
+				      0);
+      }
+      
       constant exponent_;
     };
   }

@@ -49,4 +49,37 @@ BOOST_AUTO_TEST_CASE( simple_real )  {
   BOOST_CHECK_EQUAL(0                                 , f.diff(x, x, y)(vars));
 }
 
+BOOST_AUTO_TEST_CASE( simple_0 )  {
+  nabla::expr::variable<0> x;
+  nabla::expr::variable<1> y;
+
+  auto f = pow(x, 0);
+  
+  nabla::vector<1> vars;
+  vars << 0;
+
+  BOOST_CHECK_CLOSE(1, f(vars), epsilon);
+
+  BOOST_CHECK_CLOSE(0, f.diff(x      )(vars), epsilon);
+  BOOST_CHECK_EQUAL(0, f.diff(y      )(vars));
+  BOOST_CHECK_CLOSE(0, f.diff(x, x   )(vars), epsilon);
+  BOOST_CHECK_EQUAL(0, f.diff(x, y   )(vars));
+  BOOST_CHECK_CLOSE(0, f.diff(x, x, x)(vars), epsilon);
+  BOOST_CHECK_EQUAL(0, f.diff(x, x, y)(vars));
+}
+
+BOOST_AUTO_TEST_CASE( simple_break )  {
+  nabla::expr::variable<0> x;
+
+  auto f = pow(x, 1);
+  
+  nabla::vector<1> vars;
+  vars << 0;
+
+  // Knickstelle in der Ableitung bei 0^0
+  BOOST_CHECK_SMALL(   f           (vars), epsilon);
+  BOOST_CHECK_CLOSE(1, f.diff(x   )(vars), epsilon);
+  BOOST_CHECK_CLOSE(0, f.diff(x, x)(vars), epsilon);
+}
+
 BOOST_AUTO_TEST_SUITE_END()
