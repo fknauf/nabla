@@ -17,7 +17,7 @@ namespace nabla {
     template<typename Base, typename Exponent> class power;
     
     template<typename Outer, typename... Inner> class chain;
-    template<typename Condition, typename ExprTrue, typename ExprFalse> class conditional;
+    template<typename Condition, typename ExprTrue, typename ExprFalse, int MinDimension = 0> class conditional;
   }
 }
 

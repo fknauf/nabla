@@ -11,6 +11,7 @@ nobase_include_HEADERS = \
   nabla/power.hh \
   nabla/product.hh \
   nabla/sum.hh \
+  nabla/unary_functions.hh \
   nabla/variable.hh \
   nabla/vector.hh
 
@@ -30,13 +31,14 @@ tests_test_SOURCES = \
   tests/group_polynomial.cc \
   tests/group_exponential.cc \
   tests/group_logarithm.cc \
-  tests/group_power.cc
+  tests/group_power.cc \
+  tests/group_unary_functions.cc
 
 # gcc 5 with -std=c++11 complains about Eigen's use of std::bind1st, std::bind2nd,
 # -Wno-deprecated-declarations makes it shut up
 tests_test_CPPFLAGS = -I $(top_srcdir) \
                       $$(pkg-config --cflags eigen3) -D EIGEN_MPL2_ONLY \
                       -D BOOST_TEST_DYN_LINK \
-                      -Wno-deprecated-declarations
+                      -Wno-deprecated-declarations -Wall -Wextra
 tests_test_CXXFLAGS = -g -O0
 tests_test_LDADD    = -lboost_unit_test_framework

@@ -17,15 +17,22 @@ namespace nabla {
       make_conditional(Condition &&condition, ExprTrue &&expr_true, ExprFalse &&expr_false) {
 	return { condition, expr_true, expr_false };
       }
+
+      template<int MinDimension, typename Condition, typename ExprTrue, typename ExprFalse>
+      conditional<traits::plain_type<Condition>, traits::nabla_equivalent<ExprTrue>, traits::nabla_equivalent<ExprFalse>, MinDimension >
+      make_conditional_with_min_dimension(Condition &&condition, ExprTrue &&expr_true, ExprFalse &&expr_false) {
+	return { condition, expr_true, expr_false };
+      }
     }
     
     template<typename Condition,
 	     typename ExprTrue,
-	     typename ExprFalse>
-    class conditional : public nabla_base<conditional<Condition, ExprTrue, ExprFalse> > {
+	     typename ExprFalse,
+	     int      MinDimension>
+    class conditional : public nabla_base<conditional<Condition, ExprTrue, ExprFalse, MinDimension> > {
     public:
       using nabla_base<conditional>::diff;
-      static int constexpr dimension = std::max(ExprTrue::dimension, ExprFalse::dimension);
+      static int constexpr dimension = std::max(MinDimension, std::max(ExprTrue::dimension, ExprFalse::dimension));
 
       template<typename C, typename T, typename F>
       conditional(C &&condition, T &&expr_true, F &&expr_false)
