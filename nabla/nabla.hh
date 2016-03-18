@@ -15,3 +15,5 @@
 #include "sum.hh"
 #include "unary_functions.hh"
 #include "variable.hh"
+
+#include "gradient.hh"
