@@ -28,7 +28,7 @@ namespace nabla {
       return { ufunc_ ## name(), std::forward<Expr>(expr) };		\
     }									\
 									\
-    constant name(constant const &expr) {				\
+    inline constant name(constant const &expr) {			\
       double x = expr.value();						\
       static_cast<void>(x);						\
       return expr_val;							\
