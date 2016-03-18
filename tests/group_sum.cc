@@ -235,5 +235,19 @@ BOOST_AUTO_TEST_CASE( mixed )  {
   BOOST_CHECK_EQUAL( 0, f.diff(z, z)(vars));
 }
 
+BOOST_AUTO_TEST_CASE( simple_n1 ) {
+  auto x = nabla::expr::variable<0>();
+  auto y = nabla::expr::variable<1>();
+
+  auto s = 2.0 + x - y;
+
+  nabla::vector<2> values(1.0, -3.0);
+
+  auto r = s(values);
+
+  BOOST_CHECK_EQUAL( 6.0, r);
+  BOOST_CHECK_EQUAL( 1.0, s.diff(x)(values));
+  BOOST_CHECK_EQUAL(-1.0, s.diff(y)(values));
+}
 
 BOOST_AUTO_TEST_SUITE_END()

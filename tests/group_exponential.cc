@@ -77,4 +77,40 @@ BOOST_AUTO_TEST_CASE( complex )  {
   BOOST_CHECK_CLOSE(              2048 * l2 * l2, f.diff(z, z)(vars), epsilon);
 }
 
+BOOST_AUTO_TEST_CASE( test_trivial ) {
+  auto x = nabla::expr::variable<0>();
+  auto y = nabla::expr::variable<1>();
+
+  auto s = pow(2, x * y);
+
+  nabla::vector<2> p { 2.0, 5.0 };
+
+  auto r = s(p);
+
+  BOOST_CHECK_CLOSE(r           , std::pow(2.0, p(0) * p(1)), epsilon);
+  BOOST_CHECK_CLOSE(s.diff(x)(p), p(1) * std::log(2) * r    , epsilon);
+  BOOST_CHECK_CLOSE(s.diff(y)(p), p(0) * std::log(2) * r    , epsilon);
+}
+
+BOOST_AUTO_TEST_CASE( test_stacked ) {
+  auto x = nabla::expr::variable<0>();
+  auto y = nabla::expr::variable<1>();
+
+  auto s = pow(2, pow(1.5, x * y));
+
+  nabla::vector<2> p { 2.0, 5.0 };
+
+  auto r = s(p);
+
+  double exv = std::pow(2, std::pow(1.5, p(0) * p(1)));
+
+  double dx = p(1) * std::log(2) * std::log(1.5) * std::pow(1.5, p(0) * p(1)) * exv;
+  double dy = p(0) * std::log(2) * std::log(1.5) * std::pow(1.5, p(0) * p(1)) * exv;
+
+  BOOST_CHECK_CLOSE(r           , exv, epsilon);
+  BOOST_CHECK_CLOSE(s.diff(x)(p), dx , epsilon);
+  BOOST_CHECK_CLOSE(s.diff(y)(p), dy , epsilon);
+}
+
+
 BOOST_AUTO_TEST_SUITE_END()

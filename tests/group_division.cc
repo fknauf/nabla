@@ -82,4 +82,64 @@ BOOST_AUTO_TEST_CASE( var_div_var )  {
   BOOST_CHECK_EQUAL(-0.0234375, f.diff(z, z, x, z)(vars));
 }
 
+BOOST_AUTO_TEST_CASE( simple ) {
+  auto x = nabla::expr::variable<0>();
+  auto y = nabla::expr::variable<1>();
+
+  auto s = x / 2;
+
+  nabla::vector<2> values(3.0, 4.0);
+
+  auto r = s(values);
+
+  BOOST_CHECK_EQUAL(1.5, r);
+  BOOST_CHECK_EQUAL(0.5, s.diff(x)(values));
+  BOOST_CHECK_EQUAL(0.0, s.diff(y)(values));
+}
+
+BOOST_AUTO_TEST_CASE( simple_inv ) {
+  auto x = nabla::expr::variable<0>();
+  auto y = nabla::expr::variable<1>();
+
+  auto s = 4.5 / x;
+
+  nabla::vector<2> values(3.0, 4.0);
+
+  auto r = s(values);
+
+  BOOST_CHECK_EQUAL( 1.5, r);
+  BOOST_CHECK_EQUAL(-0.5, s.diff(x)(values));
+  BOOST_CHECK_EQUAL( 0.0, s.diff(y)(values));
+}
+
+BOOST_AUTO_TEST_CASE( twovar ) {
+  auto x = nabla::expr::variable<0>();
+  auto y = nabla::expr::variable<1>();
+
+  auto s = x / y;
+
+  nabla::vector<2> values(3.0, 4.0);
+
+  auto r = s(values);
+
+  BOOST_CHECK_EQUAL( 0.75  , r);
+  BOOST_CHECK_EQUAL( 0.25  , s.diff(x)(values));
+  BOOST_CHECK_EQUAL(-0.1875, s.diff(y)(values));
+}
+
+BOOST_AUTO_TEST_CASE( twovar_plus_constant ) {
+  auto x = nabla::expr::variable<0>();
+  auto y = nabla::expr::variable<1>();
+
+  auto s = x / y / 0.5;
+
+  nabla::vector<2> values(3.0, 4.0);
+
+  auto r = s(values);
+
+  BOOST_CHECK_EQUAL( 1.5  , r);
+  BOOST_CHECK_EQUAL( 0.5  , s.diff(x)(values));
+  BOOST_CHECK_EQUAL(-0.375, s.diff(y)(values));
+}
+
 BOOST_AUTO_TEST_SUITE_END()
