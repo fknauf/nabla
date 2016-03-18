@@ -2,6 +2,8 @@ nobase_include_HEADERS = \
   nabla/constant.hh \
   nabla/exponential.hh \
   nabla/fwd.hh \
+  nabla/gausscdf.hh \
+  nabla/hypot.hh \
   nabla/logarithm.hh \
   nabla/nabla.hh \
   nabla/nabla_base.hh \

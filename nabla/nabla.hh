@@ -4,6 +4,8 @@
 #include "conditional.hh"
 #include "division.hh"
 #include "exponential.hh"
+#include "gausscdf.hh"
+#include "hypot.hh"
 #include "logarithm.hh"
 #include "nabla_tag.hh"
 #include "negation.hh"

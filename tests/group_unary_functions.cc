@@ -97,7 +97,6 @@ BOOST_AUTO_TEST_CASE( test_erfc ) {
   BOOST_CHECK_CLOSE( 4 * M_2_SQRTPI        * std::exp(-std::pow(p(0) * p(0) - 4 * p(1), 2)), cdf.diff(y)(p), epsilon);
 }
 
-/*
 BOOST_AUTO_TEST_CASE( phi ) {
   nabla::expr::variable<0> x;
   nabla::expr::variable<1> mu;
@@ -109,10 +108,10 @@ BOOST_AUTO_TEST_CASE( phi ) {
 
   auto result = cdf(params);
 
-  BOOST_CHECK_CLOSE( 0.2266273523768682, result            , epsilon);
-  BOOST_CHECK_CLOSE( 0.7528435803870109, cdf.diff(x    )(p), epsilon);
-  BOOST_CHECK_CLOSE(-0.7528435803870109, cdf.diff(mu   )(p), epsilon);
-  BOOST_CHECK_CLOSE( 0.564632685290258 , cdf.diff(sigma)(p), epsilon);
+  BOOST_CHECK_CLOSE( 0.2266273523768682, result                 , epsilon);
+  BOOST_CHECK_CLOSE( 0.7528435803870109, cdf.diff(x    )(params), epsilon);
+  BOOST_CHECK_CLOSE(-0.7528435803870109, cdf.diff(mu   )(params), epsilon);
+  BOOST_CHECK_CLOSE( 0.564632685290258 , cdf.diff(sigma)(params), epsilon);
 }
 
 BOOST_AUTO_TEST_CASE( blackscholes ) {
@@ -138,8 +137,6 @@ BOOST_AUTO_TEST_CASE( blackscholes ) {
   BOOST_CHECK_CLOSE(0.195645889482365 , callbsm.diff(sigma)(params), epsilon);
   BOOST_CHECK_CLOSE(0.0875433290208555, callbsm.diff(r    )(params), epsilon);
 }
-
-*/
 
 BOOST_AUTO_TEST_CASE( test_fabs ) {
   auto x = nabla::expr::variable<0>();
