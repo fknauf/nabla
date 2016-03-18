@@ -37,6 +37,7 @@ namespace nabla {
     class ufunc_ ## name : public nabla_base<ufunc_ ## name> {		\
     public:								\
       using nabla_base<ufunc_ ## name>::diff;				\
+      using nabla_base<ufunc_ ## name>::operator();			\
       static int constexpr dimension = 1;				\
 									\
       template<int N>							\

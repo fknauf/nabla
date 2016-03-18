@@ -69,4 +69,19 @@ BOOST_AUTO_TEST_CASE( case_degrade )  {
   BOOST_CHECK((std::is_same<nabla::expr::constant, decltype(f.diff(x, x))>::value));
 }
 
+BOOST_AUTO_TEST_CASE( params_expanded )  {
+  nabla::expr::variable<0> x;
+  nabla::expr::variable<1> y;
+
+  auto f = nabla::expr::impl::make_conditional([](auto &&) { return true; }, x * x, x * y);
+
+  BOOST_CHECK_EQUAL(9, f(3, 4, 5));
+
+  BOOST_CHECK_EQUAL(6, f.diff(x)(3, 4, 5));
+  BOOST_CHECK_EQUAL(0, f.diff(y)(3, 4, 5));
+
+  BOOST_CHECK_EQUAL(2, f.diff(x, x)(3, 4, 5));
+  BOOST_CHECK_EQUAL(0, f.diff(x, y)(3, 4, 5));
+}
+
 BOOST_AUTO_TEST_SUITE_END()

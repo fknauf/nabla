@@ -3,6 +3,7 @@
 
 #include "fwd.hh"
 #include "nabla_tag.hh"
+#include "vector.hh"
 
 namespace nabla {
   namespace expr {
@@ -15,6 +16,12 @@ namespace nabla {
 	return self().diff(head).diff(tail...);
       }
 
+      template<typename... Values>
+      std::enable_if_t<pack::applies_to_all<traits::is_nabla_value_type, traits::plain_type<Values>...>::value, double>
+      operator()(Values&&... values) const {
+	return self()(make_vector(std::forward<Values>(values)...));
+      }
+      
       /*     
       template<typename... Inner>
       std::enable_if_t<traits::is_nabla_tuple<Inner...>::value,

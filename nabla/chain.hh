@@ -70,7 +70,7 @@ namespace nabla {
       template<int Direction>
       struct chain_diff_accumulator<Direction, -1> {
 	template<typename O, typename T>
-	  static constant accumulate(O &&outer, T &&inners) {
+	static constant accumulate(O &&, T &&) {
 	  return { 0.0 };
 	}
       };
@@ -83,6 +83,7 @@ namespace nabla {
 		    "Chain rule: Outer function expects more arguments than are given");
       
       using nabla_base<chain>::diff;
+      using nabla_base<chain>::operator();
       static int constexpr dimension = std::max({ Inner::dimension... });
 
       template<typename O, typename... I>

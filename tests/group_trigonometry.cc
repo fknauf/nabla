@@ -20,6 +20,14 @@ BOOST_AUTO_TEST_CASE( test_sin ) {
   BOOST_CHECK_CLOSE(r           ,     std::sin(2 * p(0) + 4 * p(1)), epsilon);
   BOOST_CHECK_CLOSE(s.diff(x)(p), 2 * std::cos(2 * p(0) + 4 * p(1)), epsilon);
   BOOST_CHECK_CLOSE(s.diff(y)(p), 4 * std::cos(2 * p(0) + 4 * p(1)), epsilon);
+
+  BOOST_CHECK_CLOSE(s              (p(0), p(1)), s              (p), epsilon);
+  BOOST_CHECK_CLOSE(s.diff(x      )(p(0), p(1)), s.diff(x      )(p), epsilon);
+  BOOST_CHECK_CLOSE(s.diff(y      )(p(0), p(1)), s.diff(y      )(p), epsilon);
+  BOOST_CHECK_CLOSE(s.diff(x, x   )(p(0), p(1)), s.diff(x, x   )(p), epsilon);
+  BOOST_CHECK_CLOSE(s.diff(x, y   )(p(0), p(1)), s.diff(x, y   )(p), epsilon);
+  BOOST_CHECK_CLOSE(s.diff(x, x, x)(p(0), p(1)), s.diff(x, x, x)(p), epsilon);
+  BOOST_CHECK_CLOSE(s.diff(x, x, y)(p(0), p(1)), s.diff(x, x, y)(p), epsilon);
 }
 
 BOOST_AUTO_TEST_CASE( test_cos ) {
@@ -35,6 +43,14 @@ BOOST_AUTO_TEST_CASE( test_cos ) {
   BOOST_CHECK_CLOSE(r           ,      std::cos(2 * p(0) + 4 * p(1)), epsilon);
   BOOST_CHECK_CLOSE(s.diff(x)(p), 2 * -std::sin(2 * p(0) + 4 * p(1)), epsilon);
   BOOST_CHECK_CLOSE(s.diff(y)(p), 4 * -std::sin(2 * p(0) + 4 * p(1)), epsilon);
+
+  BOOST_CHECK_CLOSE(s              (p(0), p(1)), s              (p), epsilon);
+  BOOST_CHECK_CLOSE(s.diff(x      )(p(0), p(1)), s.diff(x      )(p), epsilon);
+  BOOST_CHECK_CLOSE(s.diff(y      )(p(0), p(1)), s.diff(y      )(p), epsilon);
+  BOOST_CHECK_CLOSE(s.diff(x, x   )(p(0), p(1)), s.diff(x, x   )(p), epsilon);
+  BOOST_CHECK_CLOSE(s.diff(x, y   )(p(0), p(1)), s.diff(x, y   )(p), epsilon);
+  BOOST_CHECK_CLOSE(s.diff(x, x, x)(p(0), p(1)), s.diff(x, x, x)(p), epsilon);
+  BOOST_CHECK_CLOSE(s.diff(x, x, y)(p(0), p(1)), s.diff(x, x, y)(p), epsilon);
 }
 
 BOOST_AUTO_TEST_CASE( test_tan ) {
@@ -50,6 +66,14 @@ BOOST_AUTO_TEST_CASE( test_tan ) {
   BOOST_CHECK_CLOSE(r           ,               std::tan(2 * p(0) - 4 * p(1))    , epsilon);
   BOOST_CHECK_CLOSE(s.diff(x)(p),  2 / std::pow(std::cos(4 * p(1) - 2 * p(0)), 2), epsilon);
   BOOST_CHECK_CLOSE(s.diff(y)(p), -4 / std::pow(std::cos(4 * p(1) - 2 * p(0)), 2), epsilon);
+
+  BOOST_CHECK_CLOSE(s              (p(0), p(1)), s              (p), epsilon);
+  BOOST_CHECK_CLOSE(s.diff(x      )(p(0), p(1)), s.diff(x      )(p), epsilon);
+  BOOST_CHECK_CLOSE(s.diff(y      )(p(0), p(1)), s.diff(y      )(p), epsilon);
+  BOOST_CHECK_CLOSE(s.diff(x, x   )(p(0), p(1)), s.diff(x, x   )(p), epsilon);
+  BOOST_CHECK_CLOSE(s.diff(x, y   )(p(0), p(1)), s.diff(x, y   )(p), epsilon);
+  BOOST_CHECK_CLOSE(s.diff(x, x, x)(p(0), p(1)), s.diff(x, x, x)(p), epsilon);
+  BOOST_CHECK_CLOSE(s.diff(x, x, y)(p(0), p(1)), s.diff(x, x, y)(p), epsilon);
 }
 
 BOOST_AUTO_TEST_CASE( test_asin ) {
@@ -65,6 +89,14 @@ BOOST_AUTO_TEST_CASE( test_asin ) {
   BOOST_CHECK_CLOSE(r           ,                         std::asin(p(0) * p(0) + p(1))    , epsilon);
   BOOST_CHECK_CLOSE(s.diff(x)(p), 2 * p(0) / std::sqrt(1 - std::pow(p(0) * p(0) + p(1), 2)), epsilon);
   BOOST_CHECK_CLOSE(s.diff(y)(p), 1        / std::sqrt(1 - std::pow(p(0) * p(0) + p(1), 2)), epsilon);
+
+  BOOST_CHECK_CLOSE(s              (p(0), p(1)), s              (p), epsilon);
+  BOOST_CHECK_CLOSE(s.diff(x      )(p(0), p(1)), s.diff(x      )(p), epsilon);
+  BOOST_CHECK_CLOSE(s.diff(y      )(p(0), p(1)), s.diff(y      )(p), epsilon);
+  BOOST_CHECK_CLOSE(s.diff(x, x   )(p(0), p(1)), s.diff(x, x   )(p), epsilon);
+  BOOST_CHECK_CLOSE(s.diff(x, y   )(p(0), p(1)), s.diff(x, y   )(p), epsilon);
+  BOOST_CHECK_CLOSE(s.diff(x, x, x)(p(0), p(1)), s.diff(x, x, x)(p), epsilon);
+  BOOST_CHECK_CLOSE(s.diff(x, x, y)(p(0), p(1)), s.diff(x, x, y)(p), epsilon);
 }
 
 BOOST_AUTO_TEST_CASE( test_acos ) {
@@ -80,6 +112,14 @@ BOOST_AUTO_TEST_CASE( test_acos ) {
   BOOST_CHECK_CLOSE(r           ,                          std::acos(p(0) * p(0) + p(1))    , epsilon);
   BOOST_CHECK_CLOSE(s.diff(x)(p), -2 * p(0) / std::sqrt(1 - std::pow(p(0) * p(0) + p(1), 2)), epsilon);
   BOOST_CHECK_CLOSE(s.diff(y)(p), -1        / std::sqrt(1 - std::pow(p(0) * p(0) + p(1), 2)), epsilon);
+
+  BOOST_CHECK_CLOSE(s              (p(0), p(1)), s              (p), epsilon);
+  BOOST_CHECK_CLOSE(s.diff(x      )(p(0), p(1)), s.diff(x      )(p), epsilon);
+  BOOST_CHECK_CLOSE(s.diff(y      )(p(0), p(1)), s.diff(y      )(p), epsilon);
+  BOOST_CHECK_CLOSE(s.diff(x, x   )(p(0), p(1)), s.diff(x, x   )(p), epsilon);
+  BOOST_CHECK_CLOSE(s.diff(x, y   )(p(0), p(1)), s.diff(x, y   )(p), epsilon);
+  BOOST_CHECK_CLOSE(s.diff(x, x, x)(p(0), p(1)), s.diff(x, x, x)(p), epsilon);
+  BOOST_CHECK_CLOSE(s.diff(x, x, y)(p(0), p(1)), s.diff(x, x, y)(p), epsilon);
 }
 
 BOOST_AUTO_TEST_CASE( test_atan ) {
@@ -95,6 +135,14 @@ BOOST_AUTO_TEST_CASE( test_atan ) {
   BOOST_CHECK_CLOSE(r           ,                std::atan(p(0) * p(0) + p(1))    , epsilon);
   BOOST_CHECK_CLOSE(s.diff(x)(p), 2 * p(0) / (1 + std::pow(p(0) * p(0) + p(1), 2)), epsilon);
   BOOST_CHECK_CLOSE(s.diff(y)(p), 1        / (1 + std::pow(p(0) * p(0) + p(1), 2)), epsilon);
+
+  BOOST_CHECK_CLOSE(s              (p(0), p(1)), s              (p), epsilon);
+  BOOST_CHECK_CLOSE(s.diff(x      )(p(0), p(1)), s.diff(x      )(p), epsilon);
+  BOOST_CHECK_CLOSE(s.diff(y      )(p(0), p(1)), s.diff(y      )(p), epsilon);
+  BOOST_CHECK_CLOSE(s.diff(x, x   )(p(0), p(1)), s.diff(x, x   )(p), epsilon);
+  BOOST_CHECK_CLOSE(s.diff(x, y   )(p(0), p(1)), s.diff(x, y   )(p), epsilon);
+  BOOST_CHECK_CLOSE(s.diff(x, x, x)(p(0), p(1)), s.diff(x, x, x)(p), epsilon);
+  BOOST_CHECK_CLOSE(s.diff(x, x, y)(p(0), p(1)), s.diff(x, x, y)(p), epsilon);
 }
 
 BOOST_AUTO_TEST_SUITE_END()

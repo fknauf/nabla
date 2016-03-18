@@ -34,6 +34,11 @@ BOOST_AUTO_TEST_CASE( simple )  {
   BOOST_CHECK_CLOSE(f.diff(x, y)   (vars), f.diff(y, x   )(vars), epsilon);
   BOOST_CHECK_CLOSE(f.diff(x, x, y)(vars), f.diff(y, x, x)(vars), epsilon);
   BOOST_CHECK_CLOSE(f.diff(x, x, y)(vars), f.diff(x, y, x)(vars), epsilon);
+
+  BOOST_CHECK_CLOSE(f              (vars(0), vars(1)), f              (vars), epsilon);
+  BOOST_CHECK_CLOSE(f.diff(x      )(vars(0), vars(1)), f.diff(x      )(vars), epsilon);
+  BOOST_CHECK_CLOSE(f.diff(x, x   )(vars(0), vars(1)), f.diff(x, x   )(vars), epsilon);
+  BOOST_CHECK_CLOSE(f.diff(x, x, x)(vars(0), vars(1)), f.diff(x, x, x)(vars), epsilon);
 }
 
 BOOST_AUTO_TEST_CASE( mixed )  {
@@ -54,6 +59,11 @@ BOOST_AUTO_TEST_CASE( mixed )  {
   BOOST_CHECK_CLOSE(dy, f.diff(y      )(p), epsilon);
 
   BOOST_CHECK_CLOSE(9.893089493270056e68, f.diff(x, y)(p), epsilon);
+
+  BOOST_CHECK_CLOSE(f              (p(0), p(1)), f              (p), epsilon);
+  BOOST_CHECK_CLOSE(f.diff(x      )(p(0), p(1)), f.diff(x      )(p), epsilon);
+  BOOST_CHECK_CLOSE(f.diff(x, x   )(p(0), p(1)), f.diff(x, x   )(p), epsilon);
+  BOOST_CHECK_CLOSE(f.diff(x, x, x)(p(0), p(1)), f.diff(x, x, x)(p), epsilon);
 }
 
 BOOST_AUTO_TEST_CASE( test_simple ) {
@@ -69,8 +79,12 @@ BOOST_AUTO_TEST_CASE( test_simple ) {
   BOOST_CHECK_CLOSE(r           , std::pow(p(0), p(1))                 , epsilon);
   BOOST_CHECK_CLOSE(s.diff(x)(p), std::pow(p(0), p(1) - 1) * p(1)      , epsilon);
   BOOST_CHECK_CLOSE(s.diff(y)(p), std::pow(p(0), p(1)) * std::log(p(0)), epsilon);
-}
 
+  BOOST_CHECK_CLOSE(s              (p(0), p(1)), s              (p), epsilon);
+  BOOST_CHECK_CLOSE(s.diff(x      )(p(0), p(1)), s.diff(x      )(p), epsilon);
+  BOOST_CHECK_CLOSE(s.diff(x, x   )(p(0), p(1)), s.diff(x, x   )(p), epsilon);
+  BOOST_CHECK_CLOSE(s.diff(x, x, x)(p(0), p(1)), s.diff(x, x, x)(p), epsilon);
+}
 
 BOOST_AUTO_TEST_CASE( test_mixed ) {
   auto x = nabla::expr::variable<0>();
@@ -89,6 +103,11 @@ BOOST_AUTO_TEST_CASE( test_mixed ) {
   BOOST_CHECK_CLOSE(r           , exv, epsilon);
   BOOST_CHECK_CLOSE(s.diff(x)(p), dx , epsilon);
   BOOST_CHECK_CLOSE(s.diff(y)(p), dy , epsilon);
+
+  BOOST_CHECK_CLOSE(s              (p(0), p(1)), s              (p), epsilon);
+  BOOST_CHECK_CLOSE(s.diff(x      )(p(0), p(1)), s.diff(x      )(p), epsilon);
+  BOOST_CHECK_CLOSE(s.diff(x, x   )(p(0), p(1)), s.diff(x, x   )(p), epsilon);
+  BOOST_CHECK_CLOSE(s.diff(x, x, x)(p(0), p(1)), s.diff(x, x, x)(p), epsilon);
 }
 
 BOOST_AUTO_TEST_SUITE_END()

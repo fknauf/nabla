@@ -120,4 +120,25 @@ BOOST_AUTO_TEST_CASE( n1_simple_num ) {
   BOOST_CHECK_CLOSE(0.0, s.diff(y)(p), epsilon);
 }
 
+BOOST_AUTO_TEST_CASE( params_expanded )  {
+  nabla::expr::variable<0> x;
+  nabla::expr::variable<1> y;
+  nabla::expr::variable<2> z;
+
+  auto f = x * x * y;
+  auto g = x * x;
+  auto h = x + 2 * x * y;
+
+  nabla::expr::chain<decltype(f), decltype(g), decltype(h)> c(f, g, h);
+  
+  BOOST_CHECK_EQUAL(224, c(2, 3, 4));
+
+  BOOST_CHECK_EQUAL(560, c.diff(x)(2, 3, 4));
+  BOOST_CHECK_EQUAL( 64, c.diff(y)(2, 3, 4));
+  BOOST_CHECK_EQUAL(  0, c.diff(z)(2, 3, 4));
+
+  BOOST_CHECK_EQUAL(160, c.diff(x, y)(2, 3, 4));
+  BOOST_CHECK_EQUAL(160, c.diff(y, x)(2, 3, 4));
+}
+
 BOOST_AUTO_TEST_SUITE_END()

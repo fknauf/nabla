@@ -12,6 +12,7 @@ namespace nabla {
       static_assert(N >= 0, "Variables are numbered starting from 0");
       
       using nabla_base<variable>::diff;
+      using nabla_base<variable>::operator();
       static int constexpr dimension = N + 1;
 
       template<int O>

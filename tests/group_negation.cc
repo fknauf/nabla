@@ -3,6 +3,10 @@
 
 #include <boost/test/unit_test.hpp>
 
+namespace {
+  double const epsilon = 1e-7;
+}
+
 BOOST_AUTO_TEST_SUITE( negation )
 
 BOOST_AUTO_TEST_CASE( diff_by_var )  {
@@ -29,6 +33,11 @@ BOOST_AUTO_TEST_CASE( diff_by_var )  {
   BOOST_CHECK_EQUAL( 0, f.diff(z, x)(vars));
   BOOST_CHECK_EQUAL( 0, f.diff(z, y)(vars));
   BOOST_CHECK_EQUAL( 0, f.diff(z, z)(vars));
+
+  BOOST_CHECK_CLOSE(f              (vars(0), vars(1)), f              (vars), epsilon);
+  BOOST_CHECK_CLOSE(f.diff(x      )(vars(0), vars(1)), f.diff(x      )(vars), epsilon);
+  BOOST_CHECK_CLOSE(f.diff(x, x   )(vars(0), vars(1)), f.diff(x, x   )(vars), epsilon);
+  BOOST_CHECK_CLOSE(f.diff(x, x, x)(vars(0), vars(1)), f.diff(x, x, x)(vars), epsilon);
 }
 
 BOOST_AUTO_TEST_CASE( diff_by_num )  {
@@ -53,6 +62,10 @@ BOOST_AUTO_TEST_CASE( diff_by_num )  {
   BOOST_CHECK_EQUAL( 0, f.diff<2>().diff<0>()(vars));
   BOOST_CHECK_EQUAL( 0, f.diff<2>().diff<1>()(vars));
   BOOST_CHECK_EQUAL( 0, f.diff<2>().diff<2>()(vars));
+
+  BOOST_CHECK_CLOSE(f.diff(x      )(vars(0), vars(1)), f.diff(x      )(vars), epsilon);
+  BOOST_CHECK_CLOSE(f.diff(x, x   )(vars(0), vars(1)), f.diff(x, x   )(vars), epsilon);
+  BOOST_CHECK_CLOSE(f.diff(x, x, x)(vars(0), vars(1)), f.diff(x, x, x)(vars), epsilon);
 }
 
 BOOST_AUTO_TEST_SUITE_END()

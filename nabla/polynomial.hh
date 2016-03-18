@@ -21,6 +21,7 @@ namespace nabla {
     class polynomial : public nabla_base<polynomial> {
     public:
       using nabla_base<polynomial>::diff;
+      using nabla_base<polynomial>::operator();
       static int constexpr dimension = 1;
 
       polynomial(constant exponent)

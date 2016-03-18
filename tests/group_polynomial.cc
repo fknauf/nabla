@@ -29,6 +29,9 @@ BOOST_AUTO_TEST_CASE( simple_square )  {
 
   BOOST_CHECK_EQUAL(0, f.diff(x, x, x)(vars));
   BOOST_CHECK_EQUAL(0, f.diff(x, x, y)(vars));
+
+  BOOST_CHECK_EQUAL(f        (vars(0)), f        (vars));
+  BOOST_CHECK_EQUAL(f.diff(x)(vars(0)), f.diff(x)(vars));
 }
 
 BOOST_AUTO_TEST_CASE( simple_real )  {
@@ -48,6 +51,9 @@ BOOST_AUTO_TEST_CASE( simple_real )  {
   BOOST_CHECK_EQUAL(0                                 , f.diff(x, y   )(vars));
   BOOST_CHECK_CLOSE(3.5 * 2.5 * 1.5 * std::sqrt(3)    , f.diff(x, x, x)(vars), epsilon);
   BOOST_CHECK_EQUAL(0                                 , f.diff(x, x, y)(vars));
+
+  BOOST_CHECK_EQUAL(f        (vars(0)), f        (vars));
+  BOOST_CHECK_EQUAL(f.diff(x)(vars(0)), f.diff(x)(vars));
 }
 
 BOOST_AUTO_TEST_CASE( simple_0 )  {
@@ -67,6 +73,9 @@ BOOST_AUTO_TEST_CASE( simple_0 )  {
   BOOST_CHECK_EQUAL(0, f.diff(x, y   )(vars));
   BOOST_CHECK_CLOSE(0, f.diff(x, x, x)(vars), epsilon);
   BOOST_CHECK_EQUAL(0, f.diff(x, x, y)(vars));
+
+  BOOST_CHECK_EQUAL(f        (vars(0)), f        (vars));
+  BOOST_CHECK_EQUAL(f.diff(x)(vars(0)), f.diff(x)(vars));
 }
 
 BOOST_AUTO_TEST_CASE( simple_break )  {
@@ -81,6 +90,9 @@ BOOST_AUTO_TEST_CASE( simple_break )  {
   BOOST_CHECK_SMALL(   f           (vars), epsilon);
   BOOST_CHECK_CLOSE(1, f.diff(x   )(vars), epsilon);
   BOOST_CHECK_CLOSE(0, f.diff(x, x)(vars), epsilon);
+
+  BOOST_CHECK_EQUAL(f        (vars(0)), f        (vars));
+  BOOST_CHECK_EQUAL(f.diff(x)(vars(0)), f.diff(x)(vars));
 }
 
 BOOST_AUTO_TEST_CASE( chain )  {
@@ -100,8 +112,10 @@ BOOST_AUTO_TEST_CASE( chain )  {
   BOOST_CHECK_EQUAL(-12, f.diff(x, y   )(vars));
   BOOST_CHECK_CLOSE( -6, f.diff(x, x, x)(vars), epsilon);
   BOOST_CHECK_EQUAL(  6, f.diff(x, x, y)(vars));
-}
 
+  BOOST_CHECK_EQUAL(f        (vars(0), vars(1)), f        (vars));
+  BOOST_CHECK_EQUAL(f.diff(x)(vars(0), vars(1)), f.diff(x)(vars));
+}
 
 BOOST_AUTO_TEST_CASE( test_polynomial ) {
   auto x = nabla::expr::variable<0>();
@@ -116,6 +130,9 @@ BOOST_AUTO_TEST_CASE( test_polynomial ) {
   BOOST_CHECK_CLOSE(r           ,     std::pow(p(0) * p(1), 4)             , epsilon);
   BOOST_CHECK_CLOSE(s.diff(x)(p), 4 * std::pow(p(0), 3) * std::pow(p(1), 4), epsilon);
   BOOST_CHECK_CLOSE(s.diff(y)(p), 4 * std::pow(p(0), 4) * std::pow(p(1), 3), epsilon);
+
+  BOOST_CHECK_EQUAL(s        (p(0), p(1)), s        (p));
+  BOOST_CHECK_EQUAL(s.diff(x)(p(0), p(1)), s.diff(x)(p));
 }
 
 BOOST_AUTO_TEST_CASE( test_polynomial_2 ) {
@@ -139,6 +156,9 @@ BOOST_AUTO_TEST_CASE( test_polynomial_2 ) {
   BOOST_CHECK_CLOSE(r           , exv, epsilon);
   BOOST_CHECK_CLOSE(s.diff(x)(p),  dx, epsilon);
   BOOST_CHECK_CLOSE(s.diff(y)(p), -dx, epsilon);
+
+  BOOST_CHECK_EQUAL(s        (p(0), p(1)), s        (p));
+  BOOST_CHECK_EQUAL(s.diff(x)(p(0), p(1)), s.diff(x)(p));
 }
 
 BOOST_AUTO_TEST_CASE( test_degenerated ) {
@@ -158,6 +178,9 @@ BOOST_AUTO_TEST_CASE( test_degenerated ) {
 
   BOOST_CHECK_CLOSE(r           , 1.0, epsilon);
   BOOST_CHECK_CLOSE(s.diff(x)(p), 0.0, epsilon);
+
+  BOOST_CHECK_EQUAL(s        (p(0)), s        (p));
+  BOOST_CHECK_EQUAL(s.diff(x)(p(0)), s.diff(x)(p));
 }
 
 BOOST_AUTO_TEST_SUITE_END()

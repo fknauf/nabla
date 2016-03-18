@@ -18,6 +18,7 @@ namespace nabla {
     class negation : public nabla_base<negation<Expr>> {
     public:
       using nabla_base<negation>::diff;
+      using nabla_base<negation>::operator();
       static int constexpr dimension = Expr::dimension;
 
       template<typename E>

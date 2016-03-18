@@ -18,6 +18,7 @@ namespace nabla {
     class logarithm : public nabla_base<logarithm> {
     public:
       using nabla_base<logarithm>::diff;
+      using nabla_base<logarithm>::operator();
       static int constexpr dimension = 1;
 
       template<int N>

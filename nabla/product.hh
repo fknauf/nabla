@@ -21,6 +21,7 @@ namespace nabla {
     template<typename LHS, typename RHS> class product : public nabla_base<product<LHS, RHS>> {
     public:
       using nabla_base<product>::diff;
+      using nabla_base<product>::operator();
       static int constexpr dimension = std::max(LHS::dimension, RHS::dimension);
 
       template<typename L, typename R>

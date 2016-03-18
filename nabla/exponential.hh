@@ -22,6 +22,7 @@ namespace nabla {
     class exponential : public nabla_base<exponential> {
     public:
       using nabla_base<exponential>::diff;
+      using nabla_base<exponential>::operator();
       static int constexpr dimension = 1;
       
       exponential(constant base)

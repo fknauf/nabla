@@ -142,4 +142,17 @@ BOOST_AUTO_TEST_CASE( twovar_plus_constant ) {
   BOOST_CHECK_EQUAL(-0.375, s.diff(y)(values));
 }
 
+BOOST_AUTO_TEST_CASE( params_expanded ) {
+  auto x = nabla::expr::variable<0>();
+  auto y = nabla::expr::variable<1>();
+
+  auto s = x / y / 0.5;
+
+  auto r = s(3, 4);
+
+  BOOST_CHECK_EQUAL( 1.5  , r);
+  BOOST_CHECK_EQUAL( 0.5  , s.diff(x)(3, 4));
+  BOOST_CHECK_EQUAL(-0.375, s.diff(y)(3, 4));
+}
+
 BOOST_AUTO_TEST_SUITE_END()

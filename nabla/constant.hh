@@ -13,6 +13,7 @@ namespace nabla {
     class constant : public nabla_base<constant> {
     public:
       using nabla_base<constant>::diff;
+      using nabla_base<constant>::operator();
       static int constexpr dimension = 0;
 
       constexpr constant(double value) noexcept

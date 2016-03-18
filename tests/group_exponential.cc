@@ -27,6 +27,14 @@ BOOST_AUTO_TEST_CASE( simple )  {
   BOOST_CHECK_EQUAL(                                          0, f.diff(x, y   )(vars));
   BOOST_CHECK_CLOSE(std::log(2) * std::log(2) * std::log(2) * 8, f.diff(x, x, x)(vars), epsilon);
   BOOST_CHECK_EQUAL(                                          0, f.diff(x, x, y)(vars));
+
+  BOOST_CHECK_CLOSE(f              (vars(0), vars(1)), f              (vars), epsilon);
+  BOOST_CHECK_CLOSE(f.diff(x      )(vars(0), vars(1)), f.diff(x      )(vars), epsilon);
+  BOOST_CHECK_CLOSE(f.diff(y      )(vars(0), vars(1)), f.diff(y      )(vars), epsilon);
+  BOOST_CHECK_CLOSE(f.diff(x, x   )(vars(0), vars(1)), f.diff(x, x   )(vars), epsilon);
+  BOOST_CHECK_CLOSE(f.diff(x, y   )(vars(0), vars(1)), f.diff(x, y   )(vars), epsilon);
+  BOOST_CHECK_CLOSE(f.diff(x, x, x)(vars(0), vars(1)), f.diff(x, x, x)(vars), epsilon);
+  BOOST_CHECK_CLOSE(f.diff(x, x, y)(vars(0), vars(1)), f.diff(x, x, y)(vars), epsilon);
 }
 
 BOOST_AUTO_TEST_CASE( medium )  {
@@ -46,6 +54,14 @@ BOOST_AUTO_TEST_CASE( medium )  {
   BOOST_CHECK_CLOSE(              -std::log(2) * std::log(2) * 8, f.diff(x, y   )(vars), epsilon);
   BOOST_CHECK_CLOSE( std::log(2) * std::log(2) * std::log(2) * 8, f.diff(x, x, x)(vars), epsilon);
   BOOST_CHECK_CLOSE(-std::log(2) * std::log(2) * std::log(2) * 8, f.diff(x, y, x)(vars), epsilon);
+
+  BOOST_CHECK_CLOSE(f              (vars(0), vars(1)), f              (vars), epsilon);
+  BOOST_CHECK_CLOSE(f.diff(x      )(vars(0), vars(1)), f.diff(x      )(vars), epsilon);
+  BOOST_CHECK_CLOSE(f.diff(y      )(vars(0), vars(1)), f.diff(y      )(vars), epsilon);
+  BOOST_CHECK_CLOSE(f.diff(x, x   )(vars(0), vars(1)), f.diff(x, x   )(vars), epsilon);
+  BOOST_CHECK_CLOSE(f.diff(x, y   )(vars(0), vars(1)), f.diff(x, y   )(vars), epsilon);
+  BOOST_CHECK_CLOSE(f.diff(x, x, x)(vars(0), vars(1)), f.diff(x, x, x)(vars), epsilon);
+  BOOST_CHECK_CLOSE(f.diff(x, x, y)(vars(0), vars(1)), f.diff(x, x, y)(vars), epsilon);
 }
 
 BOOST_AUTO_TEST_CASE( complex )  {
@@ -75,6 +91,14 @@ BOOST_AUTO_TEST_CASE( complex )  {
   BOOST_CHECK_CLOSE(  512 * l2 +  5120 * l2 * l2, f.diff(z, x)(vars), epsilon);
   BOOST_CHECK_CLOSE( -512 * l2 -  1024 * l2 * l2, f.diff(z, y)(vars), epsilon);
   BOOST_CHECK_CLOSE(              2048 * l2 * l2, f.diff(z, z)(vars), epsilon);
+
+  BOOST_CHECK_CLOSE(f              (vars(0), vars(1), vars(2)), f              (vars), epsilon);
+  BOOST_CHECK_CLOSE(f.diff(x      )(vars(0), vars(1), vars(2)), f.diff(x      )(vars), epsilon);
+  BOOST_CHECK_CLOSE(f.diff(y      )(vars(0), vars(1), vars(2)), f.diff(y      )(vars), epsilon);
+  BOOST_CHECK_CLOSE(f.diff(x, x   )(vars(0), vars(1), vars(2)), f.diff(x, x   )(vars), epsilon);
+  BOOST_CHECK_CLOSE(f.diff(x, y   )(vars(0), vars(1), vars(2)), f.diff(x, y   )(vars), epsilon);
+  BOOST_CHECK_CLOSE(f.diff(x, x, x)(vars(0), vars(1), vars(2)), f.diff(x, x, x)(vars), epsilon);
+  BOOST_CHECK_CLOSE(f.diff(x, x, y)(vars(0), vars(1), vars(2)), f.diff(x, x, y)(vars), epsilon);
 }
 
 BOOST_AUTO_TEST_CASE( test_trivial ) {
@@ -90,6 +114,14 @@ BOOST_AUTO_TEST_CASE( test_trivial ) {
   BOOST_CHECK_CLOSE(r           , std::pow(2.0, p(0) * p(1)), epsilon);
   BOOST_CHECK_CLOSE(s.diff(x)(p), p(1) * std::log(2) * r    , epsilon);
   BOOST_CHECK_CLOSE(s.diff(y)(p), p(0) * std::log(2) * r    , epsilon);
+
+  BOOST_CHECK_CLOSE(s              (p(0), p(1)), s              (p), epsilon);
+  BOOST_CHECK_CLOSE(s.diff(x      )(p(0), p(1)), s.diff(x      )(p), epsilon);
+  BOOST_CHECK_CLOSE(s.diff(y      )(p(0), p(1)), s.diff(y      )(p), epsilon);
+  BOOST_CHECK_CLOSE(s.diff(x, x   )(p(0), p(1)), s.diff(x, x   )(p), epsilon);
+  BOOST_CHECK_CLOSE(s.diff(x, y   )(p(0), p(1)), s.diff(x, y   )(p), epsilon);
+  BOOST_CHECK_CLOSE(s.diff(x, x, x)(p(0), p(1)), s.diff(x, x, x)(p), epsilon);
+  BOOST_CHECK_CLOSE(s.diff(x, x, y)(p(0), p(1)), s.diff(x, x, y)(p), epsilon);
 }
 
 BOOST_AUTO_TEST_CASE( test_stacked ) {
@@ -110,6 +142,14 @@ BOOST_AUTO_TEST_CASE( test_stacked ) {
   BOOST_CHECK_CLOSE(r           , exv, epsilon);
   BOOST_CHECK_CLOSE(s.diff(x)(p), dx , epsilon);
   BOOST_CHECK_CLOSE(s.diff(y)(p), dy , epsilon);
+
+  BOOST_CHECK_CLOSE(s              (p(0), p(1)), s              (p), epsilon);
+  BOOST_CHECK_CLOSE(s.diff(x      )(p(0), p(1)), s.diff(x      )(p), epsilon);
+  BOOST_CHECK_CLOSE(s.diff(y      )(p(0), p(1)), s.diff(y      )(p), epsilon);
+  BOOST_CHECK_CLOSE(s.diff(x, x   )(p(0), p(1)), s.diff(x, x   )(p), epsilon);
+  BOOST_CHECK_CLOSE(s.diff(x, y   )(p(0), p(1)), s.diff(x, y   )(p), epsilon);
+  BOOST_CHECK_CLOSE(s.diff(x, x, x)(p(0), p(1)), s.diff(x, x, x)(p), epsilon);
+  BOOST_CHECK_CLOSE(s.diff(x, x, y)(p(0), p(1)), s.diff(x, x, y)(p), epsilon);
 }
 
 

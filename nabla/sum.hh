@@ -27,6 +27,7 @@ namespace nabla {
     template<typename LHS, typename RHS> class sum : public nabla_base<sum<LHS, RHS>> {
     public:
       using nabla_base<sum>::diff;
+      using nabla_base<sum>::operator();
       static int constexpr dimension = std::max(LHS::dimension, RHS::dimension);
 
       template<typename L, typename R>

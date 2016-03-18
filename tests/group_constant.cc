@@ -55,4 +55,29 @@ BOOST_AUTO_TEST_CASE( diff_by_num )  {
   BOOST_CHECK_EQUAL(0.0, v.diff<2>().diff<2>()(vars));
 }
 
+BOOST_AUTO_TEST_CASE( params_expanded )  {
+  double val = 3.14;
+
+  nabla::expr::constant v(val);
+
+  nabla::expr::variable<0> x;
+  nabla::expr::variable<1> y;
+  nabla::expr::variable<2> z;
+  
+  BOOST_CHECK_EQUAL(val, v(1, 2, 3));
+
+  BOOST_CHECK_EQUAL(0.0, v.diff(x)(1, 2, 3));
+  BOOST_CHECK_EQUAL(0.0, v.diff(y)(1, 2, 3));
+  BOOST_CHECK_EQUAL(0.0, v.diff(z)(1, 2, 3));
+  BOOST_CHECK_EQUAL(0.0, v.diff(x, x)(1, 2, 3));
+  BOOST_CHECK_EQUAL(0.0, v.diff(x, y)(1, 2, 3));
+  BOOST_CHECK_EQUAL(0.0, v.diff(x, z)(1, 2, 3));
+  BOOST_CHECK_EQUAL(0.0, v.diff(y, x)(1, 2, 3));
+  BOOST_CHECK_EQUAL(0.0, v.diff(y, y)(1, 2, 3));
+  BOOST_CHECK_EQUAL(0.0, v.diff(y, z)(1, 2, 3));
+  BOOST_CHECK_EQUAL(0.0, v.diff(z, x)(1, 2, 3));
+  BOOST_CHECK_EQUAL(0.0, v.diff(z, y)(1, 2, 3));
+  BOOST_CHECK_EQUAL(0.0, v.diff(z, z)(1, 2, 3));
+}
+
 BOOST_AUTO_TEST_SUITE_END()

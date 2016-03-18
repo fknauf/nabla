@@ -33,6 +33,7 @@ namespace nabla {
     class conditional : public nabla_base<conditional<Condition, ExprTrue, ExprFalse, MinDimension> > {
     public:
       using nabla_base<conditional>::diff;
+      using nabla_base<conditional>::operator();
       static int constexpr dimension = std::max(MinDimension, std::max(ExprTrue::dimension, ExprFalse::dimension));
 
       template<typename C, typename T, typename F>

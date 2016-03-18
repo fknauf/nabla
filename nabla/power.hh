@@ -21,6 +21,7 @@ namespace nabla {
     class power : public nabla_base<power<Base, Exponent> > {
     public:
       using nabla_base<power>::diff;
+      using nabla_base<power>::operator();
       static int constexpr dimension = std::max(Base::dimension, Exponent::dimension);
 
       template<typename B, typename E>
