@@ -127,15 +127,22 @@ BOOST_AUTO_TEST_CASE( blackscholes ) {
       exp(-q * T) * S * gausscdf(log(S / K), (q - r - sigma * sigma / 2) * T, sigma * sqrt(T))
     - exp(-r * T) * K * gausscdf(log(S / K), (q - r + sigma * sigma / 2) * T, sigma * sqrt(T));
 
+  auto delta = callbsm.diff(S);
+  auto gamma = delta.diff(S);
+  auto theta = callbsm.diff(T);
+  auto vega  = callbsm.diff(sigma);
+  auto rho   = callbsm.diff(r);
+
   nabla::vector<4> params(1.02, 91. / 365, 0.4, 0.02);
 
   auto result = callbsm(params);
 
-  BOOST_CHECK_CLOSE(0.0509966634606674, result                     , epsilon);
-  BOOST_CHECK_CLOSE(0.394247053086975 , callbsm.diff(S    )(params), epsilon);
-  BOOST_CHECK_CLOSE(0.1599480892240612, callbsm.diff(T    )(params), epsilon);
-  BOOST_CHECK_CLOSE(0.195645889482365 , callbsm.diff(sigma)(params), epsilon);
-  BOOST_CHECK_CLOSE(0.0875433290208555, callbsm.diff(r    )(params), epsilon);
+  BOOST_CHECK_CLOSE(0.0509966634606674, result       , epsilon);
+  BOOST_CHECK_CLOSE(0.394247053086975 , delta(params), epsilon);
+  BOOST_CHECK_CLOSE(1.8856533851377741, gamma(params), epsilon);
+  BOOST_CHECK_CLOSE(0.1599480892240612, theta(params), epsilon);
+  BOOST_CHECK_CLOSE(0.195645889482365 , vega (params), epsilon);
+  BOOST_CHECK_CLOSE(0.0875433290208555, rho  (params), epsilon); 
 }
 
 BOOST_AUTO_TEST_CASE( test_fabs ) {

@@ -30,8 +30,19 @@ namespace nabla {
       struct chain_diff_accumulator {
 	template<typename O, typename T>
 	static auto accumulate(O &&outer, T &&inners) {
+	  return accumulate_dispatch(std::forward<O>(outer), std::forward<T>(inners), std::is_same<constant, std::tuple_element_t<N, traits::plain_type<T> > >());
+	}
+	  
+	template<typename O, typename T>
+	static auto accumulate_dispatch(O &&outer, T &&inners, std::true_type) {
 	  return
-	    chain_diff_accumulator<Direction, N - 1>::accumulate(std::forward<O>(outer), std::forward<T>(inners))
+	    chain_diff_accumulator<Direction, N - 1>::accumulate(std::forward<O>(outer), std::forward<T>(inners));
+	}
+
+	template<typename O, typename T>
+	static auto accumulate_dispatch(O &&outer, T &&inners, std::false_type) {
+	  return
+	    accumulate_dispatch(std::forward<O>(outer), std::forward<T>(inners), std::true_type())
 	    + make_chain_diff_term<Direction, N>(std::forward<O>(outer), std::forward<T>(inners), std::make_integer_sequence<int, traits::plain_type<O>::dimension>());
 	}
       };
@@ -40,7 +51,17 @@ namespace nabla {
       template<int Direction>
       struct chain_diff_accumulator<Direction, 0> {
 	template<typename O, typename T>
-	  static auto accumulate(O &&outer, T &&inners) {
+	static auto accumulate(O &&outer, T &&inners) {
+	  return accumulate_dispatch(std::forward<O>(outer), std::forward<T>(inners), std::is_same<constant, std::tuple_element_t<0, traits::plain_type<T> > >());
+	}
+
+	template<typename O, typename T>
+	static constant accumulate_dispatch(O &&, T &&, std::true_type) {
+	  return 0;
+	}
+	
+	template<typename O, typename T>
+	static auto accumulate_dispatch(O &&outer, T &&inners, std::false_type) {
 	  return make_chain_diff_term<Direction, 0>(std::forward<O>(outer), std::forward<T>(inners), std::make_integer_sequence<int, traits::plain_type<O>::dimension>());
 	}
       };

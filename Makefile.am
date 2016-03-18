@@ -37,7 +37,8 @@ tests_test_SOURCES = \
   tests/group_unary_functions.cc \
   tests/group_trigonometry.cc \
   tests/group_explog.cc \
-  tests/group_hyperbolic.cc
+  tests/group_hyperbolic.cc \
+  tests/group_hypot.cc
 
 # gcc 5 with -std=c++11 complains about Eigen's use of std::bind1st, std::bind2nd,
 # -Wno-deprecated-declarations makes it shut up

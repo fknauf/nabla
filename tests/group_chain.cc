@@ -99,33 +99,6 @@ BOOST_AUTO_TEST_CASE( n1_product_rule ) {
   BOOST_CHECK_CLOSE(7 * p(0) + 4 * p(1), s.diff(y)(p), epsilon);
 }
 
-BOOST_AUTO_TEST_CASE( n1_veclength ) {
-  auto x = nabla::expr::variable<0>();
-  auto y = nabla::expr::variable<1>();
-  auto z = nabla::expr::variable<2>();
-
-  auto s = hypot(x * y, x * z, 2, y * z);
-
-  nabla::vector<4> p(1.0, -3.0, 2.0, 5.0);
-
-  auto r = s(p);
-
-  double exv = std::sqrt(std::pow(p(0) * p(1), 2)
-                         + std::pow(p(0) * p(2), 2)
-                         + std::pow(2, 2)
-                         + std::pow(p(1) * p(2), 2));
-
-  double dx = p(0) * (p(1) * p(1) + p(2) * p(2)) / exv;
-  double dy = p(1) * (p(0) * p(0) + p(2) * p(2)) / exv;
-  double dz = p(2) * (p(0) * p(0) + p(1) * p(1)) / exv;
-
-  BOOST_CHECK_CLOSE(exv, r, epsilon);
-
-  BOOST_CHECK_CLOSE(dx, s.diff(x)(p), epsilon);
-  BOOST_CHECK_CLOSE(dy, s.diff(y)(p), epsilon);
-  BOOST_CHECK_CLOSE(dz, s.diff(z)(p), epsilon);
-}
-
 BOOST_AUTO_TEST_CASE( n1_simple_num ) {
   auto x = nabla::expr::variable<0>();
   auto y = nabla::expr::variable<1>();
@@ -146,6 +119,5 @@ BOOST_AUTO_TEST_CASE( n1_simple_num ) {
   BOOST_CHECK_CLOSE(0.0, s.diff(x)(p), epsilon);
   BOOST_CHECK_CLOSE(0.0, s.diff(y)(p), epsilon);
 }
-
 
 BOOST_AUTO_TEST_SUITE_END()
