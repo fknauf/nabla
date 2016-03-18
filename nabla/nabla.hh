@@ -17,3 +17,4 @@
 #include "variable.hh"
 
 #include "gradient.hh"
+#include "hessian.hh"
