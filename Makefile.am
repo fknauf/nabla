@@ -51,6 +51,7 @@ tests_test_SOURCES = \
 # gcc 5 with -std=c++11 complains about Eigen's use of std::bind1st, std::bind2nd,
 # -Wno-deprecated-declarations makes it shut up
 tests_test_CPPFLAGS = -I $(top_srcdir) \
+                      -I $(top_srcdir)/pack_traits \
                       $$(pkg-config --cflags eigen3) -D EIGEN_MPL2_ONLY \
                       -D BOOST_TEST_DYN_LINK \
                       -Wno-deprecated-declarations -Wall -Wextra
