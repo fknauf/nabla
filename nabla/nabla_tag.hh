@@ -2,6 +2,7 @@
 #define INCLUDED_NABLA2_NABLA_TAG_HH
 
 #include "fwd.hh"
+#include "util.hh"
 
 #include <pack/traits.hh>
 #include <type_traits>
@@ -23,10 +24,8 @@ namespace nabla {
     template<typename    T> using negated_nabla_equivalent = std::conditional_t<is_nabla_expression<T>::value, expr::negation<plain_type<T>>, expr::constant>;
 
     template<typename... T>
-    using is_nabla_tuple = std::integral_constant<bool,
-						  pack::applies_to_any<                is_nabla_expression,                                       T...>::value &&
-						  pack::applies_to_all<pack::or_reduce<is_nabla_expression, is_nabla_value_type>::template trait, T...>::value
-						  >;
+    using is_nabla_tuple = expr::impl::bool_constant<pack::applies_to_any<                is_nabla_expression,                                       T...>::value &&
+						     pack::applies_to_all<pack::or_reduce<is_nabla_expression, is_nabla_value_type>::template trait, T...>::value>;
 
     template<typename LHS, typename RHS>
     using is_nabla_pair = is_nabla_tuple<LHS, RHS>;

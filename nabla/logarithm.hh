@@ -4,6 +4,7 @@
 #include "fwd.hh"
 #include "chain.hh"
 #include "division.hh"
+#include "util.hh"
 
 namespace nabla {
   namespace expr {
@@ -26,7 +27,7 @@ namespace nabla {
 
       template<int N>
       auto diff(variable<N> const &var = {}) const {
-	return diff_dispatch(var, std::integral_constant<bool, N == 0>());
+	return diff_dispatch(var, impl::bool_constant<N == 0>());
       }
 
     private:

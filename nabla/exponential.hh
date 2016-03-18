@@ -6,6 +6,7 @@
 #include "chain.hh"
 #include "product.hh"
 #include "sum.hh"
+#include "util.hh"
 
 #include <cmath>
 #include <type_traits>
@@ -35,7 +36,7 @@ namespace nabla {
 
       template<int N>
       auto diff(variable<N> const & = {}) const {
-	return diff_dispatch(std::integral_constant<bool, N == 0>());
+	return diff_dispatch(impl::bool_constant<N == 0>());
       }
 
     private:

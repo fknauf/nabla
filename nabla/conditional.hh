@@ -4,6 +4,7 @@
 #include "fwd.hh"
 
 #include "nabla_base.hh"
+#include "util.hh"
 #include "variable.hh"
 #include "vector.hh"
 
@@ -48,10 +49,8 @@ namespace nabla {
 
       template<int N>
       auto diff(variable<N> const &var = {}) const {
-	return diff_dispatch(var, std::integral_constant<bool,
-			     N < dimension &&
-			     (!std::is_same<constant, ExprTrue >::value ||
-			      !std::is_same<constant, ExprFalse>::value)>());
+	return diff_dispatch(var, impl::bool_constant<(N < dimension) && (!std::is_same<constant, ExprTrue >::value ||
+									  !std::is_same<constant, ExprFalse>::value)>());
       }
       
     private:
