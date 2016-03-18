@@ -17,8 +17,6 @@ BOOST_AUTO_TEST_CASE ( simple ) {
 
   auto h = nabla::hessian(f, 2, 3);
 
-  std::cout << h << std::endl;
-
   BOOST_CHECK_CLOSE( 2, h(0, 0), epsilon);
   BOOST_CHECK_CLOSE(-2, h(0, 1), epsilon);
   BOOST_CHECK_CLOSE(-2, h(1, 0), epsilon);
