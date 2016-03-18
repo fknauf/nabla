@@ -45,6 +45,7 @@ namespace nabla {
 
       template<int N>
       auto operator()(vector<N> const &vars) const {
+	static_assert(N >= dimension, "input value vector too short");
 	return condition_(vars) ? expr_true_(vars) : expr_false_(vars);
       }
 

@@ -21,6 +21,7 @@ namespace nabla {
 
       template<int N>
       constant diff(variable<N> const & = {}) const noexcept {
+	static_assert(N >= dimension, "input value vector is shorter than zero elements? O.o");
 	return constant(0.0);
       }
 

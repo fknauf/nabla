@@ -30,6 +30,7 @@ namespace nabla {
 
       template<int N>
       auto operator()(vector<N> const &vars) const {
+	static_assert(N >= dimension, "input value vector too short");
 	return std::pow(vars(0), exponent_(vars));
       }
 
