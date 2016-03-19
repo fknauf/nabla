@@ -55,7 +55,7 @@ tests_test_SOURCES = \
 
 # gcc 5 with -std=c++11 complains about Eigen's use of std::bind1st, std::bind2nd,
 # -Wno-deprecated-declarations makes it shut up
-tests_test_CPPFLAGS = -D BOOST_TEST_DYN_LINK
+tests_test_CPPFLAGS = $(AM_CPPFLAGS) -D BOOST_TEST_DYN_LINK
 tests_test_CXXFLAGS = -g -O0
 tests_test_LDADD    = -lboost_unit_test_framework
 
