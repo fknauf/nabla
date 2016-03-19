@@ -1,4 +1,4 @@
-# Nabla - automatic gradients for C++
+# Nabla - automatic partial derivatives for C++
 
 Nabla is a library for automatic partial differentiation of multivariate functions
 using C++ expression templates for speed and profit. Currently it handles functions in
