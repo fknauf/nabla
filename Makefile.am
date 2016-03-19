@@ -1,3 +1,8 @@
+AM_CPPFLAGS = -I $(top_srcdir) \
+              -I $(top_srcdir)/pack_traits \
+              $$(pkg-config --cflags eigen3) -D EIGEN_MPL2_ONLY \
+              -Wno-deprecated-declarations -Wall -Wextra
+
 nobase_include_HEADERS = \
   nabla/chain.hh \
   nabla/conditional.hh \
@@ -50,10 +55,9 @@ tests_test_SOURCES = \
 
 # gcc 5 with -std=c++11 complains about Eigen's use of std::bind1st, std::bind2nd,
 # -Wno-deprecated-declarations makes it shut up
-tests_test_CPPFLAGS = -I $(top_srcdir) \
-                      -I $(top_srcdir)/pack_traits \
-                      $$(pkg-config --cflags eigen3) -D EIGEN_MPL2_ONLY \
-                      -D BOOST_TEST_DYN_LINK \
-                      -Wno-deprecated-declarations -Wall -Wextra
+tests_test_CPPFLAGS = -D BOOST_TEST_DYN_LINK
 tests_test_CXXFLAGS = -g -O0
 tests_test_LDADD    = -lboost_unit_test_framework
+
+noinst_PROGRAMS = example
+example_SOURCES = example.cc
