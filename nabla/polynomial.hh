@@ -12,10 +12,9 @@
 
 namespace nabla {
   namespace expr {
-    template<typename Base>
-    std::enable_if_t<traits::is_nabla_expression<Base>::value, chain<polynomial, traits::plain_type<Base> > >
-    pow(Base &&base, constant exponent) {
-      return { polynomial(exponent), std::forward<Base>(base) };
+    template<typename Base, typename = std::enable_if_t<traits::is_nabla_variable<Base>::value> >
+    auto pow(Base &&base, constant exponent) {
+      return impl::make_chain(polynomial(exponent), std::forward<Base>(base));
     }
 
     class polynomial : public nabla_base<polynomial> {

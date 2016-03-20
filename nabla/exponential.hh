@@ -13,10 +13,9 @@
 
 namespace nabla {
   namespace expr {
-    template<typename Exponent>
-    std::enable_if_t<traits::is_nabla_expression<Exponent>::value, chain<exponential, traits::plain_type<Exponent> > >
-    pow(constant base, Exponent &&exponent) {
-      return { exponential(base), std::forward<Exponent>(exponent) };
+    template<typename Exponent, typename = std::enable_if_t<traits::is_nabla_variable<Exponent>::value> >
+    auto pow(constant base, Exponent &&exponent) {
+      return impl::make_chain(exponential(base), std::forward<Exponent>(exponent));
     }
 
     class exponential : public nabla_base<exponential> {

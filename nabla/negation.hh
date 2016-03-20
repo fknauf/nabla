@@ -8,8 +8,10 @@
 
 namespace nabla {
   namespace expr {
+    inline constant operator-(constant const &x) { return -x.value(); }
+
     template<typename Expr>
-    std::enable_if_t<traits::is_nabla_expression<Expr>::value, negation<traits::plain_type<Expr> > >
+    std::enable_if_t<traits::is_nabla_variable<Expr>::value, negation<traits::plain_type<Expr> > >
     operator-(Expr &&expr) {
       return { std::forward<Expr>(expr) };
     }

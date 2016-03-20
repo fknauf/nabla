@@ -5,14 +5,14 @@
 
 namespace nabla {
   namespace expr {
-    template<typename X>
-    auto Phi(X const &x) {
-      return 0.5 * (1 + erf(x / M_SQRT2));
+    template<typename X, typename = std::enable_if_t<traits::is_nabla_expression<X>::value> >
+    auto Phi(X &&x) {
+      return 0.5 * (1 + erf(std::forward<X>(x) / M_SQRT2));
     }
 
-    template<typename X, typename Mean, typename Sigma>
-    auto gausscdf(X const &x, Mean const &mu, Sigma const &sigma) {
-      return Phi((x - mu) / sigma);
+    template<typename X, typename Mean, typename Sigma, typename = std::enable_if_t<traits::is_nabla_tuple<X, Mean, Sigma>::value> >
+    auto gausscdf(X &&x, Mean &&mu, Sigma &&sigma) {
+      return Phi((std::forward<X>(x) - std::forward<Mean>(mu)) / std::forward<Sigma>(sigma));
     }
   }
 }

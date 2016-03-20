@@ -9,21 +9,22 @@
 namespace nabla {
   namespace impl {
     template<typename Function, int... I>
-    vector<sizeof...(I)> gradient(Function &&f, vector<sizeof...(I)> const &vars, std::integer_sequence<int, I...> const &) {
+    auto gradient(Function const &f, vector<sizeof...(I)> const &vars, std::integer_sequence<int, I...>) {
       return make_vector(f.template diff<I>()(vars)...);
     }
   }
 
-  template<typename Function, int N>
-  vector<N> gradient(Function &&f, vector<N> const &vars) {
-    return impl::gradient(std::forward<Function>(f), vars, std::make_integer_sequence<int, N>());
+  template<typename Function, int N, typename = std::enable_if_t<traits::is_nabla_expression<Function>::value> >
+  auto gradient(Function const &f, vector<N> const &vars) {
+    return impl::gradient(f, vars, std::make_integer_sequence<int, N>());
   }
 
-  template<typename Function, typename... Args>
-  std::enable_if_t<pack::applies_to_all<traits::is_nabla_value_type, Args...>::value,
-		   vector<sizeof...(Args)> >
-  gradient(Function &&f, Args&&... args) {
-    return gradient(std::forward<Function>(f), make_vector(std::forward<Args>(args)...));
+  template<typename Function,
+	   typename... Args,
+	   typename = std::enable_if_t<traits::is_nabla_expression<Function>::value &&
+				       pack::applies_to_all<traits::is_nabla_value_type, Args...>::value> >
+  auto gradient(Function const &f, Args&&... args) {
+    return gradient(f, make_vector(std::forward<Args>(args)...));
   }
 }
 

@@ -8,12 +8,13 @@
 
 namespace nabla {
   namespace expr {
-    template<typename Expr>
-    std::enable_if_t<traits::is_nabla_expression<Expr>::value, chain<logarithm, traits::plain_type<Expr> > >
-    log(Expr &&expr) {
-      return { logarithm(), std::forward<Expr>(expr) };
+    template<typename Expr, typename = std::enable_if_t<traits::is_nabla_variable<Expr>::value> >
+    auto log(Expr &&expr) {
+      return impl::make_chain(logarithm(), std::forward<Expr>(expr));
     }
 
+    inline constant log(constant const &x) { return std::log(x.value()); }
+    
     // natural logarithm, naturally.
     class logarithm : public nabla_base<logarithm> {
     public:

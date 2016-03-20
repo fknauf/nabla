@@ -11,12 +11,14 @@
 namespace nabla {
   namespace expr {
     template<typename Base, typename Exponent>
-    std::enable_if_t<traits::is_nabla_expression<Base>::value && traits::is_nabla_expression<Exponent>::value,
+    std::enable_if_t<pack::applies_to_all<traits::is_nabla_expression, Base, Exponent>::value && traits::constant_folding_impossible<Base, Exponent>::value,
 		     power<traits::plain_type<Base>, traits::plain_type<Exponent> > >
     pow(Base &&base, Exponent &&exponent) {
       return { std::forward<Base>(base), std::forward<Exponent>(exponent) };
     }
 
+    inline constant pow(constant const &base, constant const &exponent) { return std::pow(base.value(), exponent.value()); }
+    
     template<typename Base, typename Exponent>
     class power : public nabla_base<power<Base, Exponent> > {
     public:
@@ -26,8 +28,8 @@ namespace nabla {
 
       template<typename B, typename E>
       power(B &&base, E &&exponent)
-	: base_(base),
-	  exponent_(exponent) { }
+	: base_    (std::forward<B>(base)),
+	  exponent_(std::forward<E>(exponent)) { }
 
       template<int N>
       double operator()(vector<N> const &vars) const {

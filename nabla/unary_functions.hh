@@ -21,17 +21,17 @@ namespace nabla {
 #define NABLA_DECLARE_UNARY_FUNCTION(name, expr_val, expr_diff)         \
     class ufunc_ ## name;                                               \
                                                                         \
-    template<typename Expr>                                             \
-    std::enable_if_t<traits::is_nabla_expression<Expr>::value,          \
-                     chain<ufunc_ ## name, traits::plain_type<Expr> > > \
-    name(Expr &&expr) {                                                 \
-      return { ufunc_ ## name(), std::forward<Expr>(expr) };            \
-    }                                                                   \
-                                                                        \
     inline constant name(constant const &expr) {                        \
       double x = expr.value();                                          \
       static_cast<void>(x);                                             \
-      return expr_val;                                                  \
+      return (expr_val);						\
+    }                                                                   \
+                                                                        \
+    template<typename Expr>                                             \
+    std::enable_if_t<traits::is_nabla_variable<Expr>::value,		\
+                     chain<ufunc_ ## name, traits::plain_type<Expr> > > \
+    name(Expr &&expr) {                                                 \
+      return { ufunc_ ## name(), std::forward<Expr>(expr) };            \
     }                                                                   \
                                                                         \
     class ufunc_ ## name : public nabla_base<ufunc_ ## name> {          \

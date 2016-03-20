@@ -36,12 +36,10 @@ namespace nabla {
       }
     };
 
-    template<typename... Inners>
-    std::enable_if_t<traits::is_nabla_tuple<Inners...>::value,
-		     chain<mfunc_hypot<sizeof...(Inners)>,
-			   traits::nabla_equivalent<Inners>...> >
-    hypot(Inners&&... inners) {
-      return { mfunc_hypot<sizeof...(Inners)>(), std::forward<Inners>(inners)... };
+    // TODO: Implement constant folding
+    template<typename... Inners, typename = std::enable_if_t<traits::is_nabla_tuple<Inners...>::value> >
+    auto hypot(Inners&&... inners) {
+      return impl::make_chain(mfunc_hypot<sizeof...(Inners)>(), std::forward<Inners>(inners)...);
     }
   }
 }

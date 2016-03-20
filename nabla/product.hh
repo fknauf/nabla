@@ -11,13 +11,15 @@
 
 namespace nabla {
   namespace expr {
+    inline constant operator*(constant const &lhs, constant const &rhs) { return lhs.value() * rhs.value(); }
+
     template<typename LHS, typename RHS>
-    std::enable_if_t<traits::is_nabla_pair<LHS, RHS>::value, product<traits::nabla_equivalent<LHS>,
-								     traits::nabla_equivalent<RHS>>>
+    std::enable_if_t<traits::is_regular_nabla_tuple<LHS, RHS>::value, product<traits::nabla_equivalent<LHS>,
+									      traits::nabla_equivalent<RHS>>>
     operator*(LHS &&lhs, RHS &&rhs) {
       return { std::forward<LHS>(lhs), std::forward<RHS>(rhs) };
     }
-
+    
     template<typename LHS, typename RHS> class product : public nabla_base<product<LHS, RHS>> {
     public:
       using nabla_base<product>::diff;
