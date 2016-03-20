@@ -183,4 +183,16 @@ BOOST_AUTO_TEST_CASE( test_degenerated ) {
   BOOST_CHECK_EQUAL(s.diff(x)(p(0)), s.diff(x)(p));
 }
 
+BOOST_AUTO_TEST_CASE( constant_folding ) {
+  nabla::expr::constant c(3);
+
+  auto s = pow(c, 2);
+
+  BOOST_CHECK_EQUAL(9, s());
+  BOOST_CHECK_EQUAL(0, s.diff<0>()());
+
+  BOOST_CHECK((std::is_same<nabla::expr::constant, decltype(s          )>::value));
+  BOOST_CHECK((std::is_same<nabla::expr::constant, decltype(s.diff<0>())>::value));
+}
+
 BOOST_AUTO_TEST_SUITE_END()

@@ -145,4 +145,22 @@ BOOST_AUTO_TEST_CASE( test_atan ) {
   BOOST_CHECK_CLOSE(s.diff(x, x, y)(p(0), p(1)), s.diff(x, x, y)(p), epsilon);
 }
 
+BOOST_AUTO_TEST_CASE( constant_folding ) {
+  nabla::expr::constant c(0.5);
+
+  BOOST_CHECK_CLOSE(std::sin (c.value()), sin (c)(), epsilon);
+  BOOST_CHECK_CLOSE(std::cos (c.value()), cos (c)(), epsilon);
+  BOOST_CHECK_CLOSE(std::tan (c.value()), tan (c)(), epsilon);
+  BOOST_CHECK_CLOSE(std::acos(c.value()), acos(c)(), epsilon);
+  BOOST_CHECK_CLOSE(std::asin(c.value()), asin(c)(), epsilon);
+  BOOST_CHECK_CLOSE(std::atan(c.value()), atan(c)(), epsilon);
+
+  BOOST_CHECK((std::is_same<nabla::expr::constant, decltype(sin (c))>::value));
+  BOOST_CHECK((std::is_same<nabla::expr::constant, decltype(cos (c))>::value));
+  BOOST_CHECK((std::is_same<nabla::expr::constant, decltype(tan (c))>::value));
+  BOOST_CHECK((std::is_same<nabla::expr::constant, decltype(acos(c))>::value));
+  BOOST_CHECK((std::is_same<nabla::expr::constant, decltype(asin(c))>::value));
+  BOOST_CHECK((std::is_same<nabla::expr::constant, decltype(atan(c))>::value));
+}
+
 BOOST_AUTO_TEST_SUITE_END()

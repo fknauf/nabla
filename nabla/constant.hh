@@ -35,6 +35,25 @@ namespace nabla {
     private:
       double value_;
     };
+
+    namespace impl {
+      inline double constant_value(constant const &c) { return c.value(); }
+
+      template<typename T, typename = std::enable_if_t<traits::is_nabla_value_type<T>::value> >
+      double constant_value(T &&c) {
+	return c;
+      }
+    }
+
+    // Arguably this does not belong here, but this is included in all of
+    // polynomial.hh, exponential.hh and power.hh.
+    template<typename Base,
+	     typename Exponent,
+	     typename = std::enable_if_t<traits::constant_folding_possible<Base, Exponent>::value> >
+    inline constant pow(Base &&base, Exponent &&exponent) {
+      return std::pow(impl::constant_value(std::forward<Base>    (base    )),
+		      impl::constant_value(std::forward<Exponent>(exponent)));
+    }
   }
 }
 

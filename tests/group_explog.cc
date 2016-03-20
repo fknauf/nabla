@@ -140,4 +140,24 @@ BOOST_AUTO_TEST_CASE( test_log1p ) {
   BOOST_CHECK_CLOSE(s.diff(y)(p(0), p(1)), s.diff(y)(p), epsilon);
 }
 
+BOOST_AUTO_TEST_CASE( constant_folding ) {
+  nabla::expr::constant c(2);
+
+  BOOST_CHECK_CLOSE(std::exp  (c.value()), exp  (c)(), epsilon);
+  BOOST_CHECK_CLOSE(std::log  (c.value()), log  (c)(), epsilon);
+  BOOST_CHECK_CLOSE(std::exp2 (c.value()), exp2 (c)(), epsilon);
+  BOOST_CHECK_CLOSE(std::expm1(c.value()), expm1(c)(), epsilon);
+  BOOST_CHECK_CLOSE(std::log10(c.value()), log10(c)(), epsilon);
+  BOOST_CHECK_CLOSE(std::log2 (c.value()), log2 (c)(), epsilon);
+  BOOST_CHECK_CLOSE(std::log1p(c.value()), log1p(c)(), epsilon);
+
+  BOOST_CHECK((std::is_same<nabla::expr::constant, decltype(exp  (c))>::value));
+  BOOST_CHECK((std::is_same<nabla::expr::constant, decltype(log  (c))>::value));
+  BOOST_CHECK((std::is_same<nabla::expr::constant, decltype(exp2 (c))>::value));
+  BOOST_CHECK((std::is_same<nabla::expr::constant, decltype(expm1(c))>::value));
+  BOOST_CHECK((std::is_same<nabla::expr::constant, decltype(log10(c))>::value));
+  BOOST_CHECK((std::is_same<nabla::expr::constant, decltype(log2 (c))>::value));
+  BOOST_CHECK((std::is_same<nabla::expr::constant, decltype(log1p(c))>::value));
+}
+
 BOOST_AUTO_TEST_SUITE_END()

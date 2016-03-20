@@ -263,4 +263,20 @@ BOOST_AUTO_TEST_CASE( blackscholes_params_expanded ) {
   BOOST_CHECK_CLOSE(0.0875433290208555, rho    (vS, vT, vsigma, vr), epsilon); 
 }
 
+BOOST_AUTO_TEST_CASE( constant_folding ) {
+  nabla::expr::constant c(2);
+
+  BOOST_CHECK_CLOSE(std::sqrt(c.value()), sqrt(c)(), epsilon);
+  BOOST_CHECK_CLOSE(std::cbrt(c.value()), cbrt(c)(), epsilon);
+  BOOST_CHECK_CLOSE(std::erf (c.value()), erf (c)(), epsilon);
+  BOOST_CHECK_CLOSE(std::erfc(c.value()), erfc(c)(), epsilon);
+  BOOST_CHECK_CLOSE(0.5 * (1 + std::erf(c.value() / M_SQRT2)), Phi(c)(), epsilon);
+
+  BOOST_CHECK((std::is_same<nabla::expr::constant, decltype(sqrt(c))>::value));
+  BOOST_CHECK((std::is_same<nabla::expr::constant, decltype(cbrt(c))>::value));
+  BOOST_CHECK((std::is_same<nabla::expr::constant, decltype(erf (c))>::value));
+  BOOST_CHECK((std::is_same<nabla::expr::constant, decltype(erfc(c))>::value));
+  BOOST_CHECK((std::is_same<nabla::expr::constant, decltype(Phi (c))>::value));
+}
+
 BOOST_AUTO_TEST_SUITE_END()

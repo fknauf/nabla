@@ -68,4 +68,16 @@ BOOST_AUTO_TEST_CASE( diff_by_num )  {
   BOOST_CHECK_CLOSE(f.diff(x, x, x)(vars(0), vars(1)), f.diff(x, x, x)(vars), epsilon);
 }
 
+BOOST_AUTO_TEST_CASE(constant_folding) {
+  nabla::expr::constant c(2);
+
+  auto s = -c;
+
+  BOOST_CHECK_EQUAL(-2, s());
+  BOOST_CHECK_EQUAL( 0, s.diff<0>()());
+
+  BOOST_CHECK((std::is_same<nabla::expr::constant, decltype(s          )>::value));
+  BOOST_CHECK((std::is_same<nabla::expr::constant, decltype(s.diff<0>())>::value));
+}
+
 BOOST_AUTO_TEST_SUITE_END()

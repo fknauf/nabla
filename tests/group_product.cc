@@ -268,4 +268,17 @@ BOOST_AUTO_TEST_CASE( n1_mixed_polynomial ) {
   BOOST_CHECK_CLOSE(s.diff(x, x, y)(values(0), values(1)), s.diff(x, x, y)(values), epsilon);
 }
 
+BOOST_AUTO_TEST_CASE(constant_folding) {
+  nabla::expr::constant c(2);
+
+  auto s = c * 3;
+
+  BOOST_CHECK_EQUAL(6, s());
+  BOOST_CHECK_EQUAL(0, s.diff<0>()());
+
+  BOOST_CHECK((std::is_same<nabla::expr::constant, decltype(s          )>::value));
+  BOOST_CHECK((std::is_same<nabla::expr::constant, decltype(s.diff<0>())>::value));
+}
+
+
 BOOST_AUTO_TEST_SUITE_END()

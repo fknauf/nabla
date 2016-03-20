@@ -145,4 +145,23 @@ BOOST_AUTO_TEST_CASE( test_atanh ) {
   BOOST_CHECK_CLOSE(s.diff(x, x, y)(p(0), p(1)), s.diff(x, x, y)(p), epsilon);
 }
 
+BOOST_AUTO_TEST_CASE( constant_folding ) {
+  nabla::expr::constant half(0.5);
+  nabla::expr::constant two (2.0);
+
+  BOOST_CHECK_CLOSE(std::sinh (two .value()), sinh (two )(), epsilon);
+  BOOST_CHECK_CLOSE(std::cosh (two .value()), cosh (two )(), epsilon);
+  BOOST_CHECK_CLOSE(std::tanh (two .value()), tanh (two )(), epsilon);
+  BOOST_CHECK_CLOSE(std::asinh(two .value()), asinh(two )(), epsilon);
+  BOOST_CHECK_CLOSE(std::acosh(two .value()), acosh(two )(), epsilon);
+  BOOST_CHECK_CLOSE(std::atanh(half.value()), atanh(half)(), epsilon);
+
+  BOOST_CHECK((std::is_same<nabla::expr::constant, decltype(sinh (two ))>::value));
+  BOOST_CHECK((std::is_same<nabla::expr::constant, decltype(cosh (two ))>::value));
+  BOOST_CHECK((std::is_same<nabla::expr::constant, decltype(tanh (two ))>::value));
+  BOOST_CHECK((std::is_same<nabla::expr::constant, decltype(asinh(two ))>::value));
+  BOOST_CHECK((std::is_same<nabla::expr::constant, decltype(acosh(two ))>::value));
+  BOOST_CHECK((std::is_same<nabla::expr::constant, decltype(atanh(half))>::value));
+}
+
 BOOST_AUTO_TEST_SUITE_END()

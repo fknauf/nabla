@@ -80,4 +80,11 @@ BOOST_AUTO_TEST_CASE( params_expanded )  {
   BOOST_CHECK_EQUAL(0.0, v.diff(z, z)(1, 2, 3));
 }
 
+BOOST_AUTO_TEST_CASE( constant_value ) {
+  nabla::expr::constant c(2);
+
+  BOOST_CHECK_EQUAL(2, nabla::expr::impl::constant_value(c));
+  BOOST_CHECK_EQUAL(3, nabla::expr::impl::constant_value(3));
+}
+
 BOOST_AUTO_TEST_SUITE_END()

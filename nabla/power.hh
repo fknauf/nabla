@@ -16,8 +16,6 @@ namespace nabla {
     pow(Base &&base, Exponent &&exponent) {
       return { std::forward<Base>(base), std::forward<Exponent>(exponent) };
     }
-
-    inline constant pow(constant const &base, constant const &exponent) { return std::pow(base.value(), exponent.value()); }
     
     template<typename Base, typename Exponent>
     class power : public nabla_base<power<Base, Exponent> > {

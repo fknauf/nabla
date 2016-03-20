@@ -6,6 +6,10 @@
 #include "nabla_base.hh"
 #include "unary_functions.hh"
 
+#include <cmath>
+#include <initializer_list>
+#include <numeric>
+
 namespace nabla {
   namespace expr {
     template<int Dimension>
@@ -37,9 +41,15 @@ namespace nabla {
     };
 
     // TODO: Implement constant folding
-    template<typename... Inners, typename = std::enable_if_t<traits::is_nabla_tuple<Inners...>::value> >
+    template<typename... Inners, typename = std::enable_if_t<traits::is_regular_nabla_tuple<Inners...>::value> >
     auto hypot(Inners&&... inners) {
       return impl::make_chain(mfunc_hypot<sizeof...(Inners)>(), std::forward<Inners>(inners)...);
+    }
+
+    template<typename... Inners, typename = std::enable_if_t<traits::constant_folding_possible<Inners...>::value> >
+    constant hypot(Inners&&... inners) {
+      std::initializer_list<double> values = { [](double x) { return x * x; } (impl::constant_value(std::forward<Inners>(inners)))... };
+      return std::sqrt(std::accumulate(begin(values), end(values), 0.0));
     }
   }
 }

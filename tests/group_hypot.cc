@@ -118,6 +118,7 @@ BOOST_AUTO_TEST_CASE( all_constant ) {
   BOOST_CHECK_CLOSE(dy, s.diff(y)(p), epsilon);
   BOOST_CHECK_CLOSE(dz, s.diff(z)(p), epsilon);
 
+  BOOST_CHECK((std::is_same<nabla::expr::constant, decltype(s        )>::value));
   BOOST_CHECK((std::is_same<nabla::expr::constant, decltype(s.diff(x))>::value));
 }
 
