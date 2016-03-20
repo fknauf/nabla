@@ -41,7 +41,7 @@ namespace nabla {
       static int constexpr dimension = 1;                               \
                                                                         \
       template<int N>                                                   \
-      auto operator()(vector<N> const &vars) const {                    \
+      double operator()(vector<N> const &vars) const {			\
         static_assert(N > 0, "Unary function " #name                    \
                       " requires an argument for evaluation");          \
         double x = vars(0);                                             \

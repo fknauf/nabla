@@ -9,14 +9,14 @@
 namespace nabla {
   namespace expr {
     template<int Dimension>
-    class mfunc_hypot : public nabla_base<mfunc_hypot<Dimension>> {
+    class mfunc_hypot : public nabla_base<mfunc_hypot<Dimension> > {
     public:
       using nabla_base<mfunc_hypot>::diff;
       using nabla_base<mfunc_hypot>::operator();
       static int constexpr dimension = Dimension;
       
       template<int N>
-      auto operator()(vector<N> const &vars) const {
+      double operator()(vector<N> const &vars) const {
 	static_assert(N == dimension, "wrong number of arguments");
 	return std::sqrt(vars.squaredNorm());
       }

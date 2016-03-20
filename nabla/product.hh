@@ -34,7 +34,7 @@ namespace nabla {
 	return lhs_ * rhs_.diff(v) + lhs_.diff(v) * rhs_;
       }
 
-      template<int N> auto operator()(vector<N> const &vars) const {
+      template<int N> double operator()(vector<N> const &vars) const {
 	static_assert(N >= dimension, "input value vector too short");
 	return lhs_(vars) * rhs_(vars);
       }

@@ -30,7 +30,7 @@ namespace nabla {
 	  exponent_(exponent) { }
 
       template<int N>
-      auto operator()(vector<N> const &vars) const {
+      double operator()(vector<N> const &vars) const {
 	static_assert(N >= dimension, "input value vector too short");
 	return std::pow(base_(vars), exponent_(vars));
       }

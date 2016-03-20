@@ -15,7 +15,7 @@ namespace nabla {
     }
     
     template<typename Expr>
-    class negation : public nabla_base<negation<Expr>> {
+    class negation : public nabla_base<negation<Expr> > {
     public:
       using nabla_base<negation>::diff;
       using nabla_base<negation>::operator();
@@ -30,7 +30,7 @@ namespace nabla {
       }
 
       template<int N>
-      auto operator()(vector<N> const &vars) const {
+      double operator()(vector<N> const &vars) const {
 	static_assert(N >= dimension, "input value vector too short");
 	return -expr_(vars);
       }

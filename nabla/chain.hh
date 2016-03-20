@@ -71,7 +71,7 @@ namespace nabla {
       struct chain_diff_accumulator<Direction, -1> {
 	template<typename O, typename T>
 	static constant accumulate(O &&, T &&) {
-	  return { 0.0 };
+	  return 0;
 	}
       };
     }
@@ -93,7 +93,7 @@ namespace nabla {
       { }
 
       template<int N>
-      auto operator()(vector<N> const &vars) const {
+      double operator()(vector<N> const &vars) const {
 	static_assert(N >= dimension, "input value vector too short");
 	return eval(vars, std::make_integer_sequence<int, Outer::dimension>());
       }

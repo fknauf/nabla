@@ -1,6 +1,7 @@
 #ifndef INCLUDED_NABLA2_CONSTANT_HH
 #define INCLUDED_NABLA2_CONSTANT_HH
 
+#include "fwd.hh"
 #include "nabla_base.hh"
 #include "vector.hh"
 
@@ -8,8 +9,6 @@
 
 namespace nabla {
   namespace expr {
-    template<int N> class variable;
-    
     class constant : public nabla_base<constant> {
     public:
       using nabla_base<constant>::diff;
@@ -22,7 +21,7 @@ namespace nabla {
       template<int N>
       constant diff(variable<N> const & = {}) const noexcept {
 	static_assert(N >= dimension, "input value vector is shorter than zero elements? O.o");
-	return constant(0.0);
+	return 0;
       }
 
       template<int N>
