@@ -21,7 +21,7 @@ functions in n directions requires only a closed form of the function:
       auto f  = exp(x * log(y) + z) / pow(y * z, 2 * x);
     
       // partial derivative with respect to y
-      auto df =  f.diff(y);
+      auto df = f.diff(y);
     
       // prints "-0.557932", the value of the derivative at point (1, 2, 3)
       std::cout << df(1, 2, 3) << std::endl;
