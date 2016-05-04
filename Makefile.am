@@ -1,7 +1,8 @@
 AM_CPPFLAGS = -I $(top_srcdir) \
               -I $(top_srcdir)/pack_traits \
               $$(pkg-config --cflags eigen3) -D EIGEN_MPL2_ONLY \
-              -Wno-deprecated-declarations -Wall -Wextra
+              -Wno-deprecated-declarations -Wall -Wextra \
+              -Wno-ignored-attributes
 
 nobase_include_HEADERS = \
   nabla/chain.hh \

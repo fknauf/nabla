@@ -25,61 +25,6 @@ namespace nabla {
       make_chain(constant const &outer, Inner&&...) {
 	return outer;
       }
-
-      template<int Direction, int N, int... I, typename O, typename T>
-      auto make_chain_diff_term(O const &outer, T const &inners, std::integer_sequence<int, I...> const &) {
-	return make_chain(outer.template diff<N>(), std::get<I>(inners)...) * std::get<N>(inners).template diff<Direction>();
-      }
-
-      // TODO: Mit C++17-Fold-Expressions ersetzen, wenn gcc 6 rauskommt.
-      template<int Direction, int N>
-      struct chain_diff_accumulator {
-	template<typename O, typename T>
-	static auto accumulate(O const &outer, T const &inners) {
-	  return accumulate_dispatch(outer, inners, std::is_same<constant, std::tuple_element_t<N, traits::plain_type<T> > >());
-	}
-	  
-	template<typename O, typename T>
-	static auto accumulate_dispatch(O const &outer, T const &inners, std::true_type) {
-	  return
-	    chain_diff_accumulator<Direction, N - 1>::accumulate(outer, inners);
-	}
-
-	template<typename O, typename T>
-	static auto accumulate_dispatch(O const &outer, T const &inners, std::false_type) {
-	  return
-	    accumulate_dispatch(outer, inners, std::true_type())
-	    + make_chain_diff_term<Direction, N>(outer, inners, std::make_integer_sequence<int, traits::plain_type<O>::dimension>());
-	}
-      };
-
-      // Stopper
-      template<int Direction>
-      struct chain_diff_accumulator<Direction, 0> {
-	template<typename O, typename T>
-	static auto accumulate(O const &outer, T const &inners) {
-	  return accumulate_dispatch(outer, inners, std::is_same<constant, std::tuple_element_t<0, traits::plain_type<T> > >());
-	}
-
-	template<typename O, typename T>
-	static constant accumulate_dispatch(O const &, T const &, std::true_type) {
-	  return 0;
-	}
-	
-	template<typename O, typename T>
-	static auto accumulate_dispatch(O const &outer, T const &inners, std::false_type) {
-	  return make_chain_diff_term<Direction, 0>(outer, inners, std::make_integer_sequence<int, traits::plain_type<O>::dimension>());
-	}
-      };
-      
-      // Kann bei dimension = 0 passieren
-      template<int Direction>
-      struct chain_diff_accumulator<Direction, -1> {
-	template<typename O, typename T>
-	static constant accumulate(O const &, T const &) {
-	  return 0;
-	}
-      };
     }
     
     template<typename Outer, typename... Inner>
@@ -105,14 +50,24 @@ namespace nabla {
       }
 
       template<int N>
-      auto diff(variable<N> const & = {}) const {
-	return impl::chain_diff_accumulator<N, Outer::dimension - 1>::accumulate(outer_, inners_);
+      auto diff(variable<N> const &var = {}) const {
+	return diff_dispatch(var, std::make_integer_sequence<int, Outer::dimension>());
       }
       
     private:
       template<int N, int... I>
       auto eval(vector<N> const &vars, std::integer_sequence<int, I...> const &) const {
 	return outer_(make_vector(std::get<I>(inners_)(vars)...));
+      }
+
+      template<int N, int Direction, int... I>
+      auto chain_diff_term(std::integer_sequence<int, I...> const &) const {
+	return impl::make_chain(outer_.template diff<N>(), std::get<I>(inners_)...) * std::get<N>(inners_).template diff<Direction>();
+      }      
+
+      template<int Direction, int ...I>
+      auto diff_dispatch(variable<Direction> const &, std::integer_sequence<int, I...> const &seq) const {
+	return (... + chain_diff_term<I, Direction>(seq));
       }
 
       Outer                outer_;

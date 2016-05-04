@@ -4,7 +4,7 @@ AM_INIT_AUTOMAKE([foreign 1.11 -Wall -Werror subdir-objects])
 #AC_CONFIG_MACRO_DIR([m4])
 AC_PREFIX_DEFAULT([/usr])
 
-CXXFLAGS+=" -Wall -Wextra -pedantic -std=c++14"
+CXXFLAGS+=" -Wall -Wextra -pedantic -std=c++17"
 
 AC_PROG_CXX
 
