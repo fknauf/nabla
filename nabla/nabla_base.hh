@@ -12,16 +12,16 @@ namespace nabla {
     public:
       template<int N, int... O>
       auto diff(variable<N> const &head,
-		variable<O> const &... tail) const {
-	return self().diff(head).diff(tail...);
+                variable<O> const &... tail) const {
+        return self().diff(head).diff(tail...);
       }
 
       template<typename... Values>
-      std::enable_if_t<pack::applies_to_all<traits::is_nabla_value_type, traits::plain_type<Values>...>::value, double>
+      std::enable_if_t<(traits::is_nabla_value_type<traits::plain_type<Values>>::value && ...), double>
       operator()(Values&&... values) const {
-	return self()(make_vector(std::forward<Values>(values)...));
+        return self()(make_vector(std::forward<Values>(values)...));
       }
-      
+
     private:
       Derived const &self() const noexcept { return static_cast<Derived const &>(*this);  }
     };

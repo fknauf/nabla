@@ -25,7 +25,6 @@ nobase_include_HEADERS = \
   nabla/product.hh \
   nabla/sum.hh \
   nabla/unary_functions.hh \
-  nabla/util.hh \
   nabla/variable.hh \
   nabla/vector.hh
 

@@ -18,25 +18,25 @@ namespace nabla {
       using nabla_base<mfunc_hypot>::diff;
       using nabla_base<mfunc_hypot>::operator();
       static int constexpr dimension = Dimension;
-      
+
       template<int N>
       double operator()(vector<N> const &vars) const {
-	static_assert(N == dimension, "wrong number of arguments");
-	return std::sqrt(vars.squaredNorm());
+        static_assert(N == dimension, "wrong number of arguments");
+        return std::sqrt(vars.squaredNorm());
       }
 
       template<int N>
       auto diff(variable<N> const &var = {}) const {
-	return diff_dispatch(var, impl::bool_constant<N < dimension>());
+        return diff_dispatch(var, std::bool_constant<N < dimension>());
       }
 
     private:
       template<int N> auto diff_dispatch(variable<N> const &var, std::true_type) const {
-	return var / *this;
+        return var / *this;
       }
 
       template<int N> constant diff_dispatch(variable<N> const &, std::false_type) const {
-	return 0.0;
+        return 0.0;
       }
     };
 

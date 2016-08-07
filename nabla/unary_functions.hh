@@ -12,7 +12,6 @@
 #include "power.hh"
 #include "product.hh"
 #include "sum.hh"
-#include "util.hh"
 
 #include <cmath>
 
@@ -24,11 +23,11 @@ namespace nabla {
     inline constant name(constant const &expr) {                        \
       double x = expr.value();                                          \
       static_cast<void>(x);                                             \
-      return (expr_val);						\
+      return (expr_val);                                                \
     }                                                                   \
                                                                         \
     template<typename Expr>                                             \
-    std::enable_if_t<traits::is_nabla_variable<Expr>::value,		\
+    std::enable_if_t<traits::is_nabla_variable<Expr>::value,            \
                      chain<ufunc_ ## name, traits::plain_type<Expr> > > \
     name(Expr &&expr) {                                                 \
       return { ufunc_ ## name(), std::forward<Expr>(expr) };            \
@@ -41,7 +40,7 @@ namespace nabla {
       static int constexpr dimension = 1;                               \
                                                                         \
       template<int N>                                                   \
-      double operator()(vector<N> const &vars) const {			\
+      double operator()(vector<N> const &vars) const {                  \
         static_assert(N > 0, "Unary function " #name                    \
                       " requires an argument for evaluation");          \
         double x = vars(0);                                             \
@@ -50,7 +49,7 @@ namespace nabla {
                                                                         \
       template<int N>                                                   \
       auto diff(variable<N> const &var = {}) const {                    \
-        return diff_dispatch(var, impl::bool_constant<N == 0>());       \
+        return diff_dispatch(var, std::bool_constant<N == 0>());        \
       }                                                                 \
                                                                         \
     private:                                                            \

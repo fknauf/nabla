@@ -24,31 +24,31 @@ namespace nabla {
       static int constexpr dimension = 1;
 
       polynomial(constant exponent)
-	: exponent_(exponent)
+        : exponent_(exponent)
       { }
 
       template<int N>
       double operator()(vector<N> const &vars) const {
-	static_assert(N >= dimension, "input value vector too short");
-	return std::pow(vars(0), exponent_(vars));
+        static_assert(N >= dimension, "input value vector too short");
+        return std::pow(vars(0), exponent_(vars));
       }
 
       template<int N>
       auto diff(variable<N> const & = {}) const {
-	return diff_dispatch(impl::bool_constant<N == 0>());
+        return diff_dispatch(std::bool_constant<N == 0>());
       }
 
     private:
       constant diff_dispatch(std::false_type) const {
-	return 0;
+        return 0;
       }
-      
+
       auto diff_dispatch(std::true_type) const {
-	return impl::make_conditional([=](auto &&) { return exponent_.value() != 0.0; },
-				      exponent_ * polynomial(exponent_.value() - 1.0),
-				      0);
+        return impl::make_conditional([=](auto &&) { return exponent_.value() != 0.0; },
+                                      exponent_ * polynomial(exponent_.value() - 1.0),
+                                      0);
       }
-      
+
       constant exponent_;
     };
   }

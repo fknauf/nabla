@@ -20,13 +20,12 @@ namespace nabla {
   }
 
   template<typename Function,
-	   typename... Args,
-	   typename = std::enable_if_t<traits::is_nabla_expression<Function>::value &&
-				       pack::applies_to_all<traits::is_nabla_value_type, Args...>::value> >
+           typename... Args,
+           typename = std::enable_if_t<traits::is_nabla_expression<Function>::value &&
+                                       traits::all(traits::is_nabla_value_type<Args>::value...)> >
   auto gradient(Function const &f, Args&&... args) {
     return gradient(f, make_vector(std::forward<Args>(args)...));
   }
 }
 
 #endif
-

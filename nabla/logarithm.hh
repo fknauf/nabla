@@ -4,7 +4,6 @@
 #include "fwd.hh"
 #include "chain.hh"
 #include "division.hh"
-#include "util.hh"
 
 namespace nabla {
   namespace expr {
@@ -14,7 +13,7 @@ namespace nabla {
     }
 
     inline constant log(constant const &x) { return std::log(x.value()); }
-    
+
     // natural logarithm, naturally.
     class logarithm : public nabla_base<logarithm> {
     public:
@@ -24,25 +23,25 @@ namespace nabla {
 
       template<int N>
       double operator()(vector<N> const &vars) const {
-	static_assert(N >= dimension, "input value vector too short");
-	return std::log(vars(0));
+        static_assert(N >= dimension, "input value vector too short");
+        return std::log(vars(0));
       }
 
       template<int N>
       auto diff(variable<N> const &var = {}) const {
-	return diff_dispatch(var, impl::bool_constant<N == 0>());
+        return diff_dispatch(var, std::bool_constant<N == 0>());
       }
 
     private:
       template<int N>
       auto diff_dispatch(variable<N> const &x, std::true_type) const {
-	static_assert(N == 0, "N must be zero here, or the check in diff is bogus.");
-	return 1 / x;
+        static_assert(N == 0, "N must be zero here, or the check in diff is bogus.");
+        return 1 / x;
       }
 
       template<int N>
       constant diff_dispatch(variable<N> const &, std::false_type) const {
-	return 0.0;
+        return 0.0;
       }
     };
   }
