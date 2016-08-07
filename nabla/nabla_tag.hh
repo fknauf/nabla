@@ -18,25 +18,22 @@ namespace nabla {
     template<typename... T> bool constexpr all(T&&... args) { return (args && ...); }
     template<typename... T> bool constexpr any(T&&... args) { return (args || ...); }
 
-    template<typename    T> using plain_type                  = std::remove_cv_t<std::remove_reference_t<T>>;
-    template<typename    T> using is_nabla_expression         = std::is_base_of<expr::nabla_tag, plain_type<T>>;
-    template<typename    T> using is_nabla_value_type         = std::is_convertible<plain_type<T>, double>;
-    template<typename    T> using is_nabla_compatible         = std::bool_constant<is_nabla_expression<T>::value || is_nabla_value_type<T>::value>;
-    template<typename    T> using is_nabla_constant           = std::bool_constant<is_nabla_value_type<T>::value || std::is_same<expr::constant, plain_type<T>>::value>;
-    template<typename    T> using is_nabla_variable           = std::bool_constant<is_nabla_expression<T>::value && !is_nabla_constant<T>::value>;
+    template<typename    T> using plain_type                   = std::remove_cv_t<std::remove_reference_t<T>>;
 
-    template<typename    T> using nabla_equivalent            = std::conditional_t<is_nabla_expression<T>::value,                plain_type<T> , expr::constant>;
-    template<typename    T> using negated_nabla_equivalent    = std::conditional_t<is_nabla_variable  <T>::value, expr::negation<plain_type<T>>, expr::constant>;
+    template<typename    T> bool constexpr is_nabla_expression = std::is_base_of<expr::nabla_tag, plain_type<T>>::value;
+    template<typename    T> bool constexpr is_nabla_value_type = std::is_convertible<plain_type<T>, double>::value;
+    template<typename    T> bool constexpr is_nabla_compatible = is_nabla_expression<T> || is_nabla_value_type<T>;
+    template<typename    T> bool constexpr is_nabla_constant   = is_nabla_value_type<T> || std::is_same<expr::constant, plain_type<T>>::value;
+    template<typename    T> bool constexpr is_nabla_variable   = is_nabla_expression<T> && !is_nabla_constant<T>;
 
-    template<typename... T> using constant_folding_possible   = std::bool_constant<(is_nabla_constant<T>::value && ...)>;
-    template<typename... T> using constant_folding_impossible = std::bool_constant<!constant_folding_possible<T...>::value>;
+    template<typename    T> using nabla_equivalent             = std::conditional_t<is_nabla_expression<T>,                plain_type<T> , expr::constant>;
+    template<typename    T> using negated_nabla_equivalent     = std::conditional_t<is_nabla_variable  <T>, expr::negation<plain_type<T>>, expr::constant>;
 
-    template<typename... T>
-    using is_nabla_tuple = std::bool_constant<any(is_nabla_expression<T>::value...) &&
-                                              all(is_nabla_compatible<T>::value...)>;
+    template<typename... T> bool constexpr constant_folding_possible   = (is_nabla_constant<T> && ...);
+    template<typename... T> bool constexpr constant_folding_impossible = !constant_folding_possible<T...>;
 
-    template<typename... T>
-    using is_regular_nabla_tuple = std::bool_constant<is_nabla_tuple<T...>::value && constant_folding_impossible<T...>::value>;
+    template<typename... T> bool constexpr is_nabla_tuple              = any(is_nabla_expression<T>...) && all(is_nabla_compatible<T>...);
+    template<typename... T> bool constexpr is_regular_nabla_tuple      = is_nabla_tuple<T...> && constant_folding_impossible<T...>;
   }
 }
 

@@ -33,7 +33,7 @@ namespace nabla {
     };
   }
 
-  template<typename Function, int N, typename = std::enable_if_t<traits::is_nabla_expression<Function>::value> >
+  template<typename Function, int N, typename = std::enable_if_t<traits::is_nabla_expression<Function>>>
   auto hessian(Function const &f, vector<N> const &vars) {
     matrix<N, N> result;
     impl::hessian_matrix_builder<N, 0, 0>::build(result, f, vars);
@@ -42,8 +42,8 @@ namespace nabla {
 
   template<typename Function,
            typename... Args,
-           typename = std::enable_if_t<traits::is_nabla_expression<Function>::value &&
-                                       traits::all(traits::is_nabla_value_type<Args>::value...)> >
+           typename = std::enable_if_t<traits::is_nabla_expression<Function> &&
+                                       traits::all(traits::is_nabla_value_type<Args>...)>>
   auto hessian(Function const &f, Args&&... args) {
     return hessian(f, make_vector(std::forward<Args>(args)...));
   }

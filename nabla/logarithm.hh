@@ -7,7 +7,7 @@
 
 namespace nabla {
   namespace expr {
-    template<typename Expr, typename = std::enable_if_t<traits::is_nabla_variable<Expr>::value> >
+    template<typename Expr, typename = std::enable_if_t<traits::is_nabla_variable<Expr>>>
     auto log(Expr &&expr) {
       return impl::make_chain(logarithm(), std::forward<Expr>(expr));
     }

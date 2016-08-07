@@ -11,11 +11,11 @@ namespace nabla {
     inline constant operator-(constant const &x) { return -x.value(); }
 
     template<typename Expr>
-    std::enable_if_t<traits::is_nabla_variable<Expr>::value, negation<traits::plain_type<Expr> > >
+    std::enable_if_t<traits::is_nabla_variable<Expr>, negation<traits::plain_type<Expr>>>
     operator-(Expr &&expr) {
       return { std::forward<Expr>(expr) };
     }
-    
+
     template<typename Expr>
     class negation : public nabla_base<negation<Expr> > {
     public:
@@ -28,15 +28,15 @@ namespace nabla {
 
       template<int N>
       auto diff(variable<N> const &v = {}) const {
-	return -expr_.diff(v);
+        return -expr_.diff(v);
       }
 
       template<int N>
       double operator()(vector<N> const &vars) const {
-	static_assert(N >= dimension, "input value vector too short");
-	return -expr_(vars);
+        static_assert(N >= dimension, "input value vector too short");
+        return -expr_(vars);
       }
-      
+
     private:
       Expr expr_;
     };

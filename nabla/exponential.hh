@@ -12,7 +12,7 @@
 
 namespace nabla {
   namespace expr {
-    template<typename Exponent, typename = std::enable_if_t<traits::is_nabla_variable<Exponent>::value> >
+    template<typename Exponent, typename = std::enable_if_t<traits::is_nabla_variable<Exponent>>>
     auto pow(constant base, Exponent &&exponent) {
       return impl::make_chain(exponential(base), std::forward<Exponent>(exponent));
     }

@@ -11,10 +11,10 @@
 namespace nabla {
   namespace expr {
     template<typename Base, typename Exponent>
-    std::enable_if_t<traits::is_nabla_expression<Base    >::value &&
-                     traits::is_nabla_expression<Exponent>::value &&
-                     traits::constant_folding_impossible<Base, Exponent>::value,
-                     power<traits::plain_type<Base>, traits::plain_type<Exponent> > >
+    std::enable_if_t<traits::is_nabla_expression<Base    > &&
+                     traits::is_nabla_expression<Exponent> &&
+                     traits::constant_folding_impossible<Base, Exponent>,
+                     power<traits::plain_type<Base>, traits::plain_type<Exponent>>>
     pow(Base &&base, Exponent &&exponent) {
       return { std::forward<Base>(base), std::forward<Exponent>(exponent) };
     }

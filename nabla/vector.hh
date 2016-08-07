@@ -11,7 +11,7 @@ namespace nabla {
   inline vector<0> make_vector() { return {}; }
 
   template<typename... T> auto make_vector(T&&... data) {
-    static_assert(traits::all(traits::is_nabla_value_type<T>::value...),
+    static_assert(traits::all(traits::is_nabla_value_type<T>...),
                   "Attempting to make vector from incompatible types");
 
     vector<sizeof...(T)> result;

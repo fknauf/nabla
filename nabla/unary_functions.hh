@@ -27,8 +27,8 @@ namespace nabla {
     }                                                                   \
                                                                         \
     template<typename Expr>                                             \
-    std::enable_if_t<traits::is_nabla_variable<Expr>::value,            \
-                     chain<ufunc_ ## name, traits::plain_type<Expr> > > \
+    std::enable_if_t<traits::is_nabla_variable<Expr>,                   \
+                     chain<ufunc_ ## name, traits::plain_type<Expr>>>   \
     name(Expr &&expr) {                                                 \
       return { ufunc_ ## name(), std::forward<Expr>(expr) };            \
     }                                                                   \

@@ -14,15 +14,15 @@ namespace nabla {
     }
   }
 
-  template<typename Function, int N, typename = std::enable_if_t<traits::is_nabla_expression<Function>::value> >
+  template<typename Function, int N, typename = std::enable_if_t<traits::is_nabla_expression<Function>>>
   auto gradient(Function const &f, vector<N> const &vars) {
     return impl::gradient(f, vars, std::make_integer_sequence<int, N>());
   }
 
   template<typename Function,
            typename... Args,
-           typename = std::enable_if_t<traits::is_nabla_expression<Function>::value &&
-                                       traits::all(traits::is_nabla_value_type<Args>::value...)> >
+           typename = std::enable_if_t<traits::is_nabla_expression<Function> &&
+                                       traits::all(traits::is_nabla_value_type<Args>...)>>
   auto gradient(Function const &f, Args&&... args) {
     return gradient(f, make_vector(std::forward<Args>(args)...));
   }
