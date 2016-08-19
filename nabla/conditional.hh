@@ -13,14 +13,23 @@ namespace nabla {
   namespace expr {
     namespace impl {
       template<typename Condition, typename ExprTrue, typename ExprFalse>
-      conditional<traits::plain_type<Condition>, traits::nabla_equivalent<ExprTrue>, traits::nabla_equivalent<ExprFalse> >
-      make_conditional(Condition &&condition, ExprTrue &&expr_true, ExprFalse &&expr_false) {
+      conditional<traits::plain_type      <Condition>,
+		  traits::nabla_equivalent<ExprTrue >,
+		  traits::nabla_equivalent<ExprFalse>>
+      make_conditional(Condition &&condition,
+		       ExprTrue  &&expr_true,
+		       ExprFalse &&expr_false) {
         return { std::forward<Condition>(condition), std::forward<ExprTrue>(expr_true), std::forward<ExprFalse>(expr_false) };
       }
 
       template<int MinDimension, typename Condition, typename ExprTrue, typename ExprFalse>
-      conditional<traits::plain_type<Condition>, traits::nabla_equivalent<ExprTrue>, traits::nabla_equivalent<ExprFalse>, MinDimension >
-      make_conditional_with_min_dimension(Condition &&condition, ExprTrue &&expr_true, ExprFalse &&expr_false) {
+      conditional<traits::plain_type      <Condition>,
+		  traits::nabla_equivalent<ExprTrue >,
+		  traits::nabla_equivalent<ExprFalse>,
+		  MinDimension>
+      make_conditional_with_min_dimension(Condition &&condition,
+					  ExprTrue  &&expr_true,
+					  ExprFalse &&expr_false) {
         return { std::forward<Condition>(condition), std::forward<ExprTrue>(expr_true), std::forward<ExprFalse>(expr_false) };
       }
     }
