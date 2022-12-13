@@ -84,7 +84,3 @@ functions are:
 Nabla depends on [Eigen](http://eigen.tuxfamily.org) for the vector types and
 calculations. `nabla::vector<n>` is an alias for an Eigen vector of doubles of
 length `n`.
-
-Furthermore, Nabla depends on my own pack_traits library for introspection on
-variadic template argument packs. This is configured as a subrepository and will
-be automatically cloned into your Nabla working copy.
