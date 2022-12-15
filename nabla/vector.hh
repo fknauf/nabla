@@ -10,11 +10,8 @@ namespace nabla {
 
   inline vector<0> make_vector() { return {}; }
 
-  template<typename... T> auto make_vector(T&&... data) {
-    static_assert(traits::all(traits::is_nabla_value_type<T>...),
-                  "Attempting to make vector from incompatible types");
-
-    vector<sizeof...(T)> result;
+  auto make_vector(traits::nabla_value auto&&... data) {
+    vector<sizeof...(data)> result;
 
     typename decltype(result)::Index i = 0;
     for(double d : { static_cast<double>(data)... }) {
