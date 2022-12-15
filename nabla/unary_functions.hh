@@ -48,21 +48,15 @@ namespace nabla {
                                                                         \
       template<int N>                                                   \
       auto diff(variable<N> const &var = {}) const {                    \
-        return diff_dispatch(var, std::bool_constant<N == 0>());        \
-      }                                                                 \
-                                                                        \
-    private:                                                            \
-      template<int N>                                                   \
-      auto diff_dispatch(variable<N> const &x, std::true_type) const {  \
-        auto &y = *this;                                                \
-        static_cast<void>(x);                                           \
-        static_cast<void>(y);                                           \
-        return (expr_diff);                                             \
-      }                                                                 \
-                                                                        \
-      template<int N>                                                   \
-      constant diff_dispatch(variable<N> const &, std::false_type) const { \
-        return 0;                                                       \
+        if constexpr (N == 0) {                                         \
+          auto &y = *this;                                              \
+          auto &x = var;                                                \
+          static_cast<void>(x);                                         \
+          static_cast<void>(y);                                         \
+          return (expr_diff);                                           \
+        } else {                                                        \
+          return 0;                                                     \
+        }                                                               \
       }                                                                 \
     };
 
