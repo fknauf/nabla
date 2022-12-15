@@ -17,8 +17,9 @@ namespace nabla {
       }
 
       template<typename... Values>
-      std::enable_if_t<(traits::is_nabla_value_type<traits::plain_type<Values>> && ...), double>
-      operator()(Values&&... values) const {
+      double operator()(Values&&... values) const
+        requires (traits::all(traits::is_nabla_value_type<traits::plain_type<Values>>...))
+      {
         return self()(make_vector(std::forward<Values>(values)...));
       }
 

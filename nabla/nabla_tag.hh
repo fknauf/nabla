@@ -35,6 +35,12 @@ namespace nabla {
     template<typename... T> bool constexpr is_pure_nabla_tuple         = all(is_nabla_expression<T>...);
     template<typename... T> bool constexpr is_nabla_tuple              = any(is_nabla_expression<T>...) && all(is_nabla_compatible<T>...);
     template<typename... T> bool constexpr is_regular_nabla_tuple      = is_nabla_tuple<T...> && constant_folding_impossible<T...>;
+
+    template<typename    T> concept nabla_expression = is_nabla_expression<T>;
+    template<typename    T> concept nabla_value      = is_nabla_value_type<T>;
+    template<typename    T> concept nabla_compatible = is_nabla_compatible<T>;
+    template<typename    T> concept nabla_constant   = is_nabla_constant<T>;
+    template<typename    T> concept nabla_variable   = is_nabla_variable<T>;
   }
 }
 

@@ -13,16 +13,18 @@ namespace nabla {
   namespace expr {
     // Mehrdimensionale Kettenregel.
     namespace impl {
-      template<typename Outer, typename... Inner>
-      std::enable_if_t<traits::is_nabla_variable<Outer> && traits::is_nabla_tuple<Inner...>,
-                       chain<traits::plain_type<Outer>, traits::nabla_equivalent<Inner>...> >
-      make_chain(Outer &&outer, Inner&&... inner) {
+      template<traits::nabla_variable Outer, typename... Inner>
+      chain<traits::plain_type<Outer>, traits::nabla_equivalent<Inner>...>
+      make_chain(Outer &&outer, Inner&&... inner)
+        requires traits::is_nabla_tuple<Inner...>
+      {
         return { std::forward<Outer>(outer), std::forward<Inner>(inner)... };
       }
 
       template<typename... Inner>
-      std::enable_if_t<traits::is_nabla_tuple<Inner...>, constant>
-      make_chain(constant const &outer, Inner&&...) {
+      constant make_chain(constant const &outer, Inner&&...)
+        requires traits::is_nabla_tuple<Inner...>
+      {
         return outer;
       }
     }

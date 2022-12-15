@@ -11,10 +11,11 @@
 namespace nabla {
   namespace expr {
     template<typename Base, typename Exponent>
-    std::enable_if_t<traits::is_pure_nabla_tuple<Base, Exponent> &&
-                     traits::constant_folding_impossible<Base, Exponent>,
-                     power<traits::plain_type<Base>, traits::plain_type<Exponent>>>
-    pow(Base &&base, Exponent &&exponent) {
+    power<traits::plain_type<Base>, traits::plain_type<Exponent>>
+    pow(Base &&base, Exponent &&exponent)
+      requires traits::is_pure_nabla_tuple<Base, Exponent> &&
+      traits::constant_folding_impossible<Base, Exponent>
+    {
       return { std::forward<Base>(base), std::forward<Exponent>(exponent) };
     }
 

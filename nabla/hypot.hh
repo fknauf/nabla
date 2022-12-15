@@ -11,8 +11,10 @@
 
 namespace nabla {
   namespace expr {
-    template<typename... Inners, typename = std::enable_if_t<traits::is_nabla_tuple<Inners...>>>
-    auto hypot(Inners&&... inners) {
+    template<typename... Inners>
+    auto hypot(Inners&&... inners)
+      requires traits::is_nabla_tuple<Inners...>
+    {
       return sqrt((... + (std::forward<Inners>(inners) * std::forward<Inners>(inners))));
     }
   }

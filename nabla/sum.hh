@@ -14,16 +14,20 @@ namespace nabla {
     inline constant operator-(constant const &lhs, constant const &rhs) { return lhs.value() - rhs.value(); }
 
     template<typename LHS, typename RHS>
-    std::enable_if_t<traits::is_regular_nabla_tuple<LHS, RHS>, sum<traits::nabla_equivalent<LHS>,
-                                                                   traits::nabla_equivalent<RHS>>>
-    operator+(LHS &&lhs, RHS &&rhs) {
+    sum<traits::nabla_equivalent<LHS>,
+        traits::nabla_equivalent<RHS>>
+    operator+(LHS &&lhs, RHS &&rhs)
+      requires traits::is_regular_nabla_tuple<LHS, RHS>
+    {
       return { std::forward<LHS>(lhs), std::forward<RHS>(rhs) };
     }
 
     template<typename LHS, typename RHS>
-    std::enable_if_t<traits::is_regular_nabla_tuple<LHS, RHS>, sum<traits::nabla_equivalent<LHS>,
-                                                                   traits::negated_nabla_equivalent<RHS>>>
-    operator-(LHS &&lhs, RHS &&rhs) {
+    sum<traits::nabla_equivalent<LHS>,
+        traits::negated_nabla_equivalent<RHS>>
+    operator-(LHS &&lhs, RHS &&rhs)
+      requires traits::is_regular_nabla_tuple<LHS, RHS>
+    {
       return std::forward<LHS>(lhs) + -std::forward<RHS>(rhs);
     }
 
