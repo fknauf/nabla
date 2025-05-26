@@ -1,0 +1,10 @@
+{
+  "$schema": "https://raw.githubusercontent.com/microsoft/vcpkg-tool/main/docs/vcpkg.schema.json",
+  "name": "nabla",
+  "version": "0.0.1",
+  "builtin-baseline": "8f54ef5453e7e76ff01e15988bf243e7247c5eb5",
+  "dependencies": [
+    "boost-test",
+    "eigen3"
+  ]
+}
