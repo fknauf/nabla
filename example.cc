@@ -19,7 +19,7 @@ auto main() -> int {
     std::cout << ddf(1, 2, 3) << std::endl;
 
     // Convenience functions for gradient and hessian matrix computation exist:
-    std::cout <<
-        "Gradient: "        << nabla::gradient(f, 1, 2, 3).transpose() << "\n"
-        "Hessian matrix:\n" << nabla::hessian (f, 1, 2, 3)             << std::endl;
+    std::cout
+        << "Gradient:\n"       << nabla::gradient(f, 1, 2, 3) << "\n"
+        << "Hessian matrix:\n" << nabla::hessian (f, 1, 2, 3) << std::endl;
 }

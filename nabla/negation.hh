@@ -23,18 +23,18 @@ namespace nabla::expr {
     public:
         using nabla_base<negation>::diff;
         using nabla_base<negation>::operator();
-        static int constexpr dimension = Expr::dimension;
+        static index_type constexpr dimension = Expr::dimension;
 
         template <typename E>
         negation(E &&expr):
             expr_(std::forward<E>(expr)) {}
 
-        template <int N>
+        template <index_type N>
         auto diff(variable<N> const &v = {}) const {
             return -expr_.diff(v);
         }
 
-        template <int N>
+        template <index_type N>
         auto operator()(vector<N> const &vars) const -> double {
             static_assert(N >= dimension, "input value vector too short");
             return -expr_(vars);

@@ -7,8 +7,7 @@ TEST(variable, diff_by_var)  {
     nabla::expr::variable<1> y;
     nabla::expr::variable<2> z;
     
-    nabla::vector<3> vars;
-    vars << 1, 2, 3;
+    nabla::vector<3> vars = nabla::make_vector(1, 2, 3);
 
     EXPECT_EQ(1, x(vars));
     EXPECT_EQ(2, y(vars));
@@ -41,8 +40,7 @@ TEST(variable, diff_by_num)  {
     nabla::expr::variable<1> y;
     nabla::expr::variable<2> z;
     
-    nabla::vector<3> vars;
-    vars << 1, 2, 3;
+    nabla::vector<3> vars = nabla::make_vector(1, 2, 3);
 
     EXPECT_EQ(1, x(vars));
     EXPECT_EQ(2, y(vars));
@@ -69,4 +67,3 @@ TEST(variable, diff_by_num)  {
     EXPECT_EQ(x.diff(x)(vars(0), vars(1), vars(2)), x.diff(x)(vars));
     EXPECT_EQ(x.diff(y)(vars(0), vars(1), vars(2)), x.diff(y)(vars));
 }
-

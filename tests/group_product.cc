@@ -8,8 +8,7 @@ TEST(product, var_times_num)  {
 
     auto f = x * 2 ;
     
-    nabla::vector<3> vars;
-    vars << 2, 3, 4;
+    nabla::vector<3> vars = nabla::make_vector(2, 3, 4);
 
     EXPECT_EQ( 4, f(vars));
 
@@ -39,8 +38,7 @@ TEST(product, num_times_var)  {
 
     auto f = 2 * x;
     
-    nabla::vector<3> vars;
-    vars << 2, 3, 4;
+    nabla::vector<3> vars = nabla::make_vector(2, 3, 4);
 
     EXPECT_EQ( 4, f(vars));
 
@@ -71,8 +69,7 @@ TEST(product, var_times_var)  {
 
     auto f = x * y ;
     
-    nabla::vector<3> vars;
-    vars << 2, 3, 4;
+    nabla::vector<3> vars = nabla::make_vector(2, 3, 4);
 
     EXPECT_EQ( 6, f(vars));
 
@@ -104,8 +101,7 @@ TEST(product, var_square)  {
 
     auto f = x * x ;
     
-    nabla::vector<3> vars;
-    vars << 3, 4, 5;
+    nabla::vector<3> vars = nabla::make_vector(3, 4, 5);
 
     EXPECT_EQ( 9, f(vars));
 
@@ -135,8 +131,7 @@ TEST(product, var_cube)  {
 
     auto f = x * x * x;
     
-    nabla::vector<3> vars;
-    vars << 4, 5, 6;
+    nabla::vector<3> vars = nabla::make_vector(4, 5, 6);
 
     EXPECT_EQ(64, f(vars));
 
@@ -167,8 +162,7 @@ TEST(product, dist)  {
 
     auto f = 2 * (x + y) * x;
     
-    nabla::vector<3> vars;
-    vars << 3, 4, 5;
+    nabla::vector<3> vars = nabla::make_vector(3, 4, 5);
 
     EXPECT_EQ(42, f(vars));
 
@@ -223,7 +217,7 @@ TEST(product, n1_squares) {
 
     auto s = 2.0 * x * x;
 
-    nabla::vector<1> values = nabla::vector<1>::Constant(3.0);
+    nabla::vector<1> values { 3.0 };
 
     auto r = s(values);
 
@@ -273,5 +267,3 @@ TEST(product, constant_folding) {
     EXPECT_TRUE((std::is_same<nabla::expr::constant, decltype(s          )>::value));
     EXPECT_TRUE((std::is_same<nabla::expr::constant, decltype(s.diff<0>())>::value));
 }
-
-

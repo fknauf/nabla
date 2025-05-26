@@ -99,7 +99,7 @@ TEST(unary_functions, test_erf) {
 
     auto cdf = erf(x - y);
 
-    nabla::vector<2> p(0.2, 0.5);
+    nabla::vector<2> p { 0.2, 0.5 };
 
     auto result = cdf(p);
 
@@ -122,7 +122,7 @@ TEST(unary_functions, test_erfc) {
 
     auto cdf = erfc(x * x - 4 * y);
 
-    nabla::vector<2> p(0.2, 0.5);
+    nabla::vector<2> p { 0.2, 0.5 };
 
     auto result = cdf(p);
 
@@ -146,7 +146,7 @@ TEST(unary_functions, phi) {
 
     auto cdf = Phi((x - mu) / sigma);
 
-    nabla::vector<3> p(0.2, 0.5, 0.4);
+    nabla::vector<3> p { 0.2, 0.5, 0.4 };
 
     auto result = cdf(p);
 
@@ -183,7 +183,7 @@ TEST(unary_functions, blackscholes) {
     auto vega  = callbsm.diff(sigma);
     auto rho   = callbsm.diff(r);
 
-    nabla::vector<4> p(1.02, 91. / 365, 0.4, 0.02);
+    nabla::vector<4> p { 1.02, 91. / 365, 0.4, 0.02 };
 
     auto result = callbsm(p);
 

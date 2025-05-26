@@ -10,7 +10,7 @@ TEST(hypot, n1_veclength) {
 
     auto s = hypot(x * y, x * z, 2, y * z);
 
-    nabla::vector<4> p(1.0, -3.0, 2.0, 5.0);
+    nabla::vector<4> p = nabla::make_vector(1.0, -3.0, 2.0, 5.0);
 
     auto r = s(p);
 
@@ -39,7 +39,7 @@ TEST(hypot, starts_with_constant) {
 
     auto s = hypot(2, x * z, 2, y * z);
 
-    nabla::vector<4> p(1.0, -3.0, 2.0, 5.0);
+    nabla::vector<4> p = nabla::make_vector(1.0, -3.0, 2.0, 5.0);
 
     auto r = s(p);
 
@@ -68,7 +68,7 @@ TEST(hypot, ends_with_constant) {
 
     auto s = hypot(x * z, 2, y * z, 2);
 
-    nabla::vector<4> p(1.0, -3.0, 2.0, 5.0);
+    nabla::vector<4> p = nabla::make_vector(1.0, -3.0, 2.0, 5.0);
 
     auto r = s(p);
 
@@ -102,7 +102,7 @@ TEST(hypot, all_constant) {
 
     auto s = nabla::expr::hypot(one, two, three, four);
 
-    nabla::vector<4> p(1.0, -3.0, 2.0, 5.0);
+    nabla::vector<4> p = nabla::make_vector(1.0, -3.0, 2.0, 5.0);
 
     auto r = s(p);
 

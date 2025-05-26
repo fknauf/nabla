@@ -9,8 +9,7 @@ TEST(conditional, case_true)  {
 
     auto f = nabla::expr::impl::make_conditional([](auto &&) { return true; }, x * x, x * y);
     
-    nabla::vector<3> vars;
-    vars << 3, 4, 5;
+    nabla::vector<3> vars = nabla::make_vector(3, 4, 5);
 
     EXPECT_EQ(9, f(vars));
 
@@ -28,8 +27,7 @@ TEST(conditional, case_false)  {
 
     auto f = nabla::expr::impl::make_conditional([](auto &&) { return false; }, x * x, x * y);
     
-    nabla::vector<3> vars;
-    vars << 3, 4, 5;
+    nabla::vector<3> vars = nabla::make_vector(3, 4, 5);
 
     EXPECT_EQ(12, f(vars));
 
@@ -50,8 +48,7 @@ TEST(conditional, case_degrade)  {
 
     auto f = nabla::expr::impl::make_conditional([](auto &&) { return false; }, x, y);
     
-    nabla::vector<3> vars;
-    vars << 3, 4, 5;
+    nabla::vector<3> vars = nabla::make_vector(3, 4, 5);
 
     EXPECT_EQ(4, f(vars));
 

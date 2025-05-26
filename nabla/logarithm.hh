@@ -22,27 +22,27 @@ namespace nabla::expr {
     public:
         using nabla_base<logarithm>::diff;
         using nabla_base<logarithm>::operator();
-        static int constexpr dimension = 1;
+        static index_type constexpr dimension = 1;
 
-        template <int N>
+        template <index_type N>
         auto operator()(vector<N> const &vars) const -> double {
             static_assert(N >= dimension, "input value vector too short");
             return std::log(vars(0));
         }
 
-        template <int N>
+        template <index_type N>
         auto diff(variable<N> const &var = {}) const {
             return diff_dispatch(var, std::bool_constant<N == 0>());
         }
 
     private:
-        template <int N>
+        template <index_type N>
         auto diff_dispatch(variable<N> const &x, std::true_type) const {
             static_assert(N == 0, "N must be zero here, or the check in diff is bogus.");
             return 1 / x;
         }
 
-        template <int N>
+        template <index_type N>
         auto diff_dispatch(variable<N> const &, std::false_type) const -> constant {
             return 0.0;
         }

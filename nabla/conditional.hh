@@ -33,7 +33,7 @@ namespace nabla::expr {
         }
 
         template <
-            int MinDimension,
+            index_type MinDimension,
             typename Condition,
             typename ExprTrue,
             typename ExprFalse
@@ -60,7 +60,7 @@ namespace nabla::expr {
         typename Condition,
         typename ExprTrue,
         typename ExprFalse,
-        int MinDimension
+        index_type MinDimension
     >
     class conditional:
         public nabla_base<conditional<Condition, ExprTrue, ExprFalse, MinDimension>>
@@ -68,7 +68,7 @@ namespace nabla::expr {
     public:
         using nabla_base<conditional>::diff;
         using nabla_base<conditional>::operator();
-        static int constexpr dimension = std::max(
+        static index_type constexpr dimension = std::max(
             MinDimension,
             std::max(ExprTrue::dimension, ExprFalse::dimension)
         );
@@ -84,13 +84,13 @@ namespace nabla::expr {
             expr_false_(std::forward<F>(expr_false))
         {}
 
-        template <int N>
+        template <index_type N>
         auto operator()(vector<N> const &vars) const -> double {
             static_assert(N >= dimension, "input value vector too short");
             return condition_(vars) ? expr_true_(vars) : expr_false_(vars);
         }
 
-        template <int N>
+        template <index_type N>
         auto diff(variable<N> const &var = {}) const {
             return diff_dispatch(
                 var,
@@ -102,7 +102,7 @@ namespace nabla::expr {
         }
 
     private:
-        template <int N>
+        template <index_type N>
         auto diff_dispatch(variable<N> const &var, std::true_type) const {
             return impl::make_conditional(
                 condition_,
@@ -111,7 +111,7 @@ namespace nabla::expr {
             );
         }
 
-        template <int N>
+        template <index_type N>
         constant diff_dispatch(variable<N> const &, std::false_type) const {
             return 0;
         }

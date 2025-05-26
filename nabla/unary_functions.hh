@@ -16,46 +16,46 @@
 #include <cmath>
 
 namespace nabla::expr {
-#define NABLA_DECLARE_UNARY_FUNCTION(name, expr_val, expr_diff)                \
-    class ufunc_##name;                                                        \
-                                                                               \
-    inline constant name(constant const &expr) {                               \
-        double x = expr.value();                                               \
-        static_cast<void>(x);                                                  \
-        return (expr_val);                                                     \
-    }                                                                          \
-                                                                               \
-    template <traits::nabla_variable Expr>                                     \
-    chain<ufunc_##name, traits::plain_type<Expr>> name(Expr &&expr) {          \
-        return { ufunc_##name(), std::forward<Expr>(expr) };                   \
-    }                                                                          \
-                                                                               \
-    class ufunc_##name: public nabla_base<ufunc_##name> {                      \
-    public:                                                                    \
-        using nabla_base<ufunc_##name>::diff;                                  \
-        using nabla_base<ufunc_##name>::operator();                            \
-        static int constexpr dimension = 1;                                    \
-                                                                               \
-        template <int N> double operator()(vector<N> const &vars) const {      \
-            static_assert(                                                     \
-                N > 0,                                                         \
-                "Unary function " #name " requires an argument for evaluation" \
-            );                                                                 \
-            double x = vars(0);                                                \
-            return (expr_val);                                                 \
-        }                                                                      \
-                                                                               \
-        template <int N> auto diff(variable<N> const &var = {}) const {        \
-            if constexpr(N == 0) {                                             \
-                auto &y = *this;                                               \
-                auto &x = var;                                                 \
-                static_cast<void>(x);                                          \
-                static_cast<void>(y);                                          \
-                return (expr_diff);                                            \
-            } else {                                                           \
-                return 0;                                                      \
-            }                                                                  \
-        }                                                                      \
+#define NABLA_DECLARE_UNARY_FUNCTION(name, expr_val, expr_diff)                  \
+    class ufunc_##name;                                                          \
+                                                                                 \
+    inline constant name(constant const &expr) {                                 \
+        double x = expr.value();                                                 \
+        static_cast<void>(x);                                                    \
+        return (expr_val);                                                       \
+    }                                                                            \
+                                                                                 \
+    template <traits::nabla_variable Expr>                                       \
+    chain<ufunc_##name, traits::plain_type<Expr>> name(Expr &&expr) {            \
+        return { ufunc_##name(), std::forward<Expr>(expr) };                     \
+    }                                                                            \
+                                                                                 \
+    class ufunc_##name: public nabla_base<ufunc_##name> {                        \
+    public:                                                                      \
+        using nabla_base<ufunc_##name>::diff;                                    \
+        using nabla_base<ufunc_##name>::operator();                              \
+        static index_type constexpr dimension = 1;                               \
+                                                                                 \
+        template <index_type N> double operator()(vector<N> const &vars) const { \
+            static_assert(                                                       \
+                N > 0,                                                           \
+                "Unary function " #name " requires an argument for evaluation"   \
+            );                                                                   \
+            double x = vars(0);                                                  \
+            return (expr_val);                                                   \
+        }                                                                        \
+                                                                                 \
+        template <index_type N> auto diff(variable<N> const &var = {}) const {   \
+            if constexpr(N == 0) {                                               \
+                auto &y = *this;                                                 \
+                auto &x = var;                                                   \
+                static_cast<void>(x);                                            \
+                static_cast<void>(y);                                            \
+                return (expr_diff);                                              \
+            } else {                                                             \
+                return 0;                                                        \
+            }                                                                    \
+        }                                                                        \
     };
 
     NABLA_DECLARE_UNARY_FUNCTION(exp, std::exp(x), y)

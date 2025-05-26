@@ -10,7 +10,7 @@
 
 namespace nabla {
     namespace impl {
-        template <int Dimension, int Row, int Column>
+        template <index_type Dimension, index_type Row, index_type Column>
         struct hessian_matrix_builder {
             template <typename Function>
             static auto build(
@@ -23,7 +23,7 @@ namespace nabla {
             }
         };
 
-        template <int Dimension, int N>
+        template <index_type Dimension, index_type N>
         struct hessian_matrix_builder<Dimension, N, N> {
             template <typename Function>
             static auto build(
@@ -36,7 +36,7 @@ namespace nabla {
             }
         };
 
-        template <int Dimension>
+        template <index_type Dimension>
         struct hessian_matrix_builder<Dimension, Dimension, 0> {
             template <typename Function>
             static auto build(
@@ -47,7 +47,7 @@ namespace nabla {
         };
     }
 
-    template <traits::nabla_expression Function, int N>
+    template <traits::nabla_expression Function, index_type N>
     auto hessian(Function const &f, vector<N> const &vars) {
         matrix<N, N> result;
         impl::hessian_matrix_builder<N, 0, 0>::build(result, f, vars);

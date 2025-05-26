@@ -20,18 +20,18 @@ namespace nabla::expr {
     public:
         using nabla_base<polynomial>::diff;
         using nabla_base<polynomial>::operator();
-        static int constexpr dimension = 1;
+        static index_type constexpr dimension = 1;
 
         polynomial(constant exponent):
             exponent_(exponent) {}
 
-        template <int N>
+        template <index_type N>
         auto operator()(vector<N> const &vars) const -> double {
             static_assert(N >= dimension, "input value vector too short");
             return std::pow(vars(0), exponent_(vars));
         }
 
-        template <int N>
+        template <index_type N>
         auto diff(variable<N> const & = {}) const {
             return diff_dispatch(std::bool_constant<N == 0>());
         }

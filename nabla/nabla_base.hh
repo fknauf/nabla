@@ -11,7 +11,7 @@ namespace nabla::expr {
         public nabla_tag
     {
     public:
-        template <int N, int... O>
+        template <index_type N, index_type... O>
         auto diff(variable<N> const &head, variable<O> const &...tail) const {
             return self().diff(head).diff(tail...);
         }

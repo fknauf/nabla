@@ -13,8 +13,7 @@ TEST(power, simple)  {
 
     auto f = pow(x, y);
     
-    nabla::vector<2> vars;
-    vars << 2, 5;
+    nabla::vector<2> vars { 2., 5. };
 
     EXPECT_DOUBLE_EQ(32, f(vars));
 
@@ -41,7 +40,7 @@ TEST(power, mixed)  {
 
     auto f = pow(pow(x, 2) * y, pow(y, 2) * x);
     
-    nabla::vector<2> p(2., 5.);
+    nabla::vector<2> p { 2., 5. };
 
     double exv = std::pow(std::pow(p(0), 2) * p(1), std::pow(p(1), 2) * p(0));
     double dx  = exv * std::pow(p(1), 2) * (std::log(p(1)) + 2 * std::log(p(0)) + 2);
@@ -66,7 +65,7 @@ TEST(power, test_simple) {
 
     auto s = pow(x, y);
 
-    nabla::vector<2> p(2.0, 5.0);
+    nabla::vector<2> p { 2.0, 5.0 };
 
     auto r = s(p);
 
@@ -86,7 +85,7 @@ TEST(power, test_mixed) {
 
     auto s = pow(pow(x, 2) * y, pow(y, 2) * x);
 
-    nabla::vector<2> p(2.0, 5.0);
+    nabla::vector<2> p { 2.0, 5.0 };
 
     auto r = s(p);
 

@@ -10,8 +10,7 @@ TEST(logarithm, simple)  {
 
     auto f = log(x);
     
-    nabla::vector<2> vars;
-    vars << 3, 4;
+    nabla::vector<2> vars = nabla::make_vector(3, 4);
 
     EXPECT_DOUBLE_EQ(std::log(3), f(vars));
 
@@ -38,8 +37,7 @@ TEST(logarithm, square)  {
     auto f = log(x);
     auto g = log(x * x);
     
-    nabla::vector<2> vars;
-    vars << 3, 4;
+    nabla::vector<2> vars = nabla::make_vector(3, 4);
 
     EXPECT_DOUBLE_EQ(std::log(3), f(vars));
 
@@ -65,8 +63,7 @@ TEST(logarithm, sum)  {
 
     auto f = log(x + 2 * y);
     
-    nabla::vector<2> vars;
-    vars << 3, 4;
+    nabla::vector<2> vars = nabla::make_vector(3, 4);
 
     EXPECT_DOUBLE_EQ(std::log(11), f(vars));
 

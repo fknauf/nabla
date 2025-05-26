@@ -8,8 +8,7 @@ TEST(division, var_div_num)  {
 
     auto f = x / 2;
     
-    nabla::vector<3> vars;
-    vars << 2, 3, 4;
+    nabla::vector<3> vars = nabla::make_vector(2, 3, 4);
 
     EXPECT_EQ(1  , f(vars));
 
@@ -31,8 +30,7 @@ TEST(division, num_div_var)  {
 
     auto f = 2 / x;
     
-    nabla::vector<3> vars;
-    vars << 2, 3, 4;
+    nabla::vector<3> vars = nabla::make_vector(2, 3, 4);
 
     EXPECT_EQ( 1   , f(vars));
 
@@ -57,8 +55,7 @@ TEST(division, var_div_var)  {
 
     auto f = x / z;
     
-    nabla::vector<3> vars;
-    vars << 2, 3, 4;
+    nabla::vector<3> vars = nabla::make_vector(2, 3, 4);
 
     EXPECT_EQ(0.5 , f(vars));
 
@@ -86,7 +83,7 @@ TEST(division, simple) {
 
     auto s = x / 2;
 
-    nabla::vector<2> values(3.0, 4.0);
+    nabla::vector<2> values = nabla::make_vector(3.0, 4.0);
 
     auto r = s(values);
 
@@ -101,7 +98,7 @@ TEST(division, simple_inv) {
 
     auto s = 4.5 / x;
 
-    nabla::vector<2> values(3.0, 4.0);
+    nabla::vector<2> values = nabla::make_vector(3.0, 4.0);
 
     auto r = s(values);
 
@@ -116,7 +113,7 @@ TEST(division, twovar) {
 
     auto s = x / y;
 
-    nabla::vector<2> values(3.0, 4.0);
+    nabla::vector<2> values = nabla::make_vector(3.0, 4.0);
 
     auto r = s(values);
 
@@ -131,7 +128,7 @@ TEST(division, twovar_plus_constant) {
 
     auto s = x / y / 0.5;
 
-    nabla::vector<2> values(3.0, 4.0);
+    nabla::vector<2> values = nabla::make_vector(3.0, 4.0);
 
     auto r = s(values);
 

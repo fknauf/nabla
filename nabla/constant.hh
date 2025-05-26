@@ -12,12 +12,12 @@ namespace nabla::expr {
     public:
         using nabla_base<constant>::diff;
         using nabla_base<constant>::operator();
-        static int constexpr dimension = 0;
+        static index_type constexpr dimension = 0;
 
         constexpr constant(double value) noexcept:
             value_(value) {}
 
-        template <int N>
+        template <index_type N>
         constant diff(variable<N> const & = {}) const noexcept {
             static_assert(
                 N >= dimension,
@@ -26,7 +26,7 @@ namespace nabla::expr {
             return 0;
         }
 
-        template <int N> double operator()(vector<N> const &) const {
+        template <index_type N> double operator()(vector<N> const &) const {
             return value_;
         }
 

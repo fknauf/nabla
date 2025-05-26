@@ -10,8 +10,7 @@ TEST(negation, diff_by_var)  {
 
     auto f = -x;
     
-    nabla::vector<3> vars;
-    vars << 2, 3, 4;
+    nabla::vector<3> vars = nabla::make_vector(2, 3, 4);
 
     EXPECT_EQ(-2, f(vars));
 
@@ -39,8 +38,7 @@ TEST(negation, diff_by_num)  {
 
     auto f = -x;
     
-    nabla::vector<3> vars;
-    vars << 2, 3, 4;
+    nabla::vector<3> vars = nabla::make_vector(2, 3, 4);
 
     EXPECT_EQ(-2, f(vars));
 
@@ -73,4 +71,3 @@ TEST(negation, constant_folding) {
     EXPECT_TRUE((std::is_same<nabla::expr::constant, decltype(s          )>::value));
     EXPECT_TRUE((std::is_same<nabla::expr::constant, decltype(s.diff<0>())>::value));
 }
-

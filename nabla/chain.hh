@@ -46,7 +46,7 @@ namespace nabla::expr {
 
         using nabla_base<chain>::diff;
         using nabla_base<chain>::operator();
-        static int constexpr dimension = std::max({ Inner::dimension... });
+        static index_type constexpr dimension = std::max({ Inner::dimension... });
 
         template <typename O, typename... I>
         chain(
@@ -57,42 +57,42 @@ namespace nabla::expr {
             inners_ { std::forward<I>(inners)... }
         {}
 
-        template <int N>
+        template <index_type N>
         auto operator()(vector<N> const &vars) const -> double {
             static_assert(N >= dimension, "input value vector too short");
             return eval(
                 vars,
-                std::make_integer_sequence<int, Outer::dimension>()
+                std::make_integer_sequence<index_type, Outer::dimension>()
             );
         }
 
-        template <int N>
+        template <index_type N>
         auto diff(variable<N> const &var = {}) const {
             return diff_dispatch(
                 var,
-                std::make_integer_sequence<int, Outer::dimension>()
+                std::make_integer_sequence<index_type, Outer::dimension>()
             );
         }
 
     private:
-        template <int N, int... I>
+        template <index_type N, index_type... I>
         auto eval(
             vector<N> const &vars,
-            std::integer_sequence<int, I...> const &
+            std::integer_sequence<index_type, I...> const &
         ) const {
             return outer_(make_vector(std::get<I>(inners_)(vars)...));
         }
 
-        template <int N, int Direction, int... I>
-        auto chain_diff_term(std::integer_sequence<int, I...> const &) const {
+        template <index_type N, index_type Direction, index_type... I>
+        auto chain_diff_term(std::integer_sequence<index_type, I...> const &) const {
             return impl::make_chain(outer_.template diff<N>(), std::get<I>(inners_)...)
                    * std::get<N>(inners_).template diff<Direction>();
         }
 
-        template <int Direction, int... I>
+        template <index_type Direction, index_type... I>
         auto diff_dispatch(
             variable<Direction> const &,
-            std::integer_sequence<int, I...> const &seq
+            std::integer_sequence<index_type, I...> const &seq
         ) const {
             return (... + chain_diff_term<I, Direction>(seq));
         }

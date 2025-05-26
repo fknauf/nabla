@@ -25,20 +25,20 @@ namespace nabla::expr {
     public:
         using nabla_base<exponential>::diff;
         using nabla_base<exponential>::operator();
-        static int constexpr dimension = 1;
+        static index_type constexpr dimension = 1;
 
         exponential(constant base):
             base_(base),
             log_base_(std::log(base.value()))
         {}
 
-        template <int N>
+        template <index_type N>
         auto operator()(vector<N> const &vars) const -> double {
             static_assert(N >= dimension, "input value vector too short");
             return std::pow(base_(vars), vars(0));
         }
 
-        template <int N>
+        template <index_type N>
         auto diff(variable<N> const & = {}) const {
             return diff_dispatch(std::bool_constant<N == 0>());
         }

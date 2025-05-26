@@ -38,7 +38,7 @@ namespace nabla::expr {
     public:
         using nabla_base<division>::diff;
         using nabla_base<division>::operator();
-        static int constexpr dimension =
+        static index_type constexpr dimension =
             std::max(LHS::dimension, RHS::dimension);
 
         template <typename L, typename R>
@@ -47,12 +47,12 @@ namespace nabla::expr {
             rhs_(std::forward<R>(rhs))
         {}
 
-        template <int N>
+        template <index_type N>
         auto diff(variable<N> const &v = {}) const {
             return (lhs_.diff(v) * rhs_ - lhs_ * rhs_.diff(v)) / (rhs_ * rhs_);
         }
 
-        template <int N>
+        template <index_type N>
         auto operator()(vector<N> const &vars) const -> double {
             static_assert(N >= dimension, "input value vector too short");
             return lhs_(vars) / rhs_(vars);

@@ -10,8 +10,7 @@ TEST(exponential, simple)  {
 
     auto f = pow(2, x);
     
-    nabla::vector<2> vars;
-    vars << 3, 4;
+    nabla::vector<2> vars = nabla::make_vector(3, 4);
 
     EXPECT_DOUBLE_EQ(8, f(vars));
 
@@ -37,8 +36,7 @@ TEST(exponential, medium)  {
 
     auto f = pow(2, x - y);
     
-    nabla::vector<2> vars;
-    vars << 4, 1;
+    nabla::vector<2> vars = nabla::make_vector(4, 1);
 
     EXPECT_DOUBLE_EQ(8, f(vars));
 
@@ -65,8 +63,7 @@ TEST(exponential, complex)  {
 
     auto f = pow(2, (x - y) * z + x * y - 2);
     
-    nabla::vector<3> vars;
-    vars << 3, 1, 4;
+    nabla::vector<3> vars = nabla::make_vector(3, 1, 4);
 
     EXPECT_DOUBLE_EQ(512, f(vars));
 
@@ -157,4 +154,3 @@ TEST(exponential, constant_folding) {
     EXPECT_TRUE((std::is_same<nabla::expr::constant, decltype(s          )>::value));
     EXPECT_TRUE((std::is_same<nabla::expr::constant, decltype(s.diff<0>())>::value));
 }
-

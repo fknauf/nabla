@@ -10,8 +10,7 @@ TEST(polynomial, simple_square)  {
 
     auto f = pow(x, 2);
     
-    nabla::vector<1> vars;
-    vars << 3;
+    nabla::vector<1> vars = nabla::make_vector(3);
 
     EXPECT_EQ(9, f(vars));
 
@@ -34,8 +33,7 @@ TEST(polynomial, simple_real)  {
 
     auto f = pow(x, 3.5);
     
-    nabla::vector<1> vars;
-    vars << 3;
+    nabla::vector<1> vars = nabla::make_vector(3);
 
     EXPECT_DOUBLE_EQ(std::pow(3, 3.5), f(vars));
 
@@ -56,8 +54,7 @@ TEST(polynomial, simple_0)  {
 
     auto f = pow(x, 0);
     
-    nabla::vector<1> vars;
-    vars << 0;
+    nabla::vector<1> vars = nabla::make_vector(0);
 
     EXPECT_DOUBLE_EQ(1, f(vars));
 
@@ -77,8 +74,7 @@ TEST(polynomial, simple_break)  {
 
     auto f = pow(x, 1);
     
-    nabla::vector<1> vars;
-    vars << 0;
+    nabla::vector<1> vars = nabla::make_vector(0);
 
     // Knickstelle in der Ableitung bei 0^0
     EXPECT_DOUBLE_EQ(0, f           (vars));
@@ -95,8 +91,7 @@ TEST(polynomial, chain)  {
 
     auto f = pow(y - x, 3);
     
-    nabla::vector<2> vars;
-    vars << 1, 3;
+    nabla::vector<2> vars = nabla::make_vector(1, 3);
 
     EXPECT_DOUBLE_EQ(8, f(vars));
 
@@ -117,7 +112,7 @@ TEST(polynomial, test_polynomial) {
 
     auto s = pow(x * y, 4);
 
-    nabla::vector<2> p(2.0, 5.0);
+    nabla::vector<2> p = nabla::make_vector(2.0, 5.0);
 
     auto r = s(p);
 
@@ -135,7 +130,7 @@ TEST(polynomial, test_polynomial_2) {
 
     auto s = pow(x, 3) - 3 * pow(x, 2) * y + 3 * x * pow(y, 2) - pow(y, 3);
 
-    nabla::vector<2> p(2.0, 5.0);
+    nabla::vector<2> p = nabla::make_vector(2.0, 5.0);
 
     auto r = s(p);
 
@@ -160,7 +155,7 @@ TEST(polynomial, test_degenerated) {
 
     auto s = pow(x, 0);
 
-    nabla::vector<1> p = nabla::vector<1>::Constant(2.0);
+    nabla::vector<1> p = nabla::make_vector(2.0);
 
     auto r = s(p);
 
@@ -188,4 +183,3 @@ TEST(polynomial, constant_folding) {
     EXPECT_TRUE((std::is_same<nabla::expr::constant, decltype(s          )>::value));
     EXPECT_TRUE((std::is_same<nabla::expr::constant, decltype(s.diff<0>())>::value));
 }
-

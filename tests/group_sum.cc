@@ -8,8 +8,7 @@ TEST(sum, var_plus_num)  {
 
     auto f = x + 1 ;
     
-    nabla::vector<3> vars;
-    vars << 2, 3, 4;
+    nabla::vector<3> vars = nabla::make_vector(2, 3, 4);
 
     EXPECT_EQ( 3, f(vars));
 
@@ -39,8 +38,7 @@ TEST(sum, num_plus_var)  {
 
     auto f = 1 + x;
     
-    nabla::vector<3> vars;
-    vars << 2, 3, 4;
+    nabla::vector<3> vars = nabla::make_vector(2, 3, 4);
 
     EXPECT_EQ( 3, f(vars));
 
@@ -71,8 +69,7 @@ TEST(sum, var_plus_var)  {
 
     auto f = x + z ;
     
-    nabla::vector<3> vars;
-    vars << 2, 3, 4;
+    nabla::vector<3> vars = nabla::make_vector(2, 3, 4);
 
     EXPECT_EQ( 6, f(vars));
 
@@ -109,8 +106,7 @@ TEST(sum, var_plus_self)  {
 
     auto f = x + x;
     
-    nabla::vector<3> vars;
-    vars << 2, 3, 4;
+    nabla::vector<3> vars = nabla::make_vector(2, 3, 4);
 
     EXPECT_EQ( 4, f(vars));
 
@@ -140,8 +136,7 @@ TEST(sum, var_minus_num)  {
 
     auto f = x - 1 ;
     
-    nabla::vector<3> vars;
-    vars << 2, 3, 4;
+    nabla::vector<3> vars = nabla::make_vector(2, 3, 4);
 
     EXPECT_EQ( 1, f(vars));
 
@@ -171,8 +166,7 @@ TEST(sum, num_minus_var)  {
 
     auto f = 1 - x;
     
-    nabla::vector<3> vars;
-    vars << 2, 3, 4;
+    nabla::vector<3> vars = nabla::make_vector(2, 3, 4);
 
     EXPECT_EQ(-1, f(vars));
 
@@ -203,8 +197,7 @@ TEST(sum, var_minus_var)  {
 
     auto f = x - z ;
     
-    nabla::vector<3> vars;
-    vars << 2, 3, 4;
+    nabla::vector<3> vars = nabla::make_vector(2, 3, 4);
 
     EXPECT_EQ(-2, f(vars));
 
@@ -241,8 +234,7 @@ TEST(sum, var_minus_self)  {
 
     auto f = x - x;
     
-    nabla::vector<3> vars;
-    vars << 2, 3, 4;
+    nabla::vector<3> vars = nabla::make_vector(2, 3, 4);
 
     EXPECT_EQ( 0, f(vars));
 
@@ -273,8 +265,7 @@ TEST(sum, mixed)  {
 
     auto f = x - z - 2 + y + 5;
     
-    nabla::vector<3> vars;
-    vars << 2, 3, 4;
+    nabla::vector<3> vars = nabla::make_vector(2, 3, 4);
 
     EXPECT_EQ( 4, f(vars));
 
@@ -311,7 +302,7 @@ TEST(sum, simple_n1) {
 
     auto s = 2.0 + x - y;
 
-    nabla::vector<2> values(1.0, -3.0);
+    nabla::vector<2> values { 1.0, -3.0 };
 
     auto r = s(values);
 

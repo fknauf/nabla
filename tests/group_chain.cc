@@ -14,8 +14,7 @@ TEST(chain, sym)  {
 
     nabla::expr::chain<decltype(f), decltype(g), decltype(h)> c(f, g, h);
     
-    nabla::vector<3> vars;
-    vars << 2, 3, 4;
+    nabla::vector<3> vars = nabla::make_vector(2, 3, 4);
 
     EXPECT_EQ(224, c(vars));
 
@@ -38,8 +37,7 @@ TEST(chain, asym)  {
 
     nabla::expr::chain<decltype(f), decltype(g), decltype(h)> c(f, g, h);
     
-    nabla::vector<3> vars;
-    vars << 2, 3, 4;
+    nabla::vector<3> vars = nabla::make_vector(2, 3, 4);
 
     EXPECT_EQ( 896, c(vars));
 
@@ -64,7 +62,7 @@ TEST(chain, n1_simple) {
 		x + 2 * y
     );
 
-    nabla::vector<2> p(1.0, -3.0);
+    nabla::vector<2> p = nabla::make_vector(1.0, -3.0);
 
     auto r = s(p);
 
@@ -87,7 +85,7 @@ TEST(chain, n1_product_rule) {
 		x + 2 * y
     );
 
-    nabla::vector<2> p(1.0, -3.0);
+    nabla::vector<2> p = nabla::make_vector(1.0, -3.0);
 
     auto r = s(p);
 
@@ -110,7 +108,7 @@ TEST(chain, n1_simple_num) {
 		nabla::expr::constant(2)
     );
 
-    nabla::vector<2> p(1.0, -3.0);
+    nabla::vector<2> p = nabla::make_vector(1.0, -3.0);
 
     auto r = s(p);
 
