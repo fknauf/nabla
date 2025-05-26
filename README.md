@@ -1,8 +1,8 @@
-# Nabla - automatic partial derivatives for C++
+# Nabla - compile-time partial derivatives for C++
 
 Nabla is a library for automatic partial differentiation of multivariate functions
-using C++ expression templates for speed and profit. Currently it handles functions in
-the reals; future versions may include support for complex numbers.
+at compile time using C++ expression templates for speed and profit. Currently it
+handles functions in the reals. Eigen3 and Armadillo are supported backends.
 
 ## Usage
 
@@ -44,7 +44,10 @@ This is equivalent to the last line of the example:
     nabla::vector<3> vars { 1, 2, 3 };
     std::cout << df(vars) << std::endl;
 
-Note that `nabla::vector<3>` is an alias for `Eigen::Vector3d` (see "Dependencies" below).
+Note that the exact handling of `nabla::vector` depends on the chosen backend.
+The default backend is Eigen3, in which case `nabla::vector<3>` is an alias
+for `Eigen::Matrix<double, 3, 1>`. If `NABLA_BACKEND_ARMADILLO` is defined,
+it is instead an alias for `arma::Col<double>::fixed<3>`.
 
 For more examples, take a look into the `tests` subdirectory. That's pretty
 much it, though. In addition to elementary arithmetic, currently supported
@@ -81,6 +84,11 @@ functions are:
 
 ## Dependencies
 
-Nabla depends on [Eigen](http://eigen.tuxfamily.org) for the vector types and
-calculations. `nabla::vector<n>` is an alias for an Eigen vector of doubles of
-length `n`.
+Nabla depends on either [Eigen](http://eigen.tuxfamily.org) or
+[Armadillo](https://arma.sourceforge.net/) for the vector types and
+calculations.
+
+The build system for the unit tests pulls both in using
+[vcpkg](https://vcpkg.io), which is supposed to have been integrated
+with `vcpkg integrate install`. This is not required to use Nabla,
+which is header-only.
