@@ -1,170 +1,167 @@
 #include <nabla/division.hh>
 
-#include <boost/test/unit_test.hpp>
+#include <gtest/gtest.h>
 
-BOOST_AUTO_TEST_SUITE( division )
+TEST(division, var_div_num)  {
+    nabla::expr::variable<0> x;
+    nabla::expr::variable<1> y;
 
-BOOST_AUTO_TEST_CASE( var_div_num )  {
-  nabla::expr::variable<0> x;
-  nabla::expr::variable<1> y;
+    auto f = x / 2;
+    
+    nabla::vector<3> vars;
+    vars << 2, 3, 4;
 
-  auto f = x / 2;
-  
-  nabla::vector<3> vars;
-  vars << 2, 3, 4;
+    EXPECT_EQ(1  , f(vars));
 
-  BOOST_CHECK_EQUAL(1  , f(vars));
+    EXPECT_EQ(0.5, f.diff(x)(vars));
+    EXPECT_EQ(0  , f.diff(y)(vars));
 
-  BOOST_CHECK_EQUAL(0.5, f.diff(x)(vars));
-  BOOST_CHECK_EQUAL(0  , f.diff(y)(vars));
-
-  BOOST_CHECK_EQUAL(0.5, f.diff<0>()(vars));
-  BOOST_CHECK_EQUAL(0  , f.diff<1>()(vars));
-  
-  BOOST_CHECK_EQUAL(0  , f.diff(x, x)(vars));
-  BOOST_CHECK_EQUAL(0  , f.diff(x, y)(vars));
-  BOOST_CHECK_EQUAL(0  , f.diff(y, x)(vars));
-  BOOST_CHECK_EQUAL(0  , f.diff(y, y)(vars));
+    EXPECT_EQ(0.5, f.diff<0>()(vars));
+    EXPECT_EQ(0  , f.diff<1>()(vars));
+    
+    EXPECT_EQ(0  , f.diff(x, x)(vars));
+    EXPECT_EQ(0  , f.diff(x, y)(vars));
+    EXPECT_EQ(0  , f.diff(y, x)(vars));
+    EXPECT_EQ(0  , f.diff(y, y)(vars));
 }
 
-BOOST_AUTO_TEST_CASE( num_div_var )  {
-  nabla::expr::variable<0> x;
-  nabla::expr::variable<1> y;
+TEST(division, num_div_var)  {
+    nabla::expr::variable<0> x;
+    nabla::expr::variable<1> y;
 
-  auto f = 2 / x;
-  
-  nabla::vector<3> vars;
-  vars << 2, 3, 4;
+    auto f = 2 / x;
+    
+    nabla::vector<3> vars;
+    vars << 2, 3, 4;
 
-  BOOST_CHECK_EQUAL( 1   , f(vars));
+    EXPECT_EQ( 1   , f(vars));
 
-  BOOST_CHECK_EQUAL(-0.5 , f.diff(x)(vars));
-  BOOST_CHECK_EQUAL( 0   , f.diff(y)(vars));
+    EXPECT_EQ(-0.5 , f.diff(x)(vars));
+    EXPECT_EQ( 0   , f.diff(y)(vars));
 
-  BOOST_CHECK_EQUAL(-0.5 , f.diff<0>()(vars));
-  BOOST_CHECK_EQUAL( 0   , f.diff<1>()(vars));
-  
-  BOOST_CHECK_EQUAL( 0.5 , f.diff(x, x)(vars));
-  BOOST_CHECK_EQUAL( 0   , f.diff(x, y)(vars));
-  BOOST_CHECK_EQUAL( 0   , f.diff(y, x)(vars));
-  BOOST_CHECK_EQUAL( 0   , f.diff(y, y)(vars));
+    EXPECT_EQ(-0.5 , f.diff<0>()(vars));
+    EXPECT_EQ( 0   , f.diff<1>()(vars));
+    
+    EXPECT_EQ( 0.5 , f.diff(x, x)(vars));
+    EXPECT_EQ( 0   , f.diff(x, y)(vars));
+    EXPECT_EQ( 0   , f.diff(y, x)(vars));
+    EXPECT_EQ( 0   , f.diff(y, y)(vars));
 
-  BOOST_CHECK_EQUAL(-0.75, f.diff(x, x, x)(vars));
+    EXPECT_EQ(-0.75, f.diff(x, x, x)(vars));
 }
 
-BOOST_AUTO_TEST_CASE( var_div_var )  {
-  nabla::expr::variable<0> x;
-  nabla::expr::variable<1> y;
-  nabla::expr::variable<2> z;
+TEST(division, var_div_var)  {
+    nabla::expr::variable<0> x;
+    nabla::expr::variable<1> y;
+    nabla::expr::variable<2> z;
 
-  auto f = x / z;
-  
-  nabla::vector<3> vars;
-  vars << 2, 3, 4;
+    auto f = x / z;
+    
+    nabla::vector<3> vars;
+    vars << 2, 3, 4;
 
-  BOOST_CHECK_EQUAL(0.5 , f(vars));
+    EXPECT_EQ(0.5 , f(vars));
 
-  BOOST_CHECK_EQUAL( 0.25 , f.diff(x)(vars));
-  BOOST_CHECK_EQUAL( 0    , f.diff(y)(vars));
-  BOOST_CHECK_EQUAL(-0.125, f.diff(z)(vars));
+    EXPECT_EQ( 0.25 , f.diff(x)(vars));
+    EXPECT_EQ( 0    , f.diff(y)(vars));
+    EXPECT_EQ(-0.125, f.diff(z)(vars));
 
-  BOOST_CHECK_EQUAL( 0.25 , f.diff<0>()(vars));
-  BOOST_CHECK_EQUAL( 0    , f.diff<1>()(vars));
-  BOOST_CHECK_EQUAL(-0.125, f.diff<2>()(vars));
-  
-  BOOST_CHECK_EQUAL( 0    , f.diff(x, x)(vars));
-  BOOST_CHECK_EQUAL( 0    , f.diff(x, y)(vars));
-  BOOST_CHECK_EQUAL( 0    , f.diff(y, x)(vars));
-  BOOST_CHECK_EQUAL( 0    , f.diff(y, y)(vars));
+    EXPECT_EQ( 0.25 , f.diff<0>()(vars));
+    EXPECT_EQ( 0    , f.diff<1>()(vars));
+    EXPECT_EQ(-0.125, f.diff<2>()(vars));
+    
+    EXPECT_EQ( 0    , f.diff(x, x)(vars));
+    EXPECT_EQ( 0    , f.diff(x, y)(vars));
+    EXPECT_EQ( 0    , f.diff(y, x)(vars));
+    EXPECT_EQ( 0    , f.diff(y, y)(vars));
 
-  BOOST_CHECK_EQUAL( 0.0625   , f.diff(z, z      )(vars));
-  BOOST_CHECK_EQUAL( 0.03125  , f.diff(z, z, x   )(vars));
-  BOOST_CHECK_EQUAL(-0.0234375, f.diff(z, z, x, z)(vars));
+    EXPECT_EQ( 0.0625   , f.diff(z, z      )(vars));
+    EXPECT_EQ( 0.03125  , f.diff(z, z, x   )(vars));
+    EXPECT_EQ(-0.0234375, f.diff(z, z, x, z)(vars));
 }
 
-BOOST_AUTO_TEST_CASE( simple ) {
-  auto x = nabla::expr::variable<0>();
-  auto y = nabla::expr::variable<1>();
+TEST(division, simple) {
+    auto x = nabla::expr::variable<0>();
+    auto y = nabla::expr::variable<1>();
 
-  auto s = x / 2;
+    auto s = x / 2;
 
-  nabla::vector<2> values(3.0, 4.0);
+    nabla::vector<2> values(3.0, 4.0);
 
-  auto r = s(values);
+    auto r = s(values);
 
-  BOOST_CHECK_EQUAL(1.5, r);
-  BOOST_CHECK_EQUAL(0.5, s.diff(x)(values));
-  BOOST_CHECK_EQUAL(0.0, s.diff(y)(values));
+    EXPECT_EQ(1.5, r);
+    EXPECT_EQ(0.5, s.diff(x)(values));
+    EXPECT_EQ(0.0, s.diff(y)(values));
 }
 
-BOOST_AUTO_TEST_CASE( simple_inv ) {
-  auto x = nabla::expr::variable<0>();
-  auto y = nabla::expr::variable<1>();
+TEST(division, simple_inv) {
+    auto x = nabla::expr::variable<0>();
+    auto y = nabla::expr::variable<1>();
 
-  auto s = 4.5 / x;
+    auto s = 4.5 / x;
 
-  nabla::vector<2> values(3.0, 4.0);
+    nabla::vector<2> values(3.0, 4.0);
 
-  auto r = s(values);
+    auto r = s(values);
 
-  BOOST_CHECK_EQUAL( 1.5, r);
-  BOOST_CHECK_EQUAL(-0.5, s.diff(x)(values));
-  BOOST_CHECK_EQUAL( 0.0, s.diff(y)(values));
+    EXPECT_EQ( 1.5, r);
+    EXPECT_EQ(-0.5, s.diff(x)(values));
+    EXPECT_EQ( 0.0, s.diff(y)(values));
 }
 
-BOOST_AUTO_TEST_CASE( twovar ) {
-  auto x = nabla::expr::variable<0>();
-  auto y = nabla::expr::variable<1>();
+TEST(division, twovar) {
+    auto x = nabla::expr::variable<0>();
+    auto y = nabla::expr::variable<1>();
 
-  auto s = x / y;
+    auto s = x / y;
 
-  nabla::vector<2> values(3.0, 4.0);
+    nabla::vector<2> values(3.0, 4.0);
 
-  auto r = s(values);
+    auto r = s(values);
 
-  BOOST_CHECK_EQUAL( 0.75  , r);
-  BOOST_CHECK_EQUAL( 0.25  , s.diff(x)(values));
-  BOOST_CHECK_EQUAL(-0.1875, s.diff(y)(values));
+    EXPECT_EQ( 0.75  , r);
+    EXPECT_EQ( 0.25  , s.diff(x)(values));
+    EXPECT_EQ(-0.1875, s.diff(y)(values));
 }
 
-BOOST_AUTO_TEST_CASE( twovar_plus_constant ) {
-  auto x = nabla::expr::variable<0>();
-  auto y = nabla::expr::variable<1>();
+TEST(division, twovar_plus_constant) {
+    auto x = nabla::expr::variable<0>();
+    auto y = nabla::expr::variable<1>();
 
-  auto s = x / y / 0.5;
+    auto s = x / y / 0.5;
 
-  nabla::vector<2> values(3.0, 4.0);
+    nabla::vector<2> values(3.0, 4.0);
 
-  auto r = s(values);
+    auto r = s(values);
 
-  BOOST_CHECK_EQUAL( 1.5  , r);
-  BOOST_CHECK_EQUAL( 0.5  , s.diff(x)(values));
-  BOOST_CHECK_EQUAL(-0.375, s.diff(y)(values));
+    EXPECT_EQ( 1.5  , r);
+    EXPECT_EQ( 0.5  , s.diff(x)(values));
+    EXPECT_EQ(-0.375, s.diff(y)(values));
 }
 
-BOOST_AUTO_TEST_CASE( params_expanded ) {
-  auto x = nabla::expr::variable<0>();
-  auto y = nabla::expr::variable<1>();
+TEST(division, params_expanded) {
+    auto x = nabla::expr::variable<0>();
+    auto y = nabla::expr::variable<1>();
 
-  auto s = x / y / 0.5;
+    auto s = x / y / 0.5;
 
-  auto r = s(3, 4);
+    auto r = s(3, 4);
 
-  BOOST_CHECK_EQUAL( 1.5  , r);
-  BOOST_CHECK_EQUAL( 0.5  , s.diff(x)(3, 4));
-  BOOST_CHECK_EQUAL(-0.375, s.diff(y)(3, 4));
+    EXPECT_EQ( 1.5  , r);
+    EXPECT_EQ( 0.5  , s.diff(x)(3, 4));
+    EXPECT_EQ(-0.375, s.diff(y)(3, 4));
 }
 
-BOOST_AUTO_TEST_CASE(constant_folding) {
-  nabla::expr::constant c(5);
+TEST(division, constant_folding) {
+    nabla::expr::constant c(5);
 
-  auto s = c / 2;
+    auto s = c / 2;
 
-  BOOST_CHECK_EQUAL(2.5, s());
-  BOOST_CHECK_EQUAL(0  , s.diff<0>()());
+    EXPECT_EQ(2.5, s());
+    EXPECT_EQ(0  , s.diff<0>()());
 
-  BOOST_CHECK((std::is_same<nabla::expr::constant, decltype(s          )>::value));
-  BOOST_CHECK((std::is_same<nabla::expr::constant, decltype(s.diff<0>())>::value));
+    EXPECT_TRUE((std::is_same<nabla::expr::constant, decltype(s          )>::value));
+    EXPECT_TRUE((std::is_same<nabla::expr::constant, decltype(s.diff<0>())>::value));
 }
 
-BOOST_AUTO_TEST_SUITE_END()

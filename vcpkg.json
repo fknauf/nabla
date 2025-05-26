@@ -4,7 +4,7 @@
   "version": "0.0.1",
   "builtin-baseline": "8f54ef5453e7e76ff01e15988bf243e7247c5eb5",
   "dependencies": [
-    "boost-test",
-    "eigen3"
+    "eigen3",
+    "gtest"
   ]
 }

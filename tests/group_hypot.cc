@@ -1,125 +1,124 @@
 #include <nabla/chain.hh>
 #include <nabla/hypot.hh>
 
-#include <boost/test/unit_test.hpp>
+#include <gtest/gtest.h>
 
-BOOST_AUTO_TEST_SUITE( chain )
+TEST(hypot, n1_veclength) {
+    auto x = nabla::expr::variable<0>();
+    auto y = nabla::expr::variable<1>();
+    auto z = nabla::expr::variable<2>();
 
-namespace {
-  double epsilon = 1e-7;
+    auto s = hypot(x * y, x * z, 2, y * z);
+
+    nabla::vector<4> p(1.0, -3.0, 2.0, 5.0);
+
+    auto r = s(p);
+
+    double exv = std::sqrt(
+        std::pow(p(0) * p(1), 2)
+        + std::pow(p(0) * p(2), 2)
+        + std::pow(2, 2)
+        + std::pow(p(1) * p(2), 2)
+    );
+
+    double dx = p(0) * (p(1) * p(1) + p(2) * p(2)) / exv;
+    double dy = p(1) * (p(0) * p(0) + p(2) * p(2)) / exv;
+    double dz = p(2) * (p(0) * p(0) + p(1) * p(1)) / exv;
+
+    EXPECT_DOUBLE_EQ(exv, r);
+
+    EXPECT_DOUBLE_EQ(dx, s.diff(x)(p));
+    EXPECT_DOUBLE_EQ(dy, s.diff(y)(p));
+    EXPECT_DOUBLE_EQ(dz, s.diff(z)(p));
 }
 
-BOOST_AUTO_TEST_CASE( n1_veclength ) {
-  auto x = nabla::expr::variable<0>();
-  auto y = nabla::expr::variable<1>();
-  auto z = nabla::expr::variable<2>();
+TEST(hypot, starts_with_constant) {
+    auto x = nabla::expr::variable<0>();
+    auto y = nabla::expr::variable<1>();
+    auto z = nabla::expr::variable<2>();
 
-  auto s = hypot(x * y, x * z, 2, y * z);
+    auto s = hypot(2, x * z, 2, y * z);
 
-  nabla::vector<4> p(1.0, -3.0, 2.0, 5.0);
+    nabla::vector<4> p(1.0, -3.0, 2.0, 5.0);
 
-  auto r = s(p);
+    auto r = s(p);
 
-  double exv = std::sqrt(std::pow(p(0) * p(1), 2)
-                         + std::pow(p(0) * p(2), 2)
-                         + std::pow(2, 2)
-                         + std::pow(p(1) * p(2), 2));
+    double exv = std::sqrt(
+        std::pow(2, 2)
+        + std::pow(p(0) * p(2), 2)
+        + std::pow(2, 2)
+        + std::pow(p(1) * p(2), 2)
+    );
 
-  double dx = p(0) * (p(1) * p(1) + p(2) * p(2)) / exv;
-  double dy = p(1) * (p(0) * p(0) + p(2) * p(2)) / exv;
-  double dz = p(2) * (p(0) * p(0) + p(1) * p(1)) / exv;
+    double dx = p(0) * (p(2) * p(2)) / exv;
+    double dy = p(1) * (p(2) * p(2)) / exv;
+    double dz = p(2) * (p(0) * p(0) + p(1) * p(1)) / exv;
 
-  BOOST_CHECK_CLOSE(exv, r, epsilon);
+    EXPECT_DOUBLE_EQ(exv, r);
 
-  BOOST_CHECK_CLOSE(dx, s.diff(x)(p), epsilon);
-  BOOST_CHECK_CLOSE(dy, s.diff(y)(p), epsilon);
-  BOOST_CHECK_CLOSE(dz, s.diff(z)(p), epsilon);
+    EXPECT_DOUBLE_EQ(dx, s.diff(x)(p));
+    EXPECT_DOUBLE_EQ(dy, s.diff(y)(p));
+    EXPECT_DOUBLE_EQ(dz, s.diff(z)(p));
 }
 
-BOOST_AUTO_TEST_CASE( starts_with_constant ) {
-  auto x = nabla::expr::variable<0>();
-  auto y = nabla::expr::variable<1>();
-  auto z = nabla::expr::variable<2>();
+TEST(hypot, ends_with_constant) {
+    auto x = nabla::expr::variable<0>();
+    auto y = nabla::expr::variable<1>();
+    auto z = nabla::expr::variable<2>();
 
-  auto s = hypot(2, x * z, 2, y * z);
+    auto s = hypot(x * z, 2, y * z, 2);
 
-  nabla::vector<4> p(1.0, -3.0, 2.0, 5.0);
+    nabla::vector<4> p(1.0, -3.0, 2.0, 5.0);
 
-  auto r = s(p);
+    auto r = s(p);
 
-  double exv = std::sqrt(std::pow(2, 2)
-                         + std::pow(p(0) * p(2), 2)
-                         + std::pow(2, 2)
-                         + std::pow(p(1) * p(2), 2));
+    double exv = std::sqrt(
+        std::pow(2, 2)
+        + std::pow(p(0) * p(2), 2)
+        + std::pow(2, 2)
+        + std::pow(p(1) * p(2), 2)
+    );
 
-  double dx = p(0) * (p(2) * p(2)) / exv;
-  double dy = p(1) * (p(2) * p(2)) / exv;
-  double dz = p(2) * (p(0) * p(0) + p(1) * p(1)) / exv;
+    double dx = p(0) * (p(2) * p(2)) / exv;
+    double dy = p(1) * (p(2) * p(2)) / exv;
+    double dz = p(2) * (p(0) * p(0) + p(1) * p(1)) / exv;
 
-  BOOST_CHECK_CLOSE(exv, r, epsilon);
+    EXPECT_DOUBLE_EQ(exv, r);
 
-  BOOST_CHECK_CLOSE(dx, s.diff(x)(p), epsilon);
-  BOOST_CHECK_CLOSE(dy, s.diff(y)(p), epsilon);
-  BOOST_CHECK_CLOSE(dz, s.diff(z)(p), epsilon);
+    EXPECT_DOUBLE_EQ(dx, s.diff(x)(p));
+    EXPECT_DOUBLE_EQ(dy, s.diff(y)(p));
+    EXPECT_DOUBLE_EQ(dz, s.diff(z)(p));
 }
 
-BOOST_AUTO_TEST_CASE( ends_with_constant ) {
-  auto x = nabla::expr::variable<0>();
-  auto y = nabla::expr::variable<1>();
-  auto z = nabla::expr::variable<2>();
+TEST(hypot, all_constant) {
+    auto x = nabla::expr::variable<0>();
+    auto y = nabla::expr::variable<1>();
+    auto z = nabla::expr::variable<2>();
 
-  auto s = hypot(x * z, 2, y * z, 2);
+    nabla::expr::constant one  (1);
+    nabla::expr::constant two  (2);
+    nabla::expr::constant three(3);
+    nabla::expr::constant four (4);
 
-  nabla::vector<4> p(1.0, -3.0, 2.0, 5.0);
+    auto s = nabla::expr::hypot(one, two, three, four);
 
-  auto r = s(p);
+    nabla::vector<4> p(1.0, -3.0, 2.0, 5.0);
 
-  double exv = std::sqrt(std::pow(2, 2)
-                         + std::pow(p(0) * p(2), 2)
-                         + std::pow(2, 2)
-                         + std::pow(p(1) * p(2), 2));
+    auto r = s(p);
 
-  double dx = p(0) * (p(2) * p(2)) / exv;
-  double dy = p(1) * (p(2) * p(2)) / exv;
-  double dz = p(2) * (p(0) * p(0) + p(1) * p(1)) / exv;
+    double exv = std::sqrt(1 + 4 + 9 + 16);
 
-  BOOST_CHECK_CLOSE(exv, r, epsilon);
+    double dx = 0;
+    double dy = 0;
+    double dz = 0;
 
-  BOOST_CHECK_CLOSE(dx, s.diff(x)(p), epsilon);
-  BOOST_CHECK_CLOSE(dy, s.diff(y)(p), epsilon);
-  BOOST_CHECK_CLOSE(dz, s.diff(z)(p), epsilon);
+    EXPECT_DOUBLE_EQ(exv, r);
+
+    EXPECT_DOUBLE_EQ(dx, s.diff(x)(p));
+    EXPECT_DOUBLE_EQ(dy, s.diff(y)(p));
+    EXPECT_DOUBLE_EQ(dz, s.diff(z)(p));
+
+    EXPECT_TRUE((std::is_same<nabla::expr::constant, decltype(s        )>::value));
+    EXPECT_TRUE((std::is_same<nabla::expr::constant, decltype(s.diff(x))>::value));
 }
 
-BOOST_AUTO_TEST_CASE( all_constant ) {
-  auto x = nabla::expr::variable<0>();
-  auto y = nabla::expr::variable<1>();
-  auto z = nabla::expr::variable<2>();
-
-  nabla::expr::constant one  (1);
-  nabla::expr::constant two  (2);
-  nabla::expr::constant three(3);
-  nabla::expr::constant four (4);
-
-  auto s = nabla::expr::hypot(one, two, three, four);
-
-  nabla::vector<4> p(1.0, -3.0, 2.0, 5.0);
-
-  auto r = s(p);
-
-  double exv = std::sqrt(1 + 4 + 9 + 16);
-
-  double dx = 0;
-  double dy = 0;
-  double dz = 0;
-
-  BOOST_CHECK_CLOSE(exv, r, epsilon);
-
-  BOOST_CHECK_CLOSE(dx, s.diff(x)(p), epsilon);
-  BOOST_CHECK_CLOSE(dy, s.diff(y)(p), epsilon);
-  BOOST_CHECK_CLOSE(dz, s.diff(z)(p), epsilon);
-
-  BOOST_CHECK((std::is_same<nabla::expr::constant, decltype(s        )>::value));
-  BOOST_CHECK((std::is_same<nabla::expr::constant, decltype(s.diff(x))>::value));
-}
-
-BOOST_AUTO_TEST_SUITE_END()

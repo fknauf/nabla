@@ -1,163 +1,156 @@
 #include <nabla/nabla.hh>
-#include <boost/test/unit_test.hpp>
+#include <gtest/gtest.h>
 
-namespace {
-  double epsilon = 1e-10;
+TEST(explog, test_exp) {
+    auto x = nabla::expr::variable<0>();
+    auto y = nabla::expr::variable<1>();
+
+    auto s = exp(2 * x + 4 * y);
+
+    nabla::vector<2> p { 2.0, 5.0 };
+
+    auto r = s(p);
+
+    EXPECT_DOUBLE_EQ(r           , std::exp(2 * p(0) + 4 * p(1)));
+    EXPECT_DOUBLE_EQ(s.diff(x)(p), 2 * r                        );
+    EXPECT_DOUBLE_EQ(s.diff(y)(p), 4 * r                        );
+
+    EXPECT_DOUBLE_EQ(s        (p(0), p(1)), s        (p));
+    EXPECT_DOUBLE_EQ(s.diff(x)(p(0), p(1)), s.diff(x)(p));
+    EXPECT_DOUBLE_EQ(s.diff(y)(p(0), p(1)), s.diff(y)(p));
 }
 
-BOOST_AUTO_TEST_SUITE( explog )
+TEST(explog, test_log) {
+    auto x = nabla::expr::variable<0>();
+    auto y = nabla::expr::variable<1>();
 
-BOOST_AUTO_TEST_CASE( test_exp ) {
-  auto x = nabla::expr::variable<0>();
-  auto y = nabla::expr::variable<1>();
+    auto s = log(2 * x + 4 * y);
 
-  auto s = exp(2 * x + 4 * y);
+    nabla::vector<2> p { 2.0, 5.0 };
 
-  nabla::vector<2> p { 2.0, 5.0 };
+    auto r = s(p);
 
-  auto r = s(p);
+    EXPECT_DOUBLE_EQ(r           , std::log(2 * p(0) + 4 * p(1)));
+    EXPECT_DOUBLE_EQ(s.diff(x)(p), 2 / (2 * p(0) + 4 * p(1))    );
+    EXPECT_DOUBLE_EQ(s.diff(y)(p), 4 / (2 * p(0) + 4 * p(1))    );
 
-  BOOST_CHECK_CLOSE(r           , std::exp(2 * p(0) + 4 * p(1)), epsilon);
-  BOOST_CHECK_CLOSE(s.diff(x)(p), 2 * r                        , epsilon);
-  BOOST_CHECK_CLOSE(s.diff(y)(p), 4 * r                        , epsilon);
-
-  BOOST_CHECK_CLOSE(s        (p(0), p(1)), s        (p), epsilon);
-  BOOST_CHECK_CLOSE(s.diff(x)(p(0), p(1)), s.diff(x)(p), epsilon);
-  BOOST_CHECK_CLOSE(s.diff(y)(p(0), p(1)), s.diff(y)(p), epsilon);
+    EXPECT_DOUBLE_EQ(s        (p(0), p(1)), s        (p));
+    EXPECT_DOUBLE_EQ(s.diff(x)(p(0), p(1)), s.diff(x)(p));
+    EXPECT_DOUBLE_EQ(s.diff(y)(p(0), p(1)), s.diff(y)(p));
 }
 
-BOOST_AUTO_TEST_CASE( test_log ) {
-  auto x = nabla::expr::variable<0>();
-  auto y = nabla::expr::variable<1>();
+TEST(explog, test_exp2) {
+    auto x = nabla::expr::variable<0>();
+    auto y = nabla::expr::variable<1>();
 
-  auto s = log(2 * x + 4 * y);
+    auto s = exp2(x * x - 4 * y);
 
-  nabla::vector<2> p { 2.0, 5.0 };
+    nabla::vector<2> p { 2.0, 5.0 };
 
-  auto r = s(p);
+    auto r = s(p);
 
-  BOOST_CHECK_CLOSE(r           , std::log(2 * p(0) + 4 * p(1)), epsilon);
-  BOOST_CHECK_CLOSE(s.diff(x)(p), 2 / (2 * p(0) + 4 * p(1))    , epsilon);
-  BOOST_CHECK_CLOSE(s.diff(y)(p), 4 / (2 * p(0) + 4 * p(1))    , epsilon);
+    EXPECT_DOUBLE_EQ(r           , std::pow(2, p(0) * p(0) - 4 * p(1)));
+    EXPECT_DOUBLE_EQ(s.diff(x)(p),  2 * M_LN2 * p(0) * r              );
+    EXPECT_DOUBLE_EQ(s.diff(y)(p), -4 * M_LN2        * r              );
 
-  BOOST_CHECK_CLOSE(s        (p(0), p(1)), s        (p), epsilon);
-  BOOST_CHECK_CLOSE(s.diff(x)(p(0), p(1)), s.diff(x)(p), epsilon);
-  BOOST_CHECK_CLOSE(s.diff(y)(p(0), p(1)), s.diff(y)(p), epsilon);
+    EXPECT_DOUBLE_EQ(s        (p(0), p(1)), s        (p));
+    EXPECT_DOUBLE_EQ(s.diff(x)(p(0), p(1)), s.diff(x)(p));
+    EXPECT_DOUBLE_EQ(s.diff(y)(p(0), p(1)), s.diff(y)(p));
 }
 
-BOOST_AUTO_TEST_CASE( test_exp2 ) {
-  auto x = nabla::expr::variable<0>();
-  auto y = nabla::expr::variable<1>();
+TEST(explog, test_expm1) {
+    auto x = nabla::expr::variable<0>();
+    auto y = nabla::expr::variable<1>();
 
-  auto s = exp2(x * x - 4 * y);
+    auto s = expm1(x * x - 4 * y);
 
-  nabla::vector<2> p { 2.0, 5.0 };
+    nabla::vector<2> p { 2.0, 5.0 };
 
-  auto r = s(p);
+    auto r = s(p);
 
-  BOOST_CHECK_CLOSE(r           , std::pow(2, p(0) * p(0) - 4 * p(1)), epsilon);
-  BOOST_CHECK_CLOSE(s.diff(x)(p),  2 * M_LN2 * p(0) * r              , epsilon);
-  BOOST_CHECK_CLOSE(s.diff(y)(p), -4 * M_LN2        * r              , epsilon);
+    EXPECT_DOUBLE_EQ(r           , std::expm1(p(0) * p(0) - 4 * p(1)));
+    EXPECT_DOUBLE_EQ(s.diff(x)(p),  2 * p(0) * (r + 1)               );
+    EXPECT_DOUBLE_EQ(s.diff(y)(p), -4        * (r + 1)               );
 
-  BOOST_CHECK_CLOSE(s        (p(0), p(1)), s        (p), epsilon);
-  BOOST_CHECK_CLOSE(s.diff(x)(p(0), p(1)), s.diff(x)(p), epsilon);
-  BOOST_CHECK_CLOSE(s.diff(y)(p(0), p(1)), s.diff(y)(p), epsilon);
+    EXPECT_DOUBLE_EQ(s        (p(0), p(1)), s        (p));
+    EXPECT_DOUBLE_EQ(s.diff(x)(p(0), p(1)), s.diff(x)(p));
+    EXPECT_DOUBLE_EQ(s.diff(y)(p(0), p(1)), s.diff(y)(p));
 }
 
-BOOST_AUTO_TEST_CASE( test_expm1 ) {
-  auto x = nabla::expr::variable<0>();
-  auto y = nabla::expr::variable<1>();
+TEST(explog, test_log10) {
+    auto x = nabla::expr::variable<0>();
+    auto y = nabla::expr::variable<1>();
 
-  auto s = expm1(x * x - 4 * y);
+    auto s = log10(x * x - 4 * y);
 
-  nabla::vector<2> p { 2.0, 5.0 };
+    nabla::vector<2> p { 3.0, 1.0 };
 
-  auto r = s(p);
+    auto r = s(p);
 
-  BOOST_CHECK_CLOSE(r           , std::expm1(p(0) * p(0) - 4 * p(1)), epsilon);
-  BOOST_CHECK_CLOSE(s.diff(x)(p),  2 * p(0) * (r + 1)               , epsilon);
-  BOOST_CHECK_CLOSE(s.diff(y)(p), -4        * (r + 1)               , epsilon);
+    EXPECT_DOUBLE_EQ(r           ,             std::log10(p(0) * p(0) - 4 * p(1)) );
+    EXPECT_DOUBLE_EQ(s.diff(x)(p),  2 * p(0) / (M_LN10 * (p(0) * p(0) - 4 * p(1))));
+    EXPECT_DOUBLE_EQ(s.diff(y)(p), -4        / (M_LN10 * (p(0) * p(0) - 4 * p(1))));
 
-  BOOST_CHECK_CLOSE(s        (p(0), p(1)), s        (p), epsilon);
-  BOOST_CHECK_CLOSE(s.diff(x)(p(0), p(1)), s.diff(x)(p), epsilon);
-  BOOST_CHECK_CLOSE(s.diff(y)(p(0), p(1)), s.diff(y)(p), epsilon);
+    EXPECT_DOUBLE_EQ(s        (p(0), p(1)), s        (p));
+    EXPECT_DOUBLE_EQ(s.diff(x)(p(0), p(1)), s.diff(x)(p));
+    EXPECT_DOUBLE_EQ(s.diff(y)(p(0), p(1)), s.diff(y)(p));
 }
 
-BOOST_AUTO_TEST_CASE( test_log10 ) {
-  auto x = nabla::expr::variable<0>();
-  auto y = nabla::expr::variable<1>();
+TEST(explog, test_log2) {
+    auto x = nabla::expr::variable<0>();
+    auto y = nabla::expr::variable<1>();
 
-  auto s = log10(x * x - 4 * y);
+    auto s = log2(x * x - 4 * y);
 
-  nabla::vector<2> p { 3.0, 1.0 };
+    nabla::vector<2> p { 3.0, 1.0 };
 
-  auto r = s(p);
+    auto r = s(p);
 
-  BOOST_CHECK_CLOSE(r           ,             std::log10(p(0) * p(0) - 4 * p(1)) , epsilon);
-  BOOST_CHECK_CLOSE(s.diff(x)(p),  2 * p(0) / (M_LN10 * (p(0) * p(0) - 4 * p(1))), epsilon);
-  BOOST_CHECK_CLOSE(s.diff(y)(p), -4        / (M_LN10 * (p(0) * p(0) - 4 * p(1))), epsilon);
+    EXPECT_DOUBLE_EQ(r           ,             std::log2(p(0) * p(0) - 4 * p(1)) );
+    EXPECT_DOUBLE_EQ(s.diff(x)(p),  2 * p(0) / (M_LN2 * (p(0) * p(0) - 4 * p(1))));
+    EXPECT_DOUBLE_EQ(s.diff(y)(p), -4        / (M_LN2 * (p(0) * p(0) - 4 * p(1))));
 
-  BOOST_CHECK_CLOSE(s        (p(0), p(1)), s        (p), epsilon);
-  BOOST_CHECK_CLOSE(s.diff(x)(p(0), p(1)), s.diff(x)(p), epsilon);
-  BOOST_CHECK_CLOSE(s.diff(y)(p(0), p(1)), s.diff(y)(p), epsilon);
+    EXPECT_DOUBLE_EQ(s        (p(0), p(1)), s        (p));
+    EXPECT_DOUBLE_EQ(s.diff(x)(p(0), p(1)), s.diff(x)(p));
+    EXPECT_DOUBLE_EQ(s.diff(y)(p(0), p(1)), s.diff(y)(p));
 }
 
-BOOST_AUTO_TEST_CASE( test_log2 ) {
-  auto x = nabla::expr::variable<0>();
-  auto y = nabla::expr::variable<1>();
+TEST(explog, test_log1p) {
+    auto x = nabla::expr::variable<0>();
+    auto y = nabla::expr::variable<1>();
 
-  auto s = log2(x * x - 4 * y);
+    auto s = log1p(x * x - 4 * y);
 
-  nabla::vector<2> p { 3.0, 1.0 };
+    nabla::vector<2> p { 3.0, 1.0 };
 
-  auto r = s(p);
+    auto r = s(p);
 
-  BOOST_CHECK_CLOSE(r           ,             std::log2(p(0) * p(0) - 4 * p(1)) , epsilon);
-  BOOST_CHECK_CLOSE(s.diff(x)(p),  2 * p(0) / (M_LN2 * (p(0) * p(0) - 4 * p(1))), epsilon);
-  BOOST_CHECK_CLOSE(s.diff(y)(p), -4        / (M_LN2 * (p(0) * p(0) - 4 * p(1))), epsilon);
+    EXPECT_DOUBLE_EQ(r           ,   std::log1p(p(0) * p(0) - 4 * p(1))    );
+    EXPECT_DOUBLE_EQ(s.diff(x)(p),  2 * p(0) / (p(0) * p(0) - 4 * p(1) + 1));
+    EXPECT_DOUBLE_EQ(s.diff(y)(p), -4        / (p(0) * p(0) - 4 * p(1) + 1));
 
-  BOOST_CHECK_CLOSE(s        (p(0), p(1)), s        (p), epsilon);
-  BOOST_CHECK_CLOSE(s.diff(x)(p(0), p(1)), s.diff(x)(p), epsilon);
-  BOOST_CHECK_CLOSE(s.diff(y)(p(0), p(1)), s.diff(y)(p), epsilon);
+    EXPECT_DOUBLE_EQ(s        (p(0), p(1)), s        (p));
+    EXPECT_DOUBLE_EQ(s.diff(x)(p(0), p(1)), s.diff(x)(p));
+    EXPECT_DOUBLE_EQ(s.diff(y)(p(0), p(1)), s.diff(y)(p));
 }
 
-BOOST_AUTO_TEST_CASE( test_log1p ) {
-  auto x = nabla::expr::variable<0>();
-  auto y = nabla::expr::variable<1>();
+TEST(explog, constant_folding) {
+    nabla::expr::constant c(2);
 
-  auto s = log1p(x * x - 4 * y);
+    EXPECT_DOUBLE_EQ(std::exp  (c.value()), exp  (c)());
+    EXPECT_DOUBLE_EQ(std::log  (c.value()), log  (c)());
+    EXPECT_DOUBLE_EQ(std::exp2 (c.value()), exp2 (c)());
+    EXPECT_DOUBLE_EQ(std::expm1(c.value()), expm1(c)());
+    EXPECT_DOUBLE_EQ(std::log10(c.value()), log10(c)());
+    EXPECT_DOUBLE_EQ(std::log2 (c.value()), log2 (c)());
+    EXPECT_DOUBLE_EQ(std::log1p(c.value()), log1p(c)());
 
-  nabla::vector<2> p { 3.0, 1.0 };
-
-  auto r = s(p);
-
-  BOOST_CHECK_CLOSE(r           ,   std::log1p(p(0) * p(0) - 4 * p(1))    , epsilon);
-  BOOST_CHECK_CLOSE(s.diff(x)(p),  2 * p(0) / (p(0) * p(0) - 4 * p(1) + 1), epsilon);
-  BOOST_CHECK_CLOSE(s.diff(y)(p), -4        / (p(0) * p(0) - 4 * p(1) + 1), epsilon);
-
-  BOOST_CHECK_CLOSE(s        (p(0), p(1)), s        (p), epsilon);
-  BOOST_CHECK_CLOSE(s.diff(x)(p(0), p(1)), s.diff(x)(p), epsilon);
-  BOOST_CHECK_CLOSE(s.diff(y)(p(0), p(1)), s.diff(y)(p), epsilon);
+    EXPECT_TRUE((std::is_same<nabla::expr::constant, decltype(exp  (c))>::value));
+    EXPECT_TRUE((std::is_same<nabla::expr::constant, decltype(log  (c))>::value));
+    EXPECT_TRUE((std::is_same<nabla::expr::constant, decltype(exp2 (c))>::value));
+    EXPECT_TRUE((std::is_same<nabla::expr::constant, decltype(expm1(c))>::value));
+    EXPECT_TRUE((std::is_same<nabla::expr::constant, decltype(log10(c))>::value));
+    EXPECT_TRUE((std::is_same<nabla::expr::constant, decltype(log2 (c))>::value));
+    EXPECT_TRUE((std::is_same<nabla::expr::constant, decltype(log1p(c))>::value));
 }
 
-BOOST_AUTO_TEST_CASE( constant_folding ) {
-  nabla::expr::constant c(2);
-
-  BOOST_CHECK_CLOSE(std::exp  (c.value()), exp  (c)(), epsilon);
-  BOOST_CHECK_CLOSE(std::log  (c.value()), log  (c)(), epsilon);
-  BOOST_CHECK_CLOSE(std::exp2 (c.value()), exp2 (c)(), epsilon);
-  BOOST_CHECK_CLOSE(std::expm1(c.value()), expm1(c)(), epsilon);
-  BOOST_CHECK_CLOSE(std::log10(c.value()), log10(c)(), epsilon);
-  BOOST_CHECK_CLOSE(std::log2 (c.value()), log2 (c)(), epsilon);
-  BOOST_CHECK_CLOSE(std::log1p(c.value()), log1p(c)(), epsilon);
-
-  BOOST_CHECK((std::is_same<nabla::expr::constant, decltype(exp  (c))>::value));
-  BOOST_CHECK((std::is_same<nabla::expr::constant, decltype(log  (c))>::value));
-  BOOST_CHECK((std::is_same<nabla::expr::constant, decltype(exp2 (c))>::value));
-  BOOST_CHECK((std::is_same<nabla::expr::constant, decltype(expm1(c))>::value));
-  BOOST_CHECK((std::is_same<nabla::expr::constant, decltype(log10(c))>::value));
-  BOOST_CHECK((std::is_same<nabla::expr::constant, decltype(log2 (c))>::value));
-  BOOST_CHECK((std::is_same<nabla::expr::constant, decltype(log1p(c))>::value));
-}
-
-BOOST_AUTO_TEST_SUITE_END()
