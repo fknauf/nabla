@@ -273,3 +273,51 @@ TEST(unary_functions, constant_folding) {
     EXPECT_TRUE((std::is_same<nabla::expr::constant, decltype(Phi (c))>::value));
 }
 
+TEST(unary_functions, gausspdf) {
+    auto x = nabla::expr::variable<0>{};
+
+    auto pdf = phi(x);
+
+    EXPECT_DOUBLE_EQ(1 / std::sqrt(2 * M_PI), pdf(0));
+    EXPECT_DOUBLE_EQ(0.0, pdf.diff(x)(0));
+
+    EXPECT_DOUBLE_EQ( 1 / std::sqrt(2 * M_E * M_PI), pdf(1));
+    EXPECT_DOUBLE_EQ(-1 / std::sqrt(2 * M_E * M_PI), pdf.diff(x)(1));
+    EXPECT_DOUBLE_EQ( 1 / std::sqrt(2 * M_E * M_PI), pdf(-1));
+    EXPECT_DOUBLE_EQ( 1 / std::sqrt(2 * M_E * M_PI), pdf.diff(x)(-1));
+
+    EXPECT_DOUBLE_EQ(1 / (M_E * M_E * std::sqrt(2 * M_PI)), pdf(2));
+    EXPECT_DOUBLE_EQ(1 / (M_E * M_E * std::sqrt(2 * M_PI)), pdf(-2));
+    EXPECT_DOUBLE_EQ(-std::sqrt(2 / M_PI) / (M_E * M_E), pdf.diff(x)(2));
+    EXPECT_DOUBLE_EQ( std::sqrt(2 / M_PI) / (M_E * M_E), pdf.diff(x)(-2));
+
+    auto shifted = gausspdf(x, 2, 1);
+
+    EXPECT_DOUBLE_EQ(pdf(0), shifted(2));
+    EXPECT_DOUBLE_EQ(pdf(1), shifted(3));
+    EXPECT_DOUBLE_EQ(pdf(2), shifted(4));
+
+    EXPECT_DOUBLE_EQ(pdf.diff(x)(0), shifted.diff(x)(2));
+    EXPECT_DOUBLE_EQ(pdf.diff(x)(1), shifted.diff(x)(3));
+    EXPECT_DOUBLE_EQ(pdf.diff(x)(2), shifted.diff(x)(4));
+
+    auto scaled = gausspdf(x, 0, 2);
+
+    EXPECT_DOUBLE_EQ(pdf(0) / 2, scaled(0));
+    EXPECT_DOUBLE_EQ(pdf(1) / 2, scaled(2));
+    EXPECT_DOUBLE_EQ(pdf(2) / 2, scaled(4));
+
+    EXPECT_DOUBLE_EQ(pdf.diff(x)(0) / 4, scaled.diff(x)(0));
+    EXPECT_DOUBLE_EQ(pdf.diff(x)(1) / 4, scaled.diff(x)(2));
+    EXPECT_DOUBLE_EQ(pdf.diff(x)(2) / 4, scaled.diff(x)(4));
+
+    auto warped = gausspdf(x, 2, 3);
+
+    EXPECT_DOUBLE_EQ(pdf(0) / 3, warped(2));
+    EXPECT_DOUBLE_EQ(pdf(1) / 3, warped(5));
+    EXPECT_DOUBLE_EQ(pdf(2) / 3, warped(8));
+
+    EXPECT_DOUBLE_EQ(pdf.diff(x)(0) / 9, warped.diff(x)(2));
+    EXPECT_DOUBLE_EQ(pdf.diff(x)(1) / 9, warped.diff(x)(5));
+    EXPECT_DOUBLE_EQ(pdf.diff(x)(2) / 9, warped.diff(x)(8));
+}
