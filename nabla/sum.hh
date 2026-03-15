@@ -9,20 +9,6 @@
 #include <algorithm>
 
 namespace nabla::expr {
-    inline auto operator+(
-        constant const &lhs,
-        constant const &rhs
-    ) -> constant {
-        return lhs.value() + rhs.value();
-    }
-    
-    inline auto operator-(
-        constant const &lhs,
-        constant const &rhs
-    ) -> constant {
-        return lhs.value() - rhs.value();
-    }
-
     template <typename LHS, typename RHS>
     auto operator+(
         LHS &&lhs,
@@ -80,6 +66,20 @@ namespace nabla::expr {
         LHS lhs_;
         RHS rhs_;
     };
+
+    inline auto operator+(
+        constant const &lhs,
+        constant const &rhs
+    ) -> constant {
+        return lhs.value() + rhs.value();
+    }
+    
+    inline auto operator-(
+        constant const &lhs,
+        constant const &rhs
+    ) -> constant {
+        return lhs.value() - rhs.value();
+    }
 }
 
 #endif

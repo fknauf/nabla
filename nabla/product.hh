@@ -10,26 +10,6 @@
 #include <algorithm>
 
 namespace nabla::expr {
-    inline auto operator*(
-        constant const &lhs,
-        constant const &rhs
-    ) -> constant {
-        return lhs.value() * rhs.value();
-    }
-
-    template <typename LHS, typename RHS>
-    auto operator*(
-        LHS &&lhs,
-        RHS &&rhs
-    ) -> product<
-        traits::nabla_equivalent<LHS>,
-        traits::nabla_equivalent<RHS>
-    >
-        requires traits::is_regular_nabla_tuple<LHS, RHS>
-    {
-        return { std::forward<LHS>(lhs), std::forward<RHS>(rhs) };
-    }
-
     template <typename LHS, typename RHS>
     class product:
         public nabla_base<product<LHS, RHS>>
@@ -59,6 +39,26 @@ namespace nabla::expr {
         LHS lhs_;
         RHS rhs_;
     };
+
+    inline auto operator*(
+        constant const &lhs,
+        constant const &rhs
+    ) -> constant {
+        return lhs.value() * rhs.value();
+    }
+
+    template <typename LHS, typename RHS>
+    auto operator*(
+        LHS &&lhs,
+        RHS &&rhs
+    ) -> product<
+        traits::nabla_equivalent<LHS>,
+        traits::nabla_equivalent<RHS>
+    >
+        requires traits::is_regular_nabla_tuple<LHS, RHS>
+    {
+        return { std::forward<LHS>(lhs), std::forward<RHS>(rhs) };
+    }
 }
 
 #endif

@@ -25,10 +25,10 @@ namespace nabla {
         template <typename T>
         using plain_type = std::remove_cv_t<std::remove_reference_t<T>>;
 
-        template <typename T> bool constexpr is_nabla_expression = std::is_base_of<expr::nabla_tag, plain_type<T>>::value;
-        template <typename T> bool constexpr is_nabla_value_type = std::is_convertible<plain_type<T>, double>::value;
+        template <typename T> bool constexpr is_nabla_expression = std::is_base_of_v<expr::nabla_tag, plain_type<T>>;
+        template <typename T> bool constexpr is_nabla_value_type = std::is_convertible_v<plain_type<T>, double>;
         template <typename T> bool constexpr is_nabla_compatible = is_nabla_expression<T> || is_nabla_value_type<T>;
-        template <typename T> bool constexpr is_nabla_constant   = is_nabla_value_type<T> || std::is_same<expr::constant, plain_type<T>>::value;
+        template <typename T> bool constexpr is_nabla_constant   = is_nabla_value_type<T> || std::is_same_v<expr::constant, plain_type<T>>;
         template <typename T> bool constexpr is_nabla_variable   = is_nabla_expression<T> && !is_nabla_constant<T>;
 
         template <typename T>

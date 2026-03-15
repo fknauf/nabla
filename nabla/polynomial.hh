@@ -28,28 +28,26 @@ namespace nabla::expr {
 
         template <index_type N>
         auto diff(variable<N> const & = {}) const {
-            return diff_dispatch(std::bool_constant<N == 0>());
+            if constexpr (N == 0) {
+                bool exponent_collapsed = exponent_.value() != 0.0;
+
+                return impl::make_conditional(
+                    [=](auto &&) { return exponent_collapsed; },
+                    exponent_ * polynomial(exponent_.value() - 1.0),
+                    constant{0}
+                );
+            } else {
+                return constant{0};
+            }
         }
 
     private:
-        auto diff_dispatch(std::false_type) const -> constant {
-            return 0;
-        }
-
-        auto diff_dispatch(std::true_type) const {
-            return impl::make_conditional(
-                [this](auto &&) { return exponent_.value() != 0.0; },
-                exponent_ * polynomial(exponent_.value() - 1.0),
-                0
-            );
-        }
-
         constant exponent_;
     };
 
     template <traits::nabla_variable Base>
     auto pow(Base &&base, constant exponent) {
-        return impl::make_chain(polynomial(exponent), std::forward<Base>(base));
+        return impl::make_chain(polynomial{exponent}, std::forward<Base>(base));
     }
 }
 

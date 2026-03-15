@@ -92,30 +92,21 @@ namespace nabla::expr {
 
         template <index_type N>
         auto diff(variable<N> const &var = {}) const {
-            return diff_dispatch(
-                var,
-                std::bool_constant<
-                    (N < dimension)
-                    && (!std::is_same<constant, ExprTrue>::value
-                        || !std::is_same<constant, ExprFalse>::value)>()
-            );
+            if constexpr (
+                N < dimension
+                && (!std::is_same_v<constant, ExprTrue> || !std::is_same_v<constant, ExprFalse>)
+            ) {
+                return impl::make_conditional(
+                    condition_,
+                    expr_true_.diff(var),
+                    expr_false_.diff(var)
+                );
+            } else {
+                return constant{0};
+            }
         }
 
     private:
-        template <index_type N>
-        auto diff_dispatch(variable<N> const &var, std::true_type) const {
-            return impl::make_conditional(
-                condition_,
-                expr_true_.diff(var),
-                expr_false_.diff(var)
-            );
-        }
-
-        template <index_type N>
-        constant diff_dispatch(variable<N> const &, std::false_type) const {
-            return 0;
-        }
-
         Condition condition_;
         ExprTrue expr_true_;
         ExprFalse expr_false_;

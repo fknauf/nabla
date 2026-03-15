@@ -23,19 +23,11 @@ namespace nabla::expr {
 
         template <index_type N>
         auto diff(variable<N> const &var = {}) const {
-            return diff_dispatch(var, std::bool_constant<N == 0>());
-        }
-
-    private:
-        template <index_type N>
-        auto diff_dispatch(variable<N> const &x, std::true_type) const {
-            static_assert(N == 0, "N must be zero here, or the check in diff is bogus.");
-            return 1 / x;
-        }
-
-        template <index_type N>
-        auto diff_dispatch(variable<N> const &, std::false_type) const -> constant {
-            return 0.0;
+            if constexpr (N == 0) {
+                return 1 / var;
+            } else {
+                return constant{0};
+            }
         }
     };
 

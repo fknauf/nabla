@@ -32,14 +32,14 @@ namespace nabla::expr {
 
         template <index_type N>
         auto diff(variable<N> const & = {}) const {
-            return diff_dispatch(std::bool_constant<N == 0>());
+            if constexpr (N == 0) {
+                return log_base_ * (*this);
+            } else {
+                return constant{0};
+            }
         }
 
     private:
-        constant diff_dispatch(std::false_type) const { return 0; }
-
-        auto diff_dispatch(std::true_type) const { return log_base_ * (*this); }
-
         constant base_;
         constant log_base_;
     };
