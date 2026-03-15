@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.22)
 
 project(nabla)
 
-if(NOT DEFINED CMAKE_TOOLCHAIN_FILE)
+if(NOT DEFINED CMAKE_TOOLCHAIN_FILE AND EXISTS $ENV{HOME}/.vcpkg/vcpkg.path.txt)
     file(READ $ENV{HOME}/.vcpkg/vcpkg.path.txt VCPKG_DIR)
     include(${VCPKG_DIR}/scripts/buildsystems/vcpkg.cmake)
 endif()

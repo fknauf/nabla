@@ -10,29 +10,26 @@
 #include <utility>
 
 namespace nabla::expr {
-    // Mehrdimensionale Kettenregel.
+    // multi-dimensional chain rule.
     namespace impl {
-        template <traits::nabla_variable Outer, typename... Inner>
+        template <traits::nabla_expression Outer, typename... Inner>
         [[nodiscard]] auto make_chain(
             Outer &&outer,
             Inner &&...inner
-        ) -> chain<traits::plain_type<Outer>, traits::nabla_equivalent<Inner>...>
+        )
             requires traits::is_nabla_tuple<Inner...>
         {
-            return {
-                std::forward<Outer>(outer),
-                std::forward<Inner>(inner)...
-            };
-        }
-
-        template <typename... Inner>
-        [[nodiscard]] auto make_chain(
-            constant const &outer,
-            Inner &&...
-        ) -> constant
-            requires traits::is_nabla_tuple<Inner...>
-        {
-            return outer;
+            if constexpr (traits::is_nabla_constant<Outer>) {
+                return constant{std::forward<Outer>(outer)};
+            } else {
+                return chain<
+                    traits::plain_type<Outer>,
+                    traits::nabla_equivalent<Inner>...
+                > {
+                    std::forward<Outer>(outer),
+                    std::forward<Inner>(inner)...
+                };
+            }
         }
     }
 

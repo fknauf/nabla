@@ -31,7 +31,7 @@ namespace nabla::expr {
             return value_;
         }
 
-        // Benutzt in polynomial
+        // used in polynomial
         [[nodiscard]] double value() const noexcept { return value_; }
 
     private:

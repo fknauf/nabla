@@ -12,33 +12,12 @@
 namespace nabla::expr {
     namespace impl {
         template <
+            index_type MinDimension = 0,
             typename Condition,
             typename ExprTrue,
             typename ExprFalse
         >
         [[nodiscard]] auto make_conditional(
-            Condition &&condition,
-            ExprTrue &&expr_true,
-            ExprFalse &&expr_false
-        ) -> conditional<
-            traits::plain_type<Condition>,
-            traits::nabla_equivalent<ExprTrue>,
-            traits::nabla_equivalent<ExprFalse>
-        > {
-            return {
-                std::forward<Condition>(condition),
-                std::forward<ExprTrue>(expr_true),
-                std::forward<ExprFalse>(expr_false)
-            };
-        }
-
-        template <
-            index_type MinDimension,
-            typename Condition,
-            typename ExprTrue,
-            typename ExprFalse
-        >
-        [[nodiscard]] auto make_conditional_with_min_dimension(
             Condition &&condition,
             ExprTrue &&expr_true,
             ExprFalse &&expr_false

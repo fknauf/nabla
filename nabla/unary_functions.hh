@@ -91,7 +91,7 @@ namespace nabla::expr {
     NABLA_DECLARE_UNARY_FUNCTION(
         fabs,
         std::fabs(x),
-        impl::make_conditional_with_min_dimension<1>(
+        impl::make_conditional<1>(
             [](auto &&vars) { return vars(0) >= 0; },
             1,
             -1
