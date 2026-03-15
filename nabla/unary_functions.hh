@@ -19,17 +19,6 @@ namespace nabla::expr {
 #define NABLA_DECLARE_UNARY_FUNCTION(name, expr_val, expr_diff)                  \
     class ufunc_##name;                                                          \
                                                                                  \
-    inline constant name(constant const &expr) {                                 \
-        double x = expr.value();                                                 \
-        static_cast<void>(x);                                                    \
-        return (expr_val);                                                       \
-    }                                                                            \
-                                                                                 \
-    template <traits::nabla_variable Expr>                                       \
-    chain<ufunc_##name, traits::plain_type<Expr>> name(Expr &&expr) {            \
-        return { ufunc_##name(), std::forward<Expr>(expr) };                     \
-    }                                                                            \
-                                                                                 \
     class ufunc_##name: public nabla_base<ufunc_##name> {                        \
     public:                                                                      \
         using nabla_base<ufunc_##name>::diff;                                    \
@@ -56,7 +45,18 @@ namespace nabla::expr {
                 return 0;                                                        \
             }                                                                    \
         }                                                                        \
-    };
+    };                                                                           \
+                                                                                 \
+    inline constant name(constant const &expr) {                                 \
+        double x = expr.value();                                                 \
+        static_cast<void>(x);                                                    \
+        return (expr_val);                                                       \
+    }                                                                            \
+                                                                                 \
+    template <traits::nabla_variable Expr>                                       \
+    chain<ufunc_##name, traits::plain_type<Expr>> name(Expr &&expr) {            \
+        return { ufunc_##name(), std::forward<Expr>(expr) };                     \
+    }
 
     NABLA_DECLARE_UNARY_FUNCTION(exp, std::exp(x), y)
     NABLA_DECLARE_UNARY_FUNCTION(exp2, std::exp2(x), M_LN2 *y)

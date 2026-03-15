@@ -6,15 +6,6 @@
 #include "fwd.hh"
 
 namespace nabla::expr {
-    template <traits::nabla_variable Expr>
-    auto log(Expr &&expr) {
-        return impl::make_chain(logarithm(), std::forward<Expr>(expr));
-    }
-
-    inline auto log(constant const &x) -> constant {
-        return std::log(x.value());
-    }
-
     // natural logarithm, naturally.
     class logarithm:
         public nabla_base<logarithm>
@@ -47,6 +38,15 @@ namespace nabla::expr {
             return 0.0;
         }
     };
+
+    template <traits::nabla_variable Expr>
+    auto log(Expr &&expr) {
+        return impl::make_chain(logarithm(), std::forward<Expr>(expr));
+    }
+
+    inline auto log(constant const &x) -> constant {
+        return std::log(x.value());
+    }
 }
 
 #endif

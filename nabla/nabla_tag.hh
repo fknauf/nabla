@@ -8,10 +8,7 @@
 
 namespace nabla {
     namespace expr {
-        class nabla_tag {
-        protected:
-            ~nabla_tag() = default;
-        };
+        struct nabla_tag {};
     }
 
     namespace traits {

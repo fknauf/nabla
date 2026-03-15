@@ -11,14 +11,6 @@
 #include <type_traits>
 
 namespace nabla::expr {
-    template <traits::nabla_variable Exponent>
-    auto pow(constant base, Exponent &&exponent) {
-        return impl::make_chain(
-            exponential(base),
-            std::forward<Exponent>(exponent)
-        );
-    }
-
     class exponential:
         public nabla_base<exponential>
     {
@@ -51,6 +43,14 @@ namespace nabla::expr {
         constant base_;
         constant log_base_;
     };
+
+    template <traits::nabla_variable Exponent>
+    auto pow(constant base, Exponent &&exponent) {
+        return impl::make_chain(
+            exponential(base),
+            std::forward<Exponent>(exponent)
+        );
+    }
 }
 
 #endif

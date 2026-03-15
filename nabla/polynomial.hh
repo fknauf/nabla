@@ -11,11 +11,6 @@
 #include <type_traits>
 
 namespace nabla::expr {
-    template <traits::nabla_variable Base>
-    auto pow(Base &&base, constant exponent) {
-        return impl::make_chain(polynomial(exponent), std::forward<Base>(base));
-    }
-
     class polynomial: public nabla_base<polynomial> {
     public:
         using nabla_base<polynomial>::diff;
@@ -51,6 +46,11 @@ namespace nabla::expr {
 
         constant exponent_;
     };
+
+    template <traits::nabla_variable Base>
+    auto pow(Base &&base, constant exponent) {
+        return impl::make_chain(polynomial(exponent), std::forward<Base>(base));
+    }
 }
 
 #endif

@@ -43,7 +43,7 @@ namespace nabla::expr {
 
         template <index_type N>
         auto diff(variable<N> const &var = {}) const {
-            return diff_dispatch(var, std::bool_constant < N<dimension>());
+            return diff_dispatch(var, std::bool_constant<N<dimension>());
         }
 
     private:

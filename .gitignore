@@ -8,3 +8,4 @@ clang-tidy-fixes.patch
 /cmake-build-*/
 /out/
 /build*/
+vcpkg_installed
