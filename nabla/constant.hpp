@@ -1,0 +1,61 @@
+#ifndef INCLUDED_NABLA2_CONSTANT_HH
+#define INCLUDED_NABLA2_CONSTANT_HH
+
+#include "fwd.hpp"
+#include "nabla_base.hpp"
+#include "vector.hpp"
+
+#include <cmath>
+
+namespace nabla::expr {
+    class constant: public nabla_base<constant> {
+    public:
+        using nabla_base<constant>::diff;
+        using nabla_base<constant>::operator();
+        static index_type constexpr dimension = 0;
+
+        constexpr constant(double value) noexcept:
+            value_(value) {}
+
+        template <index_type N>
+        [[nodiscard]] auto diff(variable<N> const & = {}) const noexcept -> constant {
+            static_assert(
+                N >= dimension,
+                "input value vector is shorter than zero elements? O.o"
+            );
+            return 0;
+        }
+
+        template <index_type N>
+        [[nodiscard]] auto operator()(vector<N> const &) const {
+            return value_;
+        }
+
+        // used in polynomial
+        [[nodiscard]] double value() const noexcept { return value_; }
+
+    private:
+        double value_;
+    };
+
+    namespace impl {
+        [[nodiscard]] inline double constant_value(constant const &c) { return c.value(); }
+        [[nodiscard]] inline double constant_value(traits::nabla_value auto &&c) { return c; }
+    }
+
+    // Arguably a pow function template does not belong here, but this header is
+    // included in all of polynomial.hpp, exponential.hh and power.hh, all of
+    // which want to have it.
+    template <typename Base, typename Exponent>
+    [[nodiscard]]
+    inline constant pow(Base &&base, Exponent &&exponent)
+        requires traits::constant_folding_possible<Base, Exponent>
+    {
+        return std::pow(
+            impl::constant_value(std::forward<Base>(base)),
+            impl::constant_value(std::forward<Exponent>(exponent))
+        );
+    }
+}
+
+#endif

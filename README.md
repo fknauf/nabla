@@ -10,7 +10,7 @@ With Nabla, otherwise tedious partial differentiation of even deeply nested
 functions in n directions requires only a closed form of the function:
 
 ```c++
-#include <nabla/nabla.hh>
+#include <nabla/nabla.hpp>
 #include <iostream>
 
 int main() {
