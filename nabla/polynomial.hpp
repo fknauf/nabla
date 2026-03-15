@@ -29,10 +29,8 @@ namespace nabla::expr {
         template <index_type N>
         [[nodiscard]] auto diff(variable<N> const & = {}) const {
             if constexpr (N == 0) {
-                bool exponent_collapsed = exponent_.value() != 0.0;
-
                 return impl::make_conditional(
-                    [=](auto &&) { return exponent_collapsed; },
+                    [cond=exponent_.value() != 0.0](auto &&) { return cond; },
                     exponent_ * polynomial(exponent_.value() - 1.0),
                     constant{0}
                 );
