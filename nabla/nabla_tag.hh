@@ -13,12 +13,12 @@ namespace nabla {
 
     namespace traits {
         template <typename... T>
-        bool constexpr all(T &&...args) {
+        [[nodiscard]] bool constexpr all(T &&...args) {
             return (args && ...);
         }
         
         template <typename... T>
-        bool constexpr any(T &&...args) {
+        [[nodiscard]] bool constexpr any(T &&...args) {
             return (args || ...);
         }
 

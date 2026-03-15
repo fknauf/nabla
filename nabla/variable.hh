@@ -17,12 +17,12 @@ namespace nabla::expr {
         static index_type constexpr dimension = N + 1;
 
         template <index_type O>
-        auto diff(variable<O> const & = {}) const noexcept -> constant {
+        [[nodiscard]] auto diff(variable<O> const & = {}) const noexcept -> constant {
             return constant(N == O ? 1 : 0);
         }
 
         template <index_type O>
-        auto operator()(vector<O> const &vars) const -> double {
+        [[nodiscard]] auto operator()(vector<O> const &vars) const -> double {
             static_assert(O >= dimension, "input value vector too short");
             return vars(N);
         }

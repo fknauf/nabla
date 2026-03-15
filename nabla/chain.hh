@@ -13,7 +13,7 @@ namespace nabla::expr {
     // Mehrdimensionale Kettenregel.
     namespace impl {
         template <traits::nabla_variable Outer, typename... Inner>
-        auto make_chain(
+        [[nodiscard]] auto make_chain(
             Outer &&outer,
             Inner &&...inner
         ) -> chain<traits::plain_type<Outer>, traits::nabla_equivalent<Inner>...>
@@ -26,7 +26,7 @@ namespace nabla::expr {
         }
 
         template <typename... Inner>
-        auto make_chain(
+        [[nodiscard]] auto make_chain(
             constant const &outer,
             Inner &&...
         ) -> constant
@@ -58,7 +58,7 @@ namespace nabla::expr {
         {}
 
         template <index_type N>
-        auto operator()(vector<N> const &vars) const -> double {
+        [[nodiscard]] auto operator()(vector<N> const &vars) const -> double {
             static_assert(N >= dimension, "input value vector too short");
             return eval(
                 vars,
@@ -67,7 +67,7 @@ namespace nabla::expr {
         }
 
         template <index_type N>
-        auto diff(variable<N> const &var = {}) const {
+        [[nodiscard]] auto diff(variable<N> const &var = {}) const {
             return diff_dispatch(
                 var,
                 std::make_integer_sequence<index_type, Outer::dimension>()
@@ -76,7 +76,7 @@ namespace nabla::expr {
 
     private:
         template <index_type N, index_type... I>
-        auto eval(
+        [[nodiscard]] auto eval(
             vector<N> const &vars,
             std::integer_sequence<index_type, I...> const &
         ) const {
@@ -84,13 +84,15 @@ namespace nabla::expr {
         }
 
         template <index_type N, index_type Direction, index_type... I>
-        auto chain_diff_term(std::integer_sequence<index_type, I...> const &) const {
+        [[nodiscard]] auto chain_diff_term(
+            std::integer_sequence<index_type, I...> const &
+        ) const {
             return impl::make_chain(outer_.template diff<N>(), std::get<I>(inners_)...)
                    * std::get<N>(inners_).template diff<Direction>();
         }
 
         template <index_type Direction, index_type... I>
-        auto diff_dispatch(
+        [[nodiscard]] auto diff_dispatch(
             variable<Direction> const &,
             std::integer_sequence<index_type, I...> const &seq
         ) const {

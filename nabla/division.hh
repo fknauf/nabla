@@ -11,7 +11,7 @@
 #include <algorithm>
 
 namespace nabla::expr {
-    inline auto operator/(
+    [[nodiscard]] inline auto operator/(
         constant const &lhs,
         constant const &rhs
     ) -> constant {
@@ -19,7 +19,7 @@ namespace nabla::expr {
     }
 
     template <typename LHS, typename RHS>
-    auto operator/(
+    [[nodiscard]] auto operator/(
         LHS &&lhs,
         RHS &&rhs
     ) -> division<
@@ -48,12 +48,12 @@ namespace nabla::expr {
         {}
 
         template <index_type N>
-        auto diff(variable<N> const &v = {}) const {
+        [[nodiscard]] auto diff(variable<N> const &v = {}) const {
             return (lhs_.diff(v) * rhs_ - lhs_ * rhs_.diff(v)) / (rhs_ * rhs_);
         }
 
         template <index_type N>
-        auto operator()(vector<N> const &vars) const -> double {
+        [[nodiscard]] auto operator()(vector<N> const &vars) const -> double {
             static_assert(N >= dimension, "input value vector too short");
             return lhs_(vars) / rhs_(vars);
         }

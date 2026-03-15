@@ -321,3 +321,12 @@ TEST(unary_functions, gausspdf) {
     EXPECT_DOUBLE_EQ(pdf.diff(x)(1) / 9, warped.diff(x)(5));
     EXPECT_DOUBLE_EQ(pdf.diff(x)(2) / 9, warped.diff(x)(8));
 }
+
+TEST(unary_functions, independence) {
+    auto x = nabla::expr::variable<0>{};
+    auto y = nabla::expr::variable<1>{};
+
+    auto f = cos(x);
+
+    EXPECT_DOUBLE_EQ(0.0, f.diff(y)(1));
+}

@@ -21,13 +21,13 @@ namespace nabla::expr {
             exponent_(exponent) {}
 
         template <index_type N>
-        auto operator()(vector<N> const &vars) const -> double {
+        [[nodiscard]] auto operator()(vector<N> const &vars) const -> double {
             static_assert(N >= dimension, "input value vector too short");
             return std::pow(vars(0), exponent_(vars));
         }
 
         template <index_type N>
-        auto diff(variable<N> const & = {}) const {
+        [[nodiscard]] auto diff(variable<N> const & = {}) const {
             if constexpr (N == 0) {
                 bool exponent_collapsed = exponent_.value() != 0.0;
 
@@ -46,7 +46,7 @@ namespace nabla::expr {
     };
 
     template <traits::nabla_variable Base>
-    auto pow(Base &&base, constant exponent) {
+    [[nodiscard]] auto pow(Base &&base, constant exponent) {
         return impl::make_chain(polynomial{exponent}, std::forward<Base>(base));
     }
 }

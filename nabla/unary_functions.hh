@@ -25,7 +25,8 @@ namespace nabla::expr {
         using nabla_base<ufunc_##name>::operator();                              \
         static index_type constexpr dimension = 1;                               \
                                                                                  \
-        template <index_type N> double operator()(vector<N> const &vars) const { \
+        template <index_type N>                                                  \
+        [[nodiscard]] double operator()(vector<N> const &vars) const {           \
             static_assert(                                                       \
                 N > 0,                                                           \
                 "Unary function " #name " requires an argument for evaluation"   \
@@ -34,27 +35,30 @@ namespace nabla::expr {
             return (expr_val);                                                   \
         }                                                                        \
                                                                                  \
-        template <index_type N> auto diff(variable<N> const &var = {}) const {   \
+        template <index_type N>                                                  \
+        [[nodiscard]] auto diff(variable<N> const &var = {}) const {             \
             if constexpr(N == 0) {                                               \
-                auto &y = *this;                                                 \
-                auto &x = var;                                                   \
-                static_cast<void>(x);                                            \
-                static_cast<void>(y);                                            \
+                [[maybe_unused]] auto &y = *this;                                \
+                [[maybe_unused]] auto &x = var;                                  \
                 return (expr_diff);                                              \
             } else {                                                             \
-                return 0;                                                        \
+                return constant{0};                                              \
             }                                                                    \
         }                                                                        \
     };                                                                           \
                                                                                  \
-    inline constant name(constant const &expr) {                                 \
+    [[nodiscard]] inline auto name(                                              \
+        constant const &expr                                                     \
+    ) -> constant {                                                              \
         double x = expr.value();                                                 \
         static_cast<void>(x);                                                    \
         return (expr_val);                                                       \
     }                                                                            \
                                                                                  \
     template <traits::nabla_variable Expr>                                       \
-    chain<ufunc_##name, traits::plain_type<Expr>> name(Expr &&expr) {            \
+    [[nodiscard]] auto name(                                                     \
+        Expr &&expr                                                              \
+    ) -> chain<ufunc_##name, traits::plain_type<Expr>> {                         \
         return { ufunc_##name(), std::forward<Expr>(expr) };                     \
     }
 

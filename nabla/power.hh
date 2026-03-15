@@ -25,15 +25,13 @@ namespace nabla::expr {
             exponent_(std::forward<E>(exponent)) {}
 
         template <index_type N>
-        [[nodiscard]]
-        auto operator()(vector<N> const &vars) const -> double {
+        [[nodiscard]] auto operator()(vector<N> const &vars) const -> double {
             static_assert(N >= dimension, "input value vector too short");
             return std::pow(base_(vars), exponent_(vars));
         }
 
         template <index_type N>
-        [[nodiscard]]
-        auto diff(variable<N> const &var = {}) const {
+        [[nodiscard]] auto diff(variable<N> const &var = {}) const {
             if constexpr (N < dimension) {
                 return (*this)
                        * (log(base_) * exponent_.diff(var)

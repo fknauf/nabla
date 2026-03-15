@@ -7,12 +7,12 @@
 #include "vector.hh"
 
 namespace nabla::expr {
-    inline auto operator-(constant const &x) -> constant {
+    [[nodiscard]] inline auto operator-(constant const &x) -> constant {
         return -x.value();
     }
 
     template <traits::nabla_variable Expr>
-    auto operator-(Expr &&expr) -> negation<traits::plain_type<Expr>> {
+    [[nodiscard]] auto operator-(Expr &&expr) -> negation<traits::plain_type<Expr>> {
         return { std::forward<Expr>(expr) };
     }
 
@@ -30,12 +30,12 @@ namespace nabla::expr {
             expr_(std::forward<E>(expr)) {}
 
         template <index_type N>
-        auto diff(variable<N> const &v = {}) const {
+        [[nodiscard]] auto diff(variable<N> const &v = {}) const {
             return -expr_.diff(v);
         }
 
         template <index_type N>
-        auto operator()(vector<N> const &vars) const -> double {
+        [[nodiscard]] auto operator()(vector<N> const &vars) const -> double {
             static_assert(N >= dimension, "input value vector too short");
             return -expr_(vars);
         }

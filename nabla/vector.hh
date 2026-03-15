@@ -4,9 +4,11 @@
 #include "nabla_base.hh"
 
 namespace nabla {
-    inline vector<0> make_vector() { return {}; }
+    [[nodiscard]] inline vector<0> make_vector() { return {}; }
 
-    auto make_vector(traits::nabla_value auto &&...data) -> vector<sizeof...(data)> {
+    [[nodiscard]] auto make_vector(
+        traits::nabla_value auto &&...data
+    ) -> vector<sizeof...(data)> {
 #ifdef NABLA_BACKEND_ARMADILLO
         return { static_cast<double>(data)... };
 #else

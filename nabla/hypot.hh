@@ -11,7 +11,7 @@
 
 namespace nabla::expr {
     template <typename... Inners>
-    auto hypot(Inners &&...inners)
+    [[nodiscard]] auto hypot(Inners &&...inners)
         requires traits::is_nabla_tuple<Inners...>
     {
         return sqrt((... + (std::forward<Inners>(inners) * std::forward<Inners>(inners))));

@@ -48,14 +48,14 @@ namespace nabla {
     }
 
     template <traits::nabla_expression Function, index_type N>
-    auto hessian(Function const &f, vector<N> const &vars) {
+    [[nodiscard]] auto hessian(Function const &f, vector<N> const &vars) {
         matrix<N, N> result;
         impl::hessian_matrix_builder<N, 0, 0>::build(result, f, vars);
         return result;
     }
 
     template <traits::nabla_expression Function, traits::nabla_value... Args>
-    auto hessian(Function const &f, Args &&...args) {
+    [[nodiscard]] auto hessian(Function const &f, Args &&...args) {
         return hessian(f, make_vector(std::forward<Args>(args)...));
     }
 }

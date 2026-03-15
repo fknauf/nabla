@@ -18,7 +18,7 @@ namespace nabla::expr {
             value_(value) {}
 
         template <index_type N>
-        constant diff(variable<N> const & = {}) const noexcept {
+        [[nodiscard]] auto diff(variable<N> const & = {}) const noexcept -> constant {
             static_assert(
                 N >= dimension,
                 "input value vector is shorter than zero elements? O.o"
@@ -26,27 +26,28 @@ namespace nabla::expr {
             return 0;
         }
 
-        template <index_type N> double operator()(vector<N> const &) const {
+        template <index_type N>
+        [[nodiscard]] auto operator()(vector<N> const &) const {
             return value_;
         }
 
         // Benutzt in polynomial
-        double value() const noexcept { return value_; }
+        [[nodiscard]] double value() const noexcept { return value_; }
 
     private:
         double value_;
     };
 
     namespace impl {
-        inline double constant_value(constant const &c) { return c.value(); }
-
-        inline double constant_value(traits::nabla_value auto &&c) { return c; }
+        [[nodiscard]] inline double constant_value(constant const &c) { return c.value(); }
+        [[nodiscard]] inline double constant_value(traits::nabla_value auto &&c) { return c; }
     }
 
     // Arguably a pow function template does not belong here, but this header is
     // included in all of polynomial.hh, exponential.hh and power.hh, all of
     // which want to have it.
     template <typename Base, typename Exponent>
+    [[nodiscard]]
     inline constant pow(Base &&base, Exponent &&exponent)
         requires traits::constant_folding_possible<Base, Exponent>
     {

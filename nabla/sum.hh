@@ -10,7 +10,7 @@
 
 namespace nabla::expr {
     template <typename LHS, typename RHS>
-    auto operator+(
+    [[nodiscard]] auto operator+(
         LHS &&lhs,
         RHS &&rhs
     ) -> sum<
@@ -23,7 +23,7 @@ namespace nabla::expr {
     }
 
     template <typename LHS, typename RHS>
-    auto operator-(
+    [[nodiscard]] auto operator-(
         LHS &&lhs,
         RHS &&rhs
     ) -> sum<
@@ -52,12 +52,12 @@ namespace nabla::expr {
         {}
 
         template <index_type N>
-        auto diff(variable<N> const &v = {}) const {
+        [[nodiscard]] auto diff(variable<N> const &v = {}) const {
             return lhs_.diff(v) + rhs_.diff(v);
         }
 
         template <index_type N>
-        auto operator()(vector<N> const &vars) const -> double {
+        [[nodiscard]] auto operator()(vector<N> const &vars) const -> double {
             static_assert(N >= dimension, "input value vector too short");
             return lhs_(vars) + rhs_(vars);
         }
@@ -67,14 +67,14 @@ namespace nabla::expr {
         RHS rhs_;
     };
 
-    inline auto operator+(
+    [[nodiscard]] inline auto operator+(
         constant const &lhs,
         constant const &rhs
     ) -> constant {
         return lhs.value() + rhs.value();
     }
     
-    inline auto operator-(
+    [[nodiscard]] inline auto operator-(
         constant const &lhs,
         constant const &rhs
     ) -> constant {
