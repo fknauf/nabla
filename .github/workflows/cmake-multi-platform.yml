@@ -44,11 +44,11 @@ jobs:
           - os: ubuntu-latest
             c_compiler: gcc
             cpp_compiler: g++
-            mono: 'dotnet'
+            mono: 'mono'
           - os: ubuntu-latest
             c_compiler: clang
             cpp_compiler: clang++
-            mono: 'dotnet'
+            mono: 'mono'
         exclude:
           - os: windows-latest
             c_compiler: gcc
