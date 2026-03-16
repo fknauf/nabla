@@ -61,7 +61,7 @@ jobs:
       run: |
         cat >> "$GITHUB_OUTPUT" << EOF
         build-output-dir=${{ github.workspace }}/build
-        vcpkg-exe=${{ github.workspace }}/vcpkg
+        vcpkg-exe=${{ github.workspace }}/vcpkg/vcpkg
         vcpkg-toolchain-file=${{ github.workspace }}/vcpkg/scripts/buildsystems/vcpkg.cmake
         binary-cache-url=https://nuget.pkg.github.com/${{ github.actor }}/index.json
         EOF
