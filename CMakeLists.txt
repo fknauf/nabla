@@ -10,7 +10,7 @@ set(CMAKE_CXX_STANDARD 20)
 
 if(MSVC)
     add_definitions(-D_USE_MATH_DEFINES)
-    add_compile_options(-Wall)
+    add_compile_options(-W3)
 else()
     add_compile_options(-Wall -Wextra -Werror)
 endif()
