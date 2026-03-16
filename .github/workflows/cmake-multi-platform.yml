@@ -72,7 +72,7 @@ jobs:
       if: runner.os == 'Linux'
       run: |
         sudo apt-get update
-        sudo apt-get -y install mono-runtime
+        sudo apt-get -y install mono-complete
 
     - name: Bootstrap vcpkg
       shell: bash
