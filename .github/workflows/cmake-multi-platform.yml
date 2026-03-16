@@ -59,7 +59,12 @@ jobs:
       id: strings
       shell: bash
       run: |
-        echo "build-output-dir=${{ github.workspace }}/build" >> "$GITHUB_OUTPUT"
+        cat >> "$GITHUB_OUTPUT" << EOF
+        build-output-dir=${{ github.workspace }}/build
+        vcpkg-exe=${{ github.workspace }}/vcpkg
+        vcpkg-toolchain-file=${{ github.workspace }}/vcpkg/scripts/buildsystems/vcpkg.cmake
+        binary-cache-url=https://nuget.pkg.github.com/${{ github.actor }}/index.json
+        EOF
 
     - name: Install Mono for nuget
       if: runner.os == 'Linux'
@@ -75,33 +80,28 @@ jobs:
 
     # Adapted from https://learn.microsoft.com/en-us/vcpkg/consume/binary-caching-github-packages
     - name: 'Setup NuGet Credentials for the binary cache'
-      env:
-        USERNAME: ${{ github.actor }}
-        FEED_URL: https://nuget.pkg.github.com/${{ github.actor }}/index.json
-        VCPKG_EXE: ${{ github.workspace }}/vcpkg/vcpkg
       shell: 'bash'
       run: |
-        "${{ env.VCPKG_EXE }}" fetch nuget
-        ${{ matrix.mono }} `"${{ env.VCPKG_EXE }}" fetch nuget | tail -n 1` \
+        "${{ steps.strings.outputs.vcpkg-exe }}" fetch nuget
+        ${{ matrix.mono }} `"${{ steps.strings.outputs.vcpkg-exe }}" fetch nuget | tail -n 1` \
           sources add \
-          -source "${{ env.FEED_URL }}" \
+          -source "${{ steps.strings.outputs.binary-cache-url }}" \
           -storepasswordincleartext \
           -name "GitHub" \
-          -username "${{ env.USERNAME }}" \
+          -username "${{ github.actor }}" \
           -password "${{ secrets.GITHUB_TOKEN }}"
-        ${{ matrix.mono }} `"${{ env.VCPKG_EXE }}" fetch nuget | tail -n 1` \
+        ${{ matrix.mono }} `"${{ steps.strings.outputs.vcpkg-exe }}" fetch nuget | tail -n 1` \
           setapikey "${{ secrets.GITHUB_TOKEN }}" \
-          -source "${{ env.FEED_URL }}"
+          -source "${{ steps.strings.outputs.binary-cache-url }}"
 
     - name: Configure CMake
       # Configure CMake in a 'build' subdirectory. `CMAKE_BUILD_TYPE` is only required if you are using a single-configuration generator such as make.
       # See https://cmake.org/cmake/help/latest/variable/CMAKE_BUILD_TYPE.html?highlight=cmake_build_type
       env:
-        VCPKG_ROOT: ${{ github.workspace }}/vcpkg
         VCPKG_BINARY_SOURCES: "clear;nuget,Github,readwrite"
       run: >
         cmake -B ${{ steps.strings.outputs.build-output-dir }}
-        -DCMAKE_TOOLCHAIN_FILE=${{ env.VCPKG_ROOT }}/scripts/buildsystems/vcpkg.cmake
+        -DCMAKE_TOOLCHAIN_FILE=${{ steps.strings.outputs.vcpkg-toolchain-file }}
         -DCMAKE_CXX_COMPILER=${{ matrix.cpp_compiler }}
         -DCMAKE_C_COMPILER=${{ matrix.c_compiler }}
         -DCMAKE_BUILD_TYPE=${{ matrix.build_type }}
