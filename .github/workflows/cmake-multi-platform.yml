@@ -59,9 +59,6 @@ jobs:
 
     steps:
     - uses: actions/checkout@v6
-    - uses: actions/setup-dotnet@v5
-      with:
-        dotnet-version: '10.0.x'
 
     - name: Set reusable strings
       # Turn repeated input strings (such as the build output directory) into step outputs. These step outputs can be used throughout the workflow file.
@@ -71,11 +68,17 @@ jobs:
         echo "build-output-dir=${{ github.workspace }}/build" >> "$GITHUB_OUTPUT"
         echo "vcpkg-dir=${{ github.workspace }}/vcpkg" >> "$GITHUB_OUTPUT"
 
+    - name: Install Mono for nuget
+      if: runner.os == 'Linux'
+      run: |
+        sudo apt-get update
+        sudo apt-get -y install mono-complete
+
     - name: Bootstrap vcpkg
       shell: bash
       run: |
         git clone https://github.com/microsoft/vcpkg.git
-        "${{ steps.strings.outputs.vcpkg-dir }}/bootstrap-vcpkg.sh" -disableMetrics
+        ./vcpkg/bootstrap-vcpkg.sh" -disableMetrics
 
     - name: 'Setup NuGet Credentials'
       shell: 'bash'
