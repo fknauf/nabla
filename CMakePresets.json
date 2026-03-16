@@ -34,8 +34,14 @@
             "configuration": "Release"
         },
         {
-            "name": "bench",
-            "configurePreset": "bench"
+            "name": "debug-vcpkg",
+            "configurePreset": "vcpkg",
+            "configuration": "Debug"
+        },
+        {
+            "name": "release-vcpkg",
+            "configurePreset": "vcpkg",
+            "configuration": "Release"
         }
     ]
 }
