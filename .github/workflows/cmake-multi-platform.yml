@@ -78,7 +78,7 @@ jobs:
       shell: bash
       run: |
         git clone https://github.com/microsoft/vcpkg.git
-        ./vcpkg/bootstrap-vcpkg.sh" -disableMetrics
+        ./vcpkg/bootstrap-vcpkg.sh -disableMetrics
 
     - name: 'Setup NuGet Credentials'
       shell: 'bash'
