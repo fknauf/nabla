@@ -58,7 +58,7 @@ jobs:
             c_compiler: cl
 
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v6
 
     - name: Set reusable strings
       # Turn repeated input strings (such as the build output directory) into step outputs. These step outputs can be used throughout the workflow file.
@@ -72,7 +72,7 @@ jobs:
       shell: bash
       run: |
         git clone https://github.com/microsoft/vcpkg.git
-        ${{ steps.strings.outputs.vcpkg-dir }}/bootstrap-vcpkg.sh -disableMetrics
+        "${{ steps.strings.outputs.vcpkg-dir }}/bootstrap-vcpkg.sh" -disableMetrics
 
     - name: 'Setup NuGet Credentials'
       shell: 'bash'
