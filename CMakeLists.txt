@@ -12,7 +12,9 @@ find_package(Eigen3 CONFIG REQUIRED)
 find_package(GTest CONFIG REQUIRED)
 
 set(CMAKE_CXX_STANDARD 20)
-add_compile_options(-Wall -Wextra -Werror)
+if(NOT MSVC)
+    add_compile_options(-Wall -Wextra -Werror)
+endif()
 include_directories(.)
 enable_testing()
 
