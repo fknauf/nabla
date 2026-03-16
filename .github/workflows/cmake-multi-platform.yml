@@ -81,14 +81,14 @@ jobs:
     - name: 'Setup NuGet Credentials for the binary cache'
       shell: 'bash'
       run: |
-        ${{ matrix.mono }} ${{ steps.fetch-nuget.outputs.nuget-path }} \
+        ${{ matrix.mono }} "${{ steps.fetch-nuget.outputs.nuget-path }}" \
           sources add \
           -source "${{ steps.strings.outputs.binary-cache-url }}" \
           -storepasswordincleartext \
           -name "GitHub" \
           -username "${{ github.actor }}" \
           -password "${{ secrets.GITHUB_TOKEN }}"
-        ${{ matrix.mono }} ${{ steps.fetch-nuget.outputs.nuget-path }} \
+        ${{ matrix.mono }} "${{ steps.fetch-nuget.outputs.nuget-path }}" \
           setapikey "${{ secrets.GITHUB_TOKEN }}" \
           -source "${{ steps.strings.outputs.binary-cache-url }}"
 
