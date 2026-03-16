@@ -12,9 +12,13 @@ find_package(Eigen3 CONFIG REQUIRED)
 find_package(GTest CONFIG REQUIRED)
 
 set(CMAKE_CXX_STANDARD 20)
-if(NOT MSVC)
+
+if(MSVC)
+    add_definitions(-D_USE_MATH_DEFINES)
+else()
     add_compile_options(-Wall -Wextra -Werror)
 endif()
+
 include_directories(.)
 enable_testing()
 
