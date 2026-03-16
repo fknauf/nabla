@@ -78,21 +78,20 @@ jobs:
       if: runner.os == 'Linux'
       shell: bash
       run: |
-        apt-get update
-        apt-get -y install mono-complete
+        apt-get install mono-complete
 
     - name: 'Setup NuGet Credentials'
       shell: 'bash'
       # Replace <OWNER> with your organization name
       run: |
-        ${{ matrix.mono }} `${{ env.VCPKG_EXE }} fetch nuget | tail -n 1` \
+        ${{ matrix.mono }} `"${{ env.VCPKG_EXE }}" fetch nuget | tail -n 1` \
           sources add \
           -source "${{ env.FEED_URL }}" \
           -storepasswordincleartext \
           -name "GitHub" \
           -username "fknauf" \
           -password "${{ secrets.GITHUB_TOKEN }}"
-        ${{ matrix.mono }} `${{ env.VCPKG_EXE }} fetch nuget | tail -n 1` \
+        ${{ matrix.mono }} `"${{ env.VCPKG_EXE }}" fetch nuget | tail -n 1` \
           setapikey "${{ secrets.GITHUB_TOKEN }}" \
           -source "${{ env.FEED_URL }}"
 
