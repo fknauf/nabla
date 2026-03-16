@@ -9,6 +9,13 @@ on:
     branches: [ "main" ]
   workflow_dispatch:
 
+env:
+  USERNAME: ${{ github.actor }}
+  FEED_URL: https://nuget.pkg.github.com/${{ github.actor }}/index.json
+  VCPKG_ROOT: ${{ github.workspace }}/vcpkg
+  VCPKG_EXE: ${{ github.workspace }}/vcpkg/vcpkg
+  VCPKG_BINARY_SOURCES: "clear;nuget,Github,readwrite"
+
 permissions:
   packages: write
 
@@ -60,7 +67,6 @@ jobs:
       shell: bash
       run: |
         echo "build-output-dir=${{ github.workspace }}/build" >> "$GITHUB_OUTPUT"
-        echo "vcpkg-dir=${{ github.workspace }}/vcpkg" >> "$GITHUB_OUTPUT"
 
     - name: Install Mono for nuget
       if: runner.os == 'Linux'
@@ -76,10 +82,6 @@ jobs:
 
     # Adapted from https://learn.microsoft.com/en-us/vcpkg/consume/binary-caching-github-packages
     - name: 'Setup NuGet Credentials for the binary cache'
-      env:
-        USERNAME: ${{ github.actor }}
-        VCPKG_EXE: ${{ github.workspace }}/vcpkg/vcpkg
-        FEED_URL: https://nuget.pkg.github.com/${{ github.actor }}/index.json
       shell: 'bash'
       run: |
         "${{ env.VCPKG_EXE }}" fetch nuget
@@ -95,9 +97,6 @@ jobs:
           -source "${{ env.FEED_URL }}"
 
     - name: Configure CMake
-      env:
-        VCPKG_ROOT: ${{ github.workspace }}/vcpkg
-        VCPKG_BINARY_SOURCES: "clear;nuget,Github,readwrite"
       # Configure CMake in a 'build' subdirectory. `CMAKE_BUILD_TYPE` is only required if you are using a single-configuration generator such as make.
       # See https://cmake.org/cmake/help/latest/variable/CMAKE_BUILD_TYPE.html?highlight=cmake_build_type
       run: >
