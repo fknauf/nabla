@@ -79,3 +79,9 @@ The build system for the unit tests pulls both in using
 [vcpkg](https://vcpkg.io), which is supposed to have been integrated
 with `vcpkg integrate install`. This is not required to use Nabla,
 which is header-only.
+
+## FAQ
+
+### Why do I get compiler errors with MSVC?
+
+You need to define the `_USE_MATH_DEFINES` preprocessor macro in your project.

@@ -2,11 +2,6 @@ cmake_minimum_required(VERSION 3.22)
 
 project(nabla)
 
-if(NOT DEFINED CMAKE_TOOLCHAIN_FILE AND EXISTS $ENV{HOME}/.vcpkg/vcpkg.path.txt)
-    file(READ $ENV{HOME}/.vcpkg/vcpkg.path.txt VCPKG_DIR)
-    include(${VCPKG_DIR}/scripts/buildsystems/vcpkg.cmake)
-endif()
-
 find_package(Armadillo CONFIG REQUIRED)
 find_package(Eigen3 CONFIG REQUIRED)
 find_package(GTest CONFIG REQUIRED)
@@ -15,6 +10,7 @@ set(CMAKE_CXX_STANDARD 20)
 
 if(MSVC)
     add_definitions(-D_USE_MATH_DEFINES)
+    add_compile_options(-Wall)
 else()
     add_compile_options(-Wall -Wextra -Werror)
 endif()
