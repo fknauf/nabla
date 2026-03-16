@@ -81,6 +81,7 @@ jobs:
       shell: 'bash'
       # Replace <OWNER> with your organization name
       run: |
+        "${{ env.VCPKG_EXE }}" fetch nuget
         ${{ matrix.mono }} `"${{ env.VCPKG_EXE }}" fetch nuget | tail -n 1` \
           sources add \
           -source "${{ env.FEED_URL }}" \
