@@ -74,20 +74,27 @@ jobs:
         git clone https://github.com/microsoft/vcpkg.git
         "${{ steps.strings.outputs.vcpkg-dir }}/bootstrap-vcpkg.sh" -disableMetrics
 
-#    - name: 'Setup NuGet Credentials'
-#      shell: 'bash'
-#      # Replace <OWNER> with your organization name
-#      run: |
-#        ${{ matrix.mono }} `${{ env.VCPKG_EXE }} fetch nuget | tail -n 1` \
-#          sources add \
-#          -source "${{ env.FEED_URL }}" \
-#          -storepasswordincleartext \
-#          -name "GitHub" \
-#          -username "fknauf" \
-#          -password "${{ secrets.GITHUB_TOKEN }}"
-#        ${{ matrix.mono }} `${{ env.VCPKG_EXE }} fetch nuget | tail -n 1` \
-#          setapikey "${{ secrets.GITHUB_TOKEN }}" \
-#          -source "${{ env.FEED_URL }}"
+    - name: Get Mono for nuget
+      if: runner.os == 'Linux'
+      shell: bash
+      run: |
+        apt-get update
+        apt-get -y install mono-complete
+
+    - name: 'Setup NuGet Credentials'
+      shell: 'bash'
+      # Replace <OWNER> with your organization name
+      run: |
+        ${{ matrix.mono }} `${{ env.VCPKG_EXE }} fetch nuget | tail -n 1` \
+          sources add \
+          -source "${{ env.FEED_URL }}" \
+          -storepasswordincleartext \
+          -name "GitHub" \
+          -username "fknauf" \
+          -password "${{ secrets.GITHUB_TOKEN }}"
+        ${{ matrix.mono }} `${{ env.VCPKG_EXE }} fetch nuget | tail -n 1` \
+          setapikey "${{ secrets.GITHUB_TOKEN }}" \
+          -source "${{ env.FEED_URL }}"
 
     - name: Configure CMake
       # Configure CMake in a 'build' subdirectory. `CMAKE_BUILD_TYPE` is only required if you are using a single-configuration generator such as make.
