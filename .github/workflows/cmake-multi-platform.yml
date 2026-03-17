@@ -75,7 +75,7 @@ jobs:
       run: |
         echo -n "nuget-path=" >> "$GITHUB_OUTPUT"
         "${{ steps.strings.outputs.vcpkg-exe }}" fetch nuget | tee >(tail -n 1 >> "$GITHUB_OUTPUT")
-        test ${PIPESTATUS[0]} -eq 0
+        test "${PIPESTATUS[0]}" -eq 0
 
     # Adapted from https://learn.microsoft.com/en-us/vcpkg/consume/binary-caching-github-packages
     - name: 'Setup NuGet Credentials for the binary cache'
