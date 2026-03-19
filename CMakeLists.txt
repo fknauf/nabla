@@ -2,6 +2,8 @@ cmake_minimum_required(VERSION 3.22)
 
 project(nabla)
 
+include (CTest)
+
 find_package(Armadillo CONFIG REQUIRED)
 find_package(Eigen3 CONFIG REQUIRED)
 find_package(GTest CONFIG REQUIRED)
@@ -16,7 +18,39 @@ else()
 endif()
 
 include_directories(.)
-enable_testing()
+
+add_library(nabla INTERFACE)
+target_sources(
+    nabla
+    INTERFACE
+    FILE_SET HEADERS
+    FILES
+    nabla/chain.hpp
+    nabla/conditional.hpp
+    nabla/constant.hpp
+    nabla/division.hpp
+    nabla/exponential.hpp
+    nabla/fwd.hpp
+    nabla/gausscdf.hpp
+    nabla/gradient.hpp
+    nabla/hessian.hpp
+    nabla/hypot.hpp
+    nabla/logarithm.hpp
+    nabla/nabla_base.hpp
+    nabla/nabla.hpp
+    nabla/nabla_tag.hpp
+    nabla/negation.hpp
+    nabla/polynomial.hpp
+    nabla/power.hpp
+    nabla/product.hpp
+    nabla/sum.hpp
+    nabla/unary_functions.hpp
+    nabla/variable.hpp
+    nabla/vector.hpp
+)
+
+install(TARGETS nabla EXPORT Nabla FILE_SET HEADERS DESTINATION include)
+install(EXPORT Nabla NAMESPACE Nabla:: DESTINATION lib/cmake/Nabla)
 
 add_executable(example example.cpp)
 target_link_libraries(example PRIVATE Eigen3::Eigen)

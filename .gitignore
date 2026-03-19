@@ -9,3 +9,4 @@ clang-tidy-fixes.patch
 /out/
 /build*/
 vcpkg_installed
+inst
