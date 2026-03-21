@@ -88,7 +88,11 @@ namespace nabla::expr {
     protected:
         constant exponent_;
 
+        #ifdef _MSC_VER
+        [[msvc::no_unique_address]]
+        #else
         [[no_unique_address]]
+        #endif
         impl::gated_bool<collapsable> has_collapsed_;
     };
 
