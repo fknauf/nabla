@@ -360,6 +360,21 @@ TEST(sum, deep_constant_folding) {
     EXPECT_TRUE((std::is_same_v<nabla::expr::sum<decltype(x), nabla::expr::constant>, decltype(g)>));
     EXPECT_TRUE((std::is_same_v<nabla::expr::sum<nabla::expr::constant, decltype(x)>, decltype(h)>));
     EXPECT_TRUE((std::is_same_v<nabla::expr::sum<nabla::expr::constant, decltype(x)>, decltype(i)>));
+
+    auto j = (2 + x) + (x + 3);
+    auto k = (x + 2) + (x + 3);
+    auto l = (2 + x) + (3 + x);
+    auto m = (x + 2) + (3 + x);
+
+    EXPECT_EQ(7, j(1));
+    EXPECT_EQ(7, k(1));
+    EXPECT_EQ(7, l(1));
+    EXPECT_EQ(7, m(1));
+
+    EXPECT_TRUE((std::is_same_v<nabla::expr::sum<nabla::expr::sum<nabla::expr::constant, decltype(x)>, decltype(x)>, decltype(j)>));
+    EXPECT_TRUE((std::is_same_v<nabla::expr::sum<nabla::expr::sum<decltype(x), nabla::expr::constant>, decltype(x)>, decltype(k)>));
+    EXPECT_TRUE((std::is_same_v<nabla::expr::sum<nabla::expr::sum<nabla::expr::constant, decltype(x)>, decltype(x)>, decltype(l)>));
+    EXPECT_TRUE((std::is_same_v<nabla::expr::sum<nabla::expr::sum<decltype(x), nabla::expr::constant>, decltype(x)>, decltype(m)>));
 }
 
 TEST(sum, deep_constant_folding_minus) {
