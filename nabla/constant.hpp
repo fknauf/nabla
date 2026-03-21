@@ -8,7 +8,12 @@
 #include <cmath>
 
 namespace nabla::expr {
-    class constant: public nabla_base<constant> {
+    /**
+     * Describes a term that's constant wrt all input variables, i.e. a number.
+     */
+    class constant:
+        public nabla_base<constant>
+    {
     public:
         using nabla_base<constant>::diff;
         using nabla_base<constant>::operator();

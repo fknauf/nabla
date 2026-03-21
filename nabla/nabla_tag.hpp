@@ -55,6 +55,20 @@ namespace nabla {
             { f(0.0) } -> std::same_as<double>;
             { f(0, 1.2, 3.f) } -> std::same_as<double>;
         };
+
+        template<template<typename, typename> class E, typename T>
+        bool constexpr strict_is_left_hand_constant = false;
+        template<template<typename, typename> class E, typename Other>
+        bool constexpr strict_is_left_hand_constant<E, E<expr::constant, Other>> = true;
+        template<template<typename, typename> class E, typename T>
+        bool constexpr is_left_hand_constant = strict_is_left_hand_constant<E, plain_type<T>>;
+
+        template<template<typename, typename> class E, typename T>
+        bool constexpr strict_is_right_hand_constant = false;
+        template<template<typename, typename> class E, typename Other>
+        bool constexpr strict_is_right_hand_constant<E, E<Other, expr::constant>> = true;
+        template<template<typename, typename> class E, typename T>
+        bool constexpr is_right_hand_constant = strict_is_right_hand_constant<E, plain_type<T>>;
     }
 }
 

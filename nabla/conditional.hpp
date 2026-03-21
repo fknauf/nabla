@@ -35,6 +35,10 @@ namespace nabla::expr {
         }
     }
 
+    /**
+     * Conditional for segmented functions such as fabs, where the differentiation
+     * is one of two functions depending on a condition of the input parameters.
+     */
     template <
         typename Condition,
         typename ExprTrue,

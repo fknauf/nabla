@@ -343,3 +343,40 @@ TEST(sum, constant_folding_minus) {
     EXPECT_TRUE((std::is_same<nabla::expr::constant, decltype(s.diff<0>())>::value));
 }
 
+TEST(sum, deep_constant_folding) {
+    nabla::expr::variable<0> x;
+
+    auto f = (2 + x) + 3;
+    auto g = (x + 2) + 3;
+    auto h = 2 + (3 + x);
+    auto i = 2 + (x + 3);
+
+    EXPECT_EQ(6, f(1));
+    EXPECT_EQ(6, g(1));
+    EXPECT_EQ(6, h(1));
+    EXPECT_EQ(6, i(1));
+
+    EXPECT_TRUE((std::is_same_v<nabla::expr::sum<nabla::expr::constant, decltype(x)>, decltype(f)>));
+    EXPECT_TRUE((std::is_same_v<nabla::expr::sum<decltype(x), nabla::expr::constant>, decltype(g)>));
+    EXPECT_TRUE((std::is_same_v<nabla::expr::sum<nabla::expr::constant, decltype(x)>, decltype(h)>));
+    EXPECT_TRUE((std::is_same_v<nabla::expr::sum<nabla::expr::constant, decltype(x)>, decltype(i)>));
+}
+
+TEST(sum, deep_constant_folding_minus) {
+    nabla::expr::variable<0> x;
+
+    auto f = (2 - x) - 3;
+    auto g = (x - 2) - 3;
+    auto h = 2 - (3 - x);
+    auto i = 2 - (x - 3);
+
+    EXPECT_EQ(-2, f(1));
+    EXPECT_EQ(-4, g(1));
+    EXPECT_EQ(0, h(1));
+    EXPECT_EQ(4, i(1));
+
+    EXPECT_TRUE((std::is_same_v<nabla::expr::sum<nabla::expr::constant, nabla::expr::negation<decltype(x)>>, decltype(f)>));
+    EXPECT_TRUE((std::is_same_v<nabla::expr::sum<decltype(x), nabla::expr::constant>, decltype(g)>));
+    //EXPECT_TRUE((std::is_same_v<nabla::expr::sum<nabla::expr::constant, nabla::expr::negation<decltype(x)>>, decltype(h)>));
+    //EXPECT_TRUE((std::is_same_v<nabla::expr::sum<nabla::expr::constant, nabla::expr::negation<decltype(x)>>, decltype(i)>));
+}

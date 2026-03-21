@@ -9,6 +9,9 @@
 #include <cmath>
 
 namespace nabla::expr {
+    /**
+     * Generic exponentiation: f^g
+     */
     template <typename Base, typename Exponent>
     class power:
         public nabla_base<power<Base, Exponent>>

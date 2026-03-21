@@ -16,6 +16,9 @@ namespace nabla::expr {
         return { std::forward<Expr>(expr) };
     }
 
+    /**
+     * unary negation: -f
+     */
     template <typename Expr>
     class negation:
         public nabla_base<negation<Expr>>

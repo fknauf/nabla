@@ -6,6 +6,13 @@
 #include "vector.hpp"
 
 namespace nabla::expr {
+    /**
+     * Common base for all nabla expressions. Provides
+     *
+     * - the common non-vector evaluation function, i.e. f(1, 2, 3)
+     * - the common multi-var differentiation, i.e. f.diff(x, y, z)
+     * - tags the type for identification by traits::is_nabla_expression.
+     */
     template <typename Derived>
     class nabla_base:
         public nabla_tag

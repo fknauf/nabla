@@ -11,6 +11,9 @@
 #include <type_traits>
 
 namespace nabla::expr {
+    /**
+     * Exponential term: constant^x
+     */
     class exponential:
         public nabla_base<exponential>
     {
