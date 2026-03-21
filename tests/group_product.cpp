@@ -285,4 +285,19 @@ TEST(product, deep_constant_folding) {
     EXPECT_TRUE((std::is_same_v<nabla::expr::product<decltype(x), nabla::expr::constant>, decltype(g)>));
     EXPECT_TRUE((std::is_same_v<nabla::expr::product<nabla::expr::constant, decltype(x)>, decltype(h)>));
     EXPECT_TRUE((std::is_same_v<nabla::expr::product<nabla::expr::constant, decltype(x)>, decltype(i)>));
+
+    auto j = (2 * x) * (x * 3);
+    auto k = (x * 2) * (x * 3);
+    auto l = (2 * x) * (3 * x);
+    auto m = (x * 2) * (3 * x);
+
+    EXPECT_EQ(6, j(1));
+    EXPECT_EQ(6, k(1));
+    EXPECT_EQ(6, l(1));
+    EXPECT_EQ(6, m(1));
+
+    EXPECT_TRUE((std::is_same_v<nabla::expr::product<nabla::expr::product<nabla::expr::constant, decltype(x)>, decltype(x)>, decltype(j)>));
+    EXPECT_TRUE((std::is_same_v<nabla::expr::product<nabla::expr::product<decltype(x), nabla::expr::constant>, decltype(x)>, decltype(k)>));
+    EXPECT_TRUE((std::is_same_v<nabla::expr::product<nabla::expr::product<nabla::expr::constant, decltype(x)>, decltype(x)>, decltype(l)>));
+    EXPECT_TRUE((std::is_same_v<nabla::expr::product<nabla::expr::product<decltype(x), nabla::expr::constant>, decltype(x)>, decltype(m)>));
 }

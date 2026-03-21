@@ -55,13 +55,13 @@ namespace nabla::expr {
         requires traits::is_regular_nabla_tuple<LHS, RHS>
     {
         // deep constant folding: reform 2 * x * 2 to 4 * x etc.
-        if constexpr(traits::is_nabla_constant<LHS> && traits::is_left_hand_constant<product, RHS>) {
+        if constexpr(traits::will_fold_into_constant<product, LHS> && traits::is_left_hand_constant<product, RHS>) {
             return (lhs * rhs.lhs()) * rhs.rhs();
-        } else if constexpr(traits::is_nabla_constant<LHS> && traits::is_right_hand_constant<product, RHS>) {
+        } else if constexpr(traits::will_fold_into_constant<product, LHS> && traits::is_right_hand_constant<product, RHS>) {
             return (lhs * rhs.rhs()) * rhs.lhs();
-        } else if constexpr(traits::is_left_hand_constant<product, LHS> && traits::is_nabla_constant<RHS>) {
+        } else if constexpr(traits::is_left_hand_constant<product, LHS> && traits::will_fold_into_constant<product, RHS>) {
             return (lhs.lhs() * rhs) * lhs.rhs();
-        } else if constexpr(traits::is_right_hand_constant<product, LHS> && traits::is_nabla_constant<RHS>) {
+        } else if constexpr(traits::is_right_hand_constant<product, LHS> && traits::will_fold_into_constant<product, RHS>) {
             return lhs.lhs() * (lhs.rhs() * rhs);
         } else {
             return 
