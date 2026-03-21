@@ -183,3 +183,7 @@ TEST(polynomial, constant_folding) {
     EXPECT_TRUE((std::is_same<nabla::expr::constant, decltype(s          )>::value));
     EXPECT_TRUE((std::is_same<nabla::expr::constant, decltype(s.diff<0>())>::value));
 }
+
+TEST(polynomial, collapsable_space_optimization) {
+    EXPECT_LT(sizeof(nabla::expr::polynomial<false>), sizeof(nabla::expr::polynomial<true>));
+}

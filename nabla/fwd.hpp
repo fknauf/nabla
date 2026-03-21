@@ -29,7 +29,7 @@ namespace nabla::expr {
     template <typename LHS, typename RHS> class product;
     template <typename LHS, typename RHS> class division;
 
-    class polynomial;
+    template<bool collapsable = false> class polynomial;
     class exponential;
     class logarithm;
     template <typename Base, typename Exponent> class power;
