@@ -1,4 +1,5 @@
 #include <nabla/product.hpp>
+#include <nabla/division.hpp>
 
 #include <gtest/gtest.h>
 

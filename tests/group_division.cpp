@@ -1,4 +1,5 @@
 #include <nabla/division.hpp>
+#include <nabla/product.hpp>
 
 #include <gtest/gtest.h>
 
@@ -162,3 +163,71 @@ TEST(division, constant_folding) {
     EXPECT_TRUE((std::is_same<nabla::expr::constant, decltype(s.diff<0>())>::value));
 }
 
+TEST(division, mixed_deep_constant_folding) {
+    using nabla::expr::division;
+    using nabla::expr::product;
+    using nabla::expr::constant;
+
+    auto x = nabla::expr::variable<0>{};
+    auto y = nabla::expr::variable<1>{};
+
+    auto f1 = (4 * x) / (2 * y);
+    auto f2 = (4 * x) / (y * 2);
+    auto f3 = (x * 4) / (2 * y);
+    auto f4 = (x * 4) / (y * 2);
+
+    EXPECT_EQ(1, f1(1, 2));
+    EXPECT_EQ(1, f2(1, 2));
+    EXPECT_EQ(1, f3(1, 2));
+    EXPECT_EQ(1, f4(1, 2));
+
+    EXPECT_TRUE((std::is_same_v<division<product<constant, decltype(x)>, decltype(y)>, decltype(f1)>));
+    EXPECT_TRUE((std::is_same_v<division<product<constant, decltype(x)>, decltype(y)>, decltype(f2)>));
+    EXPECT_TRUE((std::is_same_v<division<product<decltype(x), constant>, decltype(y)>, decltype(f3)>));
+    EXPECT_TRUE((std::is_same_v<division<product<decltype(x), constant>, decltype(y)>, decltype(f4)>));
+
+    auto g1 = (4 / x) / (2 * y);
+    auto g2 = (4 / x) / (y * 2);
+    auto g3 = (x / 4) / (2 * y);
+    auto g4 = (x / 4) / (y * 2);
+
+    EXPECT_EQ(1, g1(1, 2));
+    EXPECT_EQ(1, g2(1, 2));
+    EXPECT_EQ(0.0625, g3(1, 2));
+    EXPECT_EQ(0.0625, g4(1, 2));
+
+    EXPECT_TRUE((std::is_same_v<division<constant, product<decltype(x), decltype(y)>>, decltype(g1)>));
+    EXPECT_TRUE((std::is_same_v<division<constant, product<decltype(x), decltype(y)>>, decltype(g2)>));
+    EXPECT_TRUE((std::is_same_v<division<decltype(x), product<constant, decltype(y)>>, decltype(g3)>));
+    EXPECT_TRUE((std::is_same_v<division<decltype(x), product<constant, decltype(y)>>, decltype(g4)>));
+
+    auto h1 = (4 * x) / (2 / y);
+    auto h2 = (4 * x) / (y / 2);
+    auto h3 = (x * 4) / (2 / y);
+    auto h4 = (x * 4) / (y / 2);
+
+    EXPECT_EQ(4, h1(1, 2));
+    EXPECT_EQ(4, h2(1, 2));
+    EXPECT_EQ(4, h3(1, 2));
+    EXPECT_EQ(4, h4(1, 2));
+
+    EXPECT_TRUE((std::is_same_v<product <product<constant, decltype(x)>, decltype(y)>, decltype(h1)>));
+    EXPECT_TRUE((std::is_same_v<division<product<constant, decltype(x)>, decltype(y)>, decltype(h2)>));
+    EXPECT_TRUE((std::is_same_v<product <product<decltype(x), constant>, decltype(y)>, decltype(h3)>));
+    EXPECT_TRUE((std::is_same_v<division<product<decltype(x), constant>, decltype(y)>, decltype(h4)>));
+
+    auto i1 = (4 / x) / (2 / y);
+    auto i2 = (4 / x) / (y / 2);
+    auto i3 = (x / 4) / (2 / y);
+    auto i4 = (x / 4) / (y / 2);
+
+    EXPECT_EQ(4, i1(1, 2));
+    EXPECT_EQ(4, i2(1, 2));
+    EXPECT_EQ(0.25, i3(1, 2));
+    EXPECT_EQ(0.25, i4(1, 2));
+
+    EXPECT_TRUE((std::is_same_v<division<product<constant, decltype(y)>, decltype(x)>, decltype(i1)>));
+    EXPECT_TRUE((std::is_same_v<division<constant, product<decltype(x), decltype(y)>>, decltype(i2)>));
+    //EXPECT_TRUE((std::is_same_v<division<product<decltype(x), decltype(y)>, constant>, decltype(i3)>));
+    EXPECT_TRUE((std::is_same_v<division<decltype(x), product<constant, decltype(y)>>, decltype(i4)>));
+}

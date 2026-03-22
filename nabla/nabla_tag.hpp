@@ -56,35 +56,28 @@ namespace nabla {
             { f(0, 1.2, 3.f) } -> std::same_as<double>;
         };
 
-        template<template<typename, typename> class E, typename T>
-        bool constexpr strict_is_left_hand_constant = false;
-        template<template<typename, typename> class E, typename Other>
-        bool constexpr strict_is_left_hand_constant<E, E<expr::constant, Other>> = true;
-        template<template<typename, typename> class E, typename T>
-        bool constexpr is_left_hand_constant = strict_is_left_hand_constant<E, plain_type<T>>;
+        template<template<typename, typename> class E, typename T>                 bool constexpr strict_is_binop = false;
+        template<template<typename, typename> class E, typename LHS, typename RHS> bool constexpr strict_is_binop<E, E<LHS, RHS>> = true;
+        template<template<typename, typename> class E, typename T>                 bool constexpr is_binop = strict_is_binop<E, plain_type<T>>;
 
-        template<template<typename, typename> class E, typename T>
-        bool constexpr strict_is_right_hand_constant = false;
-        template<template<typename, typename> class E, typename Other>
-        bool constexpr strict_is_right_hand_constant<E, E<Other, expr::constant>> = true;
-        template<template<typename, typename> class E, typename T>
-        bool constexpr is_right_hand_constant = strict_is_right_hand_constant<E, plain_type<T>>;
-        template<template<typename, typename> class E, typename T>
-        bool constexpr will_fold_into_constant = is_left_hand_constant<E, T> || is_right_hand_constant<E, T> || is_nabla_constant<T>;
+        template<template<typename, typename> class E, typename T>     bool constexpr strict_is_left_hand_constant = false;
+        template<template<typename, typename> class E, typename Other> bool constexpr strict_is_left_hand_constant<E, E<expr::constant, Other>> = true;
+        template<template<typename, typename> class E, typename T>     bool constexpr is_left_hand_constant = strict_is_left_hand_constant<E, plain_type<T>>;
 
-        template<template<typename, typename> class E, typename T>
-        bool constexpr strict_is_negated_left_hand_constant = false;
-        template<template<typename, typename> class E, typename Other>
-        bool constexpr strict_is_negated_left_hand_constant<E, expr::negation<E<expr::constant, Other>>> = true;
-        template<template<typename, typename> class E, typename T>
-        bool constexpr is_negated_left_hand_constant = strict_is_negated_left_hand_constant<E, plain_type<T>>;
+        template<template<typename, typename> class E, typename T>     bool constexpr strict_is_right_hand_constant = false;
+        template<template<typename, typename> class E, typename Other> bool constexpr strict_is_right_hand_constant<E, E<Other, expr::constant>> = true;
+        template<template<typename, typename> class E, typename T>     bool constexpr is_right_hand_constant = strict_is_right_hand_constant<E, plain_type<T>>;
+        template<template<typename, typename> class E, typename T>     bool constexpr will_fold_into_constant = is_left_hand_constant<E, T> || is_right_hand_constant<E, T> || is_nabla_constant<T>;
 
-        template<template<typename, typename> class E, typename T>
-        bool constexpr strict_is_negated_right_hand_constant = false;
-        template<template<typename, typename> class E, typename Other>
-        bool constexpr strict_is_negated_right_hand_constant<E, expr::negation<E<Other, expr::constant>>> = true;
-        template<template<typename, typename> class E, typename T>
-        bool constexpr is_negated_right_hand_constant = strict_is_negated_right_hand_constant<E, plain_type<T>>;
+        template<typename T> bool constexpr will_multiply_into_constant = will_fold_into_constant<expr::product, T> || will_fold_into_constant<expr::division, T>;
+
+        template<template<typename, typename> class E, typename T>     bool constexpr strict_is_negated_left_hand_constant = false;
+        template<template<typename, typename> class E, typename Other> bool constexpr strict_is_negated_left_hand_constant<E, expr::negation<E<expr::constant, Other>>> = true;
+        template<template<typename, typename> class E, typename T>     bool constexpr is_negated_left_hand_constant = strict_is_negated_left_hand_constant<E, plain_type<T>>;
+
+        template<template<typename, typename> class E, typename T>     bool constexpr strict_is_negated_right_hand_constant = false;
+        template<template<typename, typename> class E, typename Other> bool constexpr strict_is_negated_right_hand_constant<E, expr::negation<E<Other, expr::constant>>> = true;
+        template<template<typename, typename> class E, typename T>     bool constexpr is_negated_right_hand_constant = strict_is_negated_right_hand_constant<E, plain_type<T>>;
     }
 }
 

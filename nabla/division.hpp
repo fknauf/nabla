@@ -22,13 +22,48 @@ namespace nabla::expr {
     [[nodiscard]] auto operator/(
         LHS &&lhs,
         RHS &&rhs
-    ) -> division<
-        traits::nabla_equivalent<LHS>,
-        traits::nabla_equivalent<RHS>
-    >
+    )
         requires traits::is_regular_nabla_tuple<LHS, RHS>
     {
-        return { std::forward<LHS>(lhs), std::forward<RHS>(rhs) };
+        // deep constant folding: reform 2 / x / 2 to 1 / x etc.
+        if constexpr(traits::is_left_hand_constant<division, LHS> && traits::is_nabla_constant<RHS>) {
+            return (lhs.lhs() / rhs) / lhs.rhs();
+        } else if constexpr(traits::is_left_hand_constant<division, LHS> && traits::is_left_hand_constant<product, RHS>) {
+            return (lhs.lhs() / rhs.lhs()) / (lhs.rhs() * rhs.rhs());
+        } else if constexpr(traits::is_left_hand_constant<division, LHS> && traits::is_right_hand_constant<product, RHS>) {
+            return (lhs.lhs() / rhs.rhs()) / (lhs.rhs() * rhs.lhs());
+        } else if constexpr(traits::is_left_hand_constant<division, LHS> && traits::is_left_hand_constant<division, RHS>) {
+            return (lhs.lhs() / rhs.lhs()) * rhs.rhs() / lhs.rhs();
+        } else if constexpr(traits::is_left_hand_constant<division, LHS> && traits::is_right_hand_constant<division, RHS>) {
+            return (lhs.lhs() * rhs.rhs()) / (lhs.rhs() * rhs.lhs());
+        } else if constexpr(traits::is_right_hand_constant<division, LHS> && traits::will_multiply_into_constant<RHS>) {
+            return lhs.lhs() / (lhs.rhs() * rhs);
+        } else if constexpr(traits::will_multiply_into_constant<LHS> && traits::is_left_hand_constant<division, RHS>) {
+            return (lhs / rhs.lhs()) * rhs.rhs();
+        } else if constexpr(traits::will_multiply_into_constant<LHS> && traits::is_right_hand_constant<division, RHS>) {
+            return (lhs * rhs.rhs()) / rhs.lhs();
+        } else if constexpr(traits::will_multiply_into_constant<LHS> && traits::is_left_hand_constant<product, RHS>) {
+            return (lhs / rhs.lhs()) / rhs.rhs();
+        } else if constexpr(traits::will_multiply_into_constant<LHS> && traits::is_right_hand_constant<product, RHS>) {
+            return (lhs / rhs.rhs()) / rhs.lhs();
+        } else if constexpr(traits::is_left_hand_constant<product, LHS> && traits::will_multiply_into_constant<RHS>) {
+            return (lhs.lhs() / rhs) * lhs.rhs();
+        } else if constexpr(traits::is_right_hand_constant<product, LHS> && traits::will_multiply_into_constant<RHS>) {
+            return lhs.lhs() * (lhs.rhs() / rhs);
+        } else if constexpr(traits::is_binop<division, LHS> && traits::is_binop<division, RHS>) {
+            return (lhs.lhs() * rhs.rhs()) / (lhs.rhs() * rhs.lhs());
+        } else if constexpr(traits::is_binop<division, LHS>) {
+            return lhs.lhs() / (lhs.rhs() * rhs);
+        } else {
+            return 
+                division<
+                    traits::nabla_equivalent<LHS>,
+                    traits::nabla_equivalent<RHS>
+                > { 
+                    std::forward<LHS>(lhs),
+                    std::forward<RHS>(rhs)
+                };
+        }
     }
 
     template <typename LHS, typename RHS>
@@ -57,6 +92,9 @@ namespace nabla::expr {
             static_assert(N >= dimension, "input value vector too short");
             return lhs_(vars) / rhs_(vars);
         }
+
+        auto const &lhs() const noexcept { return lhs_; }
+        auto const &rhs() const noexcept { return rhs_; }
 
     private:
         LHS lhs_;
