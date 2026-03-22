@@ -196,8 +196,8 @@ TEST(division, mixed_deep_constant_folding) {
     EXPECT_EQ(0.0625, g3(1, 2));
     EXPECT_EQ(0.0625, g4(1, 2));
 
-    EXPECT_TRUE((std::is_same_v<division<constant, product<decltype(x), decltype(y)>>, decltype(g1)>));
-    EXPECT_TRUE((std::is_same_v<division<constant, product<decltype(x), decltype(y)>>, decltype(g2)>));
+    EXPECT_TRUE((std::is_same_v<division<constant, product<decltype(y), decltype(x)>>, decltype(g1)>));
+    EXPECT_TRUE((std::is_same_v<division<constant, product<decltype(y), decltype(x)>>, decltype(g2)>));
     EXPECT_TRUE((std::is_same_v<division<decltype(x), product<constant, decltype(y)>>, decltype(g3)>));
     EXPECT_TRUE((std::is_same_v<division<decltype(x), product<constant, decltype(y)>>, decltype(g4)>));
 
@@ -227,7 +227,7 @@ TEST(division, mixed_deep_constant_folding) {
     EXPECT_EQ(0.25, i4(1, 2));
 
     EXPECT_TRUE((std::is_same_v<division<product<constant, decltype(y)>, decltype(x)>, decltype(i1)>));
-    EXPECT_TRUE((std::is_same_v<division<constant, product<decltype(x), decltype(y)>>, decltype(i2)>));
+    EXPECT_TRUE((std::is_same_v<division<constant, product<decltype(y), decltype(x)>>, decltype(i2)>));
     EXPECT_TRUE((std::is_same_v<division<product<decltype(x), decltype(y)>, constant>, decltype(i3)>));
     EXPECT_TRUE((std::is_same_v<division<decltype(x), product<constant, decltype(y)>>, decltype(i4)>));
 }
