@@ -54,6 +54,8 @@ namespace nabla::expr {
             return (lhs.lhs() * rhs.rhs()) / (lhs.rhs() * rhs.lhs());
         } else if constexpr(traits::is_binop<division, LHS>) {
             return lhs.lhs() / (lhs.rhs() * rhs);
+        } else if constexpr(traits::is_binop<division, RHS>) {
+            return lhs * rhs.rhs() / rhs.lhs();
         } else {
             return 
                 division<

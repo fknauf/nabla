@@ -228,6 +228,6 @@ TEST(division, mixed_deep_constant_folding) {
 
     EXPECT_TRUE((std::is_same_v<division<product<constant, decltype(y)>, decltype(x)>, decltype(i1)>));
     EXPECT_TRUE((std::is_same_v<division<constant, product<decltype(x), decltype(y)>>, decltype(i2)>));
-    //EXPECT_TRUE((std::is_same_v<division<product<decltype(x), decltype(y)>, constant>, decltype(i3)>));
+    EXPECT_TRUE((std::is_same_v<division<product<decltype(x), decltype(y)>, constant>, decltype(i3)>));
     EXPECT_TRUE((std::is_same_v<division<decltype(x), product<constant, decltype(y)>>, decltype(i4)>));
 }
