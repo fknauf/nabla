@@ -16,14 +16,14 @@ jobs:
     outputs:
       os: ${{ steps.define-matrix.outputs.os }}
     steps:
-      - name: Define matrix
-        id: define-matrix
-        run: |
-          if [ "${{runner.environment }}" == "github-hosted" ]; then
-            echo 'os=[ "ubuntu-latest", "windows-latest" ]' >> "$GITHUB_OUTPUT"
-          else
-            echo 'os=[ "ubuntu-latest" ]' >> "$GITHUB_OUTPUT"
-          fi
+    - name: Define matrix
+      id: define-matrix
+      run: |
+        if [ "${{runner.environment }}" == "github-hosted" ]; then
+          echo 'os=[ "ubuntu-latest", "windows-latest" ]' >> "$GITHUB_OUTPUT"
+        else
+          echo 'os=[ "ubuntu-latest" ]' >> "$GITHUB_OUTPUT"
+        fi
 
   build:
     needs: define-matrix
