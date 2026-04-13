@@ -37,19 +37,6 @@ jobs:
         os: ${{ fromJSON(needs.define-matrix.outputs.os) }}
         build_type: [Debug, Release]
         c_compiler: [gcc, clang, cl]
-        include:
-          - os: windows-latest
-            c_compiler: cl
-            cpp_compiler: cl
-            mono: ''
-          - os: ubuntu-latest
-            c_compiler: gcc
-            cpp_compiler: g++
-            mono: 'mono'
-          - os: ubuntu-latest
-            c_compiler: clang
-            cpp_compiler: clang++
-            mono: 'mono'
         exclude:
           - os: windows-latest
             c_compiler: gcc
@@ -70,6 +57,7 @@ jobs:
         vcpkg-exe=${{ github.workspace }}/vcpkg/vcpkg
         vcpkg-toolchain-file=${{ github.workspace }}/vcpkg/scripts/buildsystems/vcpkg.cmake
         binary-cache-url=https://nuget.pkg.github.com/${{ github.actor }}/index.json
+	mono=${{ runner.os == 'Linux' && 'mono' || ''}}
         EOF
 
     - name: Install Mono for nuget
@@ -98,14 +86,14 @@ jobs:
       if: runner.environment == 'github-hosted'
       shell: 'bash'
       run: |
-        ${{ matrix.mono }} "${{ steps.fetch-nuget.outputs.nuget-path }}" \
+        ${{ steps.strings.mono }} "${{ steps.fetch-nuget.outputs.nuget-path }}" \
           sources add \
           -source "${{ steps.strings.outputs.binary-cache-url }}" \
           -storepasswordincleartext \
           -name "GitHub" \
           -username "${{ github.actor }}" \
           -password "${{ secrets.GITHUB_TOKEN }}"
-        ${{ matrix.mono }} "${{ steps.fetch-nuget.outputs.nuget-path }}" \
+        ${{ steps.strings.mono }} "${{ steps.fetch-nuget.outputs.nuget-path }}" \
           setapikey "${{ secrets.GITHUB_TOKEN }}" \
           -source "${{ steps.strings.outputs.binary-cache-url }}"
 
