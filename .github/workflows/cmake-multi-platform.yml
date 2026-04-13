@@ -57,7 +57,7 @@ jobs:
         vcpkg-exe=${{ github.workspace }}/vcpkg/vcpkg
         vcpkg-toolchain-file=${{ github.workspace }}/vcpkg/scripts/buildsystems/vcpkg.cmake
         binary-cache-url=https://nuget.pkg.github.com/${{ github.actor }}/index.json
-	mono=${{ runner.os == 'Linux' && 'mono' || ''}}
+        mono=${{ runner.os == 'Linux' && 'mono' || ''}}
         EOF
 
     - name: Install Mono for nuget
