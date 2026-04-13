@@ -48,16 +48,16 @@ jobs:
         exclude:
         - os: windows-latest
           compiler:
-          - c: gcc
+            c: gcc
             cxx: g++
         - os: windows-latest
           compiler:
-          - c: clang
-          - cxx: clang++
+            c: clang
+            cxx: clang++
         - os: ubuntu-latest
           compiler:
-          - c: cl
-          - cxx: cl
+            c: cl
+            cxx: cl
 
     steps:
     - uses: actions/checkout@v6
