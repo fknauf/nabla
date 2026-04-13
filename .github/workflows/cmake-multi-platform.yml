@@ -35,15 +35,29 @@ jobs:
 
       matrix:
         os: ${{ fromJSON(needs.define-matrix.outputs.os) }}
-        build_type: [Debug, Release]
-        c_compiler: [gcc, clang, cl]
+        build_type:
+	  - Debug
+	  - Release
+        compiler:
+	  - c: gcc
+	    cxx: g++
+	  - c: clang
+	    cxx: clang++
+	  - c: cl
+	    cxx: cl
         exclude:
           - os: windows-latest
-            c_compiler: gcc
+            compiler:
+	      - c: gcc
+	        cxx: g++
           - os: windows-latest
-            c_compiler: clang
+            compiler:
+	      - c: clang
+	      - cxx: clang++
           - os: ubuntu-latest
-            c_compiler: cl
+            compiler:
+	      - c: cl
+	      - cxx: cl
 
     steps:
     - uses: actions/checkout@v6
@@ -103,8 +117,8 @@ jobs:
       run: >
         cmake -B ${{ steps.strings.outputs.build-output-dir }}
         -DCMAKE_TOOLCHAIN_FILE=${{ steps.strings.outputs.vcpkg-toolchain-file }}
-        -DCMAKE_CXX_COMPILER=${{ matrix.cpp_compiler }}
-        -DCMAKE_C_COMPILER=${{ matrix.c_compiler }}
+        -DCMAKE_CXX_COMPILER=${{ matrix.compiler.cxx }}
+        -DCMAKE_C_COMPILER=${{ matrix.compiler.c }}
         -DCMAKE_BUILD_TYPE=${{ matrix.build_type }}
         -S ${{ github.workspace }}
 
