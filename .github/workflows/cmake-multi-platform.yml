@@ -58,7 +58,7 @@ jobs:
         EOF
 
     - name: Install Mono for nuget
-      if: runner.os == 'Linux'
+      if: runner.os == 'Linux' && runner.environment == 'github-hosted'
       run: |
         sudo apt-get update
         sudo apt-get -y install mono-complete
@@ -70,6 +70,7 @@ jobs:
         ./vcpkg/bootstrap-vcpkg.sh -disableMetrics
 
     - name: Fetch Nuget
+      if: runner.environment == 'github-hosted'
       id: fetch-nuget
       shell: bash
       run: |
@@ -79,6 +80,7 @@ jobs:
 
     # Adapted from https://learn.microsoft.com/en-us/vcpkg/consume/binary-caching-github-packages
     - name: 'Setup NuGet Credentials for the binary cache'
+      if: runner.environment == 'github-hosted'
       shell: 'bash'
       run: |
         ${{ matrix.mono }} "${{ steps.fetch-nuget.outputs.nuget-path }}" \
@@ -94,7 +96,7 @@ jobs:
 
     - name: Configure CMake
       env:
-        VCPKG_BINARY_SOURCES: "clear;nuget,Github,readwrite"
+        VCPKG_BINARY_SOURCES: "${{ runner.environment == 'github-hosted' && 'clear;nuget,Github,readwrite' || '' }}"
       run: >
         cmake -B ${{ steps.strings.outputs.build-output-dir }}
         -DCMAKE_TOOLCHAIN_FILE=${{ steps.strings.outputs.vcpkg-toolchain-file }}
