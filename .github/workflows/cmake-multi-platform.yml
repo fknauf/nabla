@@ -36,28 +36,28 @@ jobs:
       matrix:
         os: ${{ fromJSON(needs.define-matrix.outputs.os) }}
         build_type:
-	  - Debug
-	  - Release
+        - Debug
+        - Release
         compiler:
-	  - c: gcc
-	    cxx: g++
-	  - c: clang
-	    cxx: clang++
-	  - c: cl
-	    cxx: cl
+        - c: gcc
+          cxx: g++
+        - c: clang
+          cxx: clang++
+        - c: cl
+          cxx: cl
         exclude:
-          - os: windows-latest
-            compiler:
-	      - c: gcc
-	        cxx: g++
-          - os: windows-latest
-            compiler:
-	      - c: clang
-	      - cxx: clang++
-          - os: ubuntu-latest
-            compiler:
-	      - c: cl
-	      - cxx: cl
+        - os: windows-latest
+          compiler:
+          - c: gcc
+            cxx: g++
+        - os: windows-latest
+          compiler:
+          - c: clang
+          - cxx: clang++
+        - os: ubuntu-latest
+          compiler:
+          - c: cl
+          - cxx: cl
 
     steps:
     - uses: actions/checkout@v6
