@@ -23,7 +23,7 @@ namespace nabla::expr {
     [[nodiscard]] auto phi(X &&x) 
         requires traits::is_nabla_expression<X>
     {
-        return (1 / std::sqrt(2 * M_PI)) * exp(-(std::forward<X>(x) * std::forward<X>(x)) / 2);
+        return (1 / std::sqrt(2 * M_PI)) * exp(-(x * x) / 2);
     }
 
     template <typename X, typename Mean, typename Sigma>
